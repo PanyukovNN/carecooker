@@ -41,9 +41,9 @@ body {
     /*justify-content: space-between;*/
 }
 
-.recipe-leading-info {
-    width: 75%;
-}
+/*.recipe-leading-info {*/
+/*    width: 75%;*/
+/*}*/
 
 .recipe-meta-block {
     width: 25%;
@@ -77,7 +77,7 @@ body {
 
 .recipe-ingredients__list {
     list-style: none;
-    padding: 16px 0;
+    padding-left: 0;
 }
 
 .recipe-method-wrap {

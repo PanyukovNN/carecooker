@@ -14,7 +14,7 @@
                 ${recipe.description}
             </p>
         </div>
-        <div class="recipe-meta-block ml-3">
+        <div class="recipe-meta-block mt-3">
             <div class="recipe-meta-wrap">
                 <p class="recipe-meta-heading">Время приготовления</p>
                 <p class="recipe-meta_prep-time mt-1">${recipe.cookTime}</p>
@@ -26,18 +26,18 @@
         </div>
     </div>
 
-    <div class="recipe-ingredient-list-wrap mt-4 border-bottom">
+    <div class="recipe-ingredient-list-wrap mt-3 border-bottom">
         <h3 class="recipe-ingredients__heading">Ингедиенты</h3>
-        <ul class="recipe-ingredients__list">
+        <ul class="recipe-ingredients__list mt-3">
             <#list recipe.ingredients as ingedient>
                 <li class="recipe-ingredients__list-item">${ingedient}</li>
             </#list>
         </ul>
     </div>
 
-    <div class="recipe-method-wrap mt-4 border-bottom">
+    <div class="recipe-method-wrap mt-3 border-bottom">
         <h3 class="recipe-method__heading">Способ приготовления</h3>
-        <ol class="recipe-method__list mt-4">
+        <ol class="recipe-method__list mt-3">
             <#list recipe.methodSteps as step>
                 <li class="recipe-method__list-item">
                     <p class="recipe-method__list-item-text">

@@ -11,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,12 +48,12 @@ public class MainController {
         return "main";
     }
 
-    @GetMapping("/add_recipe")
+    @GetMapping("/add-recipe")
     public String getAddRecipe() {
-        return "add_recipe";
+        return "addRecipe";
     }
 
-    @PostMapping("/add_recipe")
+    @PostMapping("/add-recipe")
     public String addMessage(
             @RequestParam String name,
             @RequestParam String description,
@@ -90,14 +91,75 @@ public class MainController {
 
         recipeRepository.save(recipe);
 
-        model.addAttribute("successfully_added", "true");
-        return "add_recipe";
+        model.addAttribute("successfullyAdded", "true");
+        return "addRecipe";
+    }
+
+    @GetMapping("/edit-recipe/{id}")
+    public String getEditRecipe(
+            @PathVariable long id,
+            Model model) {
+        Recipe recipe = recipeRepository.findById(id).get();
+
+        model.addAttribute("recipe", recipe);
+
+        return "editRecipe";
+    }
+
+    @PostMapping("/edit-recipe/{id}")
+    public String editRecipe(
+            @PathVariable long id,
+            @RequestParam String name,
+            @RequestParam String description,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam String cookTime,
+            @RequestParam String serving,
+            @RequestParam String ingredients,
+            @RequestParam String method,
+            @RequestParam String categories,
+            Model model) throws IOException {
+
+        List<String> ingredientsList = Arrays.stream(ingredients.split("\n"))
+                .map(String::trim)
+                .collect(Collectors.toList());
+        List<String> categoriesList = Arrays.stream(categories.split("\n"))
+                .map(String::trim)
+                .collect(Collectors.toList());
+
+        Recipe recipe = recipeRepository.findById(id).get();
+        System.out.println("Recipe found " + recipe);
+        recipe.setName(name);
+        recipe.setDescription(description);
+        recipe.setCookTime(cookTime);
+        recipe.setServing(serving);
+        recipe.setMethod(method);
+        recipe.setIngredients(ingredientsList);
+        recipe.setCategories(categoriesList);
+
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uidFile = UUID.randomUUID().toString();
+            String resultFileName = uidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+
+            recipe.setMainImage(resultFileName);
+        }
+
+        recipeRepository.save(recipe);
+
+        model.addAttribute("successfullyUpdated", "true");
+        return "editRecipe";
     }
 
     @GetMapping("/recipe")
     public String getRecipe(@RequestParam long id,
                             Model model) {
-
         Recipe recipe = recipeRepository.findById(id).get();
 
         model.addAttribute("recipe", recipe);
