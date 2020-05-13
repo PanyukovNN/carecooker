@@ -86,16 +86,16 @@ body {
 
 .recipe-method__list {
     text-align: justify;
+    padding-left: 1rem;
 }
 
 .footer {
     position: static;
-    margin-top: 90px;
     left: 0;
     bottom: 0;
     height: 100px;
     width: 100%;
-    background-color: #237280;
+    background-color: #35adc1;
     color: white;
     text-align: center;
 }

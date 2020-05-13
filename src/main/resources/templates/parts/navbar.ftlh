@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active ml-3">
-                <a class="nav-link" href="/">Главная страница <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Все рецепты<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item ml-3">
                 <a class="nav-link" href="/add_recipe">Добавить рецепт</a>

@@ -4,7 +4,7 @@
     <h2 class="mt-3">${recipe.name}</h2>
 
     <div class="recipe-main-info border-bottom">
-        <div class="recipe-leading-info">
+        <div class="recipe-leading-info mt-3">
             <#if recipe.mainImage??>
                 <img src="/img/${recipe.mainImage}" class="card-img-top">
             </#if>
