@@ -1,0 +1,13 @@
+.idea
+out
+target
+*.iml
+log
+*.txt
+*.exe
+*.csv
+*.zip
+src\main\resources
+**.properties
+/src/main/resources/rule_insert.sql
+/uploads/
