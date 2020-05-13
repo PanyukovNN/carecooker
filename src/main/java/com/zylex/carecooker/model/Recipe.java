@@ -1,6 +1,7 @@
 package com.zylex.carecooker.model;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,7 +14,6 @@ public class Recipe {
 
     private String name;
 
-    @Column(length = 4096)
     private String description;
 
     private String mainImage;
@@ -23,14 +23,11 @@ public class Recipe {
     private String serving;
 
     @ElementCollection
-    @Column(length = 4096)
     private List<String> ingredients;
 
-    @Column(length = 4096)
     private String method;
 
     @ElementCollection
-    @Column(length = 4096)
     private List<String> categories;
 
     public Recipe() {
@@ -56,6 +53,12 @@ public class Recipe {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getShortDescription() {
+        return description.length() > 150
+                ? description.substring(0, 150) + "..."
+                : description;
     }
 
     public void setDescription(String description) {
@@ -104,6 +107,10 @@ public class Recipe {
 
     public String getMethod() {
         return method;
+    }
+
+    public List<String> getMethodSteps() {
+        return Arrays.asList(method.split("\n"));
     }
 
     public void setMethod(String method) {

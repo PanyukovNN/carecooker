@@ -93,7 +93,6 @@ public class MainController {
                             Model model) {
 
         Recipe recipe = recipeRepository.findById(id).get();
-        System.out.println(recipe);
 
         model.addAttribute("recipe", recipe);
 

@@ -1,7 +1,3 @@
-.navbar {
-    max-height: 40px;
-}
-
 .navbar .navbar-brand {
     margin-left: 7.5%;
 }
@@ -21,14 +17,28 @@ body {
     color: #3a3a3a;
 }
 
+.card-group {
+    max-width: 33%;
+    font-size: 0.875rem;
+}
+
+.card-text {
+    text-align: justify;
+    line-height: 1.2;
+}
+
+.card-img-top {
+    object-fit: cover;
+}
+
 .main-container {
     max-width: 85%;
 }
 
 .recipe-main-info {
     width: 66.6%;
-    display: flex;
-    justify-content: space-between;
+    /*display: flex;*/
+    /*justify-content: space-between;*/
 }
 
 .recipe-leading-info {
@@ -43,6 +53,10 @@ body {
     width: 100%;
     height: 350px;
     object-fit: cover;
+}
+
+.recipe-description-text {
+    text-align: justify;
 }
 
 .recipe-meta-heading {
@@ -68,6 +82,10 @@ body {
 
 .recipe-method-wrap {
     width: 66.6%;
+}
+
+.recipe-method__list {
+    text-align: justify;
 }
 
 .footer {
