@@ -20,14 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
 
-    private RecipeRepository recipeRepository;
+    private final RecipeRepository recipeRepository;
 
     @Autowired
     public MainController(RecipeRepository recipeRepository) {
@@ -127,7 +126,6 @@ public class MainController {
                 .collect(Collectors.toList());
 
         Recipe recipe = recipeRepository.findById(id).get();
-        System.out.println("Recipe found " + recipe);
         recipe.setName(name);
         recipe.setDescription(description);
         recipe.setCookTime(cookTime);
@@ -154,7 +152,7 @@ public class MainController {
         recipeRepository.save(recipe);
 
         model.addAttribute("successfullyUpdated", "true");
-        return "editRecipe";
+        return "redirect:/recipe?id=" + id;
     }
 
     @GetMapping("/recipe")

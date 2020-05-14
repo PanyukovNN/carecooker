@@ -1,6 +1,12 @@
 <#import "pager.ftlh" as p>
 
-<div class="card-columns pt-4">
+<nav class="mt-3" aria-label="breadcrumb">
+    <ol class="breadcrumb" >
+        <li class="breadcrumb-item"><a href="#">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Страница ${recipes.getNumber() + 1}</li>
+    </ol>
+</nav>
+<div class="card-columns pt-1">
     <#list recipes.content as recipe>
         <a href="/recipe?id=${recipe.id}">
             <div class="card mb-3 shadow rounded">

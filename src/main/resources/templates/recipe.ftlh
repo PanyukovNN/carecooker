@@ -4,7 +4,7 @@
     <h2 class="mt-3">${recipe.name}</h2>
 
     <div class="recipe-main-info border-bottom">
-        <div class="recipe-leading-info mt-3">
+        <div class="recipe-leading-info mt-4">
             <#if recipe.mainImage??>
                 <img src="/img/${recipe.mainImage}" class="card-img-top">
             </#if>
@@ -47,4 +47,12 @@
             </#list>
         </ol>
     </div>
+
+    <a href="/edit-recipe/${recipe.id}">
+        <button type="button" class="btn btn-primary mt-4">Редактировать рецепт</button>
+    </a>
+
+    <a href="/delete-recipe/${recipe.id}">
+        <button type="button" class="btn btn-danger mt-4">Удалить рецепт</button>
+    </a>
 </@c.page>

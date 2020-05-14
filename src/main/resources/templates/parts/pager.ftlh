@@ -16,19 +16,14 @@
     </#if>
     <div class="mt-5">
         <ul class="pagination justify-content-center">
-            <li class="page-item">
-                <#if page.getNumber() gt 0>
+            <#if page.getNumber() gt 0>
+                <li class="page-item">
                     <a class="page-link" href="${url}?page=${page.getNumber() - 1}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
                     </a>
-                <#else>
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </#if>
-            </li>
+                </li>
+            </#if>
 
             <#list body as p>
                 <#if (p - 1) == page.getNumber()>
@@ -46,19 +41,14 @@
                 </#if>
             </#list>
 
-            <li class="page-item">
-                <#if page.getNumber() lt page.getTotalPages() - 1>
+            <#if page.getNumber() lt page.getTotalPages() - 1>
+                <li class="page-item">
                     <a class="page-link" href="${url}?page=${page.getNumber() + 1}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
                     </a>
-                <#else>
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </#if>
-            </li>
+                </li>
+            </#if>
         </ul>
 
 <#--        <ul class="pagination">-->

@@ -2,6 +2,10 @@
     margin-left: 7.5%;
 }
 
+.breadcrumb {
+    background-color: #f8f9fa !important;
+}
+
 .card {
     color: #3a3a3a;
 }
