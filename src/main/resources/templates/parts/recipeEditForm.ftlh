@@ -1,9 +1,9 @@
-<div class="mb-2">
-    <img id="recipe-main-image" src="<#if recipe.mainImage??>/img/${recipe.mainImage}<#else>#</#if>" alt="" />
+<div class="mb-3">
+    <img id="recipe-main-image" src="<#if recipe??>/img/${recipe.mainImage}<#else>#</#if>" alt="" />
 </div>
 <div class="form-group">
     <div class="custom-file">
-        <input type="file" name="file" id="customFile" />
+        <input type="file" name="file" id="customFile" value="<#if recipe??>${recipe.mainImage}</#if>" />
         <label class="custom-file-label" for="customFile">Выберите изображение блюда</label>
     </div>
     <script>

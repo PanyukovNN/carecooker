@@ -27,13 +27,13 @@ public class Recipe {
 
     private String method;
 
-    @ElementCollection
-    private List<String> categories;
+    @ManyToMany
+    private List<Category> categories;
 
     public Recipe() {
     }
 
-    public Recipe(String name, String description, String cookTime, String serving, List<String> ingredients, String method, List<String> categories) {
+    public Recipe(String name, String description, String cookTime, String serving, List<String> ingredients, String method, List<Category> categories) {
         this.name = name;
         this.description = description;
         this.cookTime = cookTime;
@@ -117,11 +117,11 @@ public class Recipe {
         this.method = method;
     }
 
-    public List<String> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 

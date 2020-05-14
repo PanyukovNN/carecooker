@@ -13,10 +13,6 @@ public class MvcConfig implements WebMvcConfigurer {
     private String uploadPath;
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/").setViewName("home");
-        registry.addViewController("/recipe").setViewName("recipe");
-        registry.addViewController("/add_recipe").setViewName("add_recipe");
     }
 
     @Override

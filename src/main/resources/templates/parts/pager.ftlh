@@ -28,7 +28,7 @@
             <#list body as p>
                 <#if (p - 1) == page.getNumber()>
                     <li class="page-item active">
-                        <a class="page-link" href="#" tabindex="-1" style="background-color: #35adc1; border-color: #35adc1;">${p}</a>
+                        <a class="page-link" href="#" tabindex="-1" style="background-color: #7cdcef; border-color: #7cdcef;">${p}</a>
                     </li>
                 <#elseif p == -1>
                     <li class="page-item disabled">
@@ -50,22 +50,5 @@
                 </li>
             </#if>
         </ul>
-
-<#--        <ul class="pagination">-->
-<#--            <li class="page-item disabled">-->
-<#--                <a class="page-link" href="#" tabindex="-1">Элементов на странице</a>-->
-<#--            </li>-->
-<#--            <#list [3, 9, 15] as c>-->
-<#--                <#if c == page.getSize()>-->
-<#--                    <li class="page-item active">-->
-<#--                        <a class="page-link" href="#" tabindex="-1">${c}</a>-->
-<#--                    </li>-->
-<#--                <#else>-->
-<#--                    <li class="page-item">-->
-<#--                        <a class="page-link" href="${url}?page=${page.getNumber()}&size=${c}" tabindex="-1">${c}</a>-->
-<#--                    </li>-->
-<#--                </#if>-->
-<#--            </#list>-->
-<#--        </ul>-->
     </div>
 </#macro>

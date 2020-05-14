@@ -2,7 +2,7 @@
 
 <nav class="mt-3" aria-label="breadcrumb">
     <ol class="breadcrumb" >
-        <li class="breadcrumb-item"><a href="#">Главная</a></li>
+<#--        <li class="breadcrumb-item"><a href="#">Главная</a></li>-->
         <li class="breadcrumb-item active" aria-current="page">Страница ${recipes.getNumber() + 1}</li>
     </ol>
 </nav>
