@@ -10,6 +10,9 @@
             <#if successfullyAdded??=true>
                 Рецепт успешно добавлен!
             </#if>
+            <#if successfullyUpdated??=true>
+                Рецепт успешно обновлён!
+            </#if>
         </div>
     </div>
 </@c.page>

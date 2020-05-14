@@ -35,7 +35,7 @@ body {
     object-fit: cover;
 }
 
-.main-container {
+.container-fluid {
     max-width: 85%;
 }
 
@@ -45,7 +45,7 @@ body {
     /*justify-content: space-between;*/
 }
 
-.recipe-image {
+.recipe-main-image {
     width: 100%;
     background-size: cover;
     background-position: center;

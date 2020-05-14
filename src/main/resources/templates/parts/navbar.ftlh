@@ -10,7 +10,7 @@
                 <a class="nav-link" href="/">Все рецепты<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item ml-3">
-                <a class="nav-link" href="/add-recipe">Добавить рецепт</a>
+                <a class="nav-link" href="/recipe/add">Добавить рецепт</a>
             </li>
         </ul>
     </div>

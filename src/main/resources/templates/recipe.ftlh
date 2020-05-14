@@ -4,7 +4,7 @@
     <div class="recipe-main-info border-bottom">
         <h2 class="mt-3">${recipe.name}</h2>
         <#if recipe.mainImage??>
-            <div class="recipe-image mt-4"
+            <div class="recipe-main-image mt-4"
                  style="background-image: url('/img/${recipe.mainImage}');">
                     <div style="padding-top: 56.25%;"></div>
             </div>
@@ -50,11 +50,11 @@
         </ol>
     </div>
 
-    <a href="/edit-recipe/${recipe.id}">
+    <a href="/recipe/edit?id=${recipe.id}">
         <button type="button" class="btn btn-primary mt-4">Редактировать рецепт</button>
     </a>
 
-    <a href="/delete-recipe/${recipe.id}">
+    <a href="/recipe/delete?id=${recipe.id}">
         <button type="button" class="btn btn-danger mt-4">Удалить рецепт</button>
     </a>
 </@c.page>

@@ -8,7 +8,7 @@
 </nav>
 <div class="card-columns pt-1">
     <#list recipes.content as recipe>
-        <a href="/recipe?id=${recipe.id}">
+        <a href="/recipe/${recipe.id}">
             <div class="card mb-3 shadow rounded">
                 <#if recipe.mainImage??>
                     <img src="/img/${recipe.mainImage}" class="card-img-top">
