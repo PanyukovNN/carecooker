@@ -1,5 +1,6 @@
 package com.zylex.carecooker.repository;
 
+import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findAll(Pageable pageable);
+
+    Page<Recipe> findByCategoriesContaining(Category category, Pageable pageable);
 }

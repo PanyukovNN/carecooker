@@ -36,14 +36,14 @@
                     </li>
                 <#else>
                     <li class="page-item">
-                        <a class="page-link" href="${url}?page=${p - 1}" tabindex="-1">${p}</a>
+                        <a class="page-link" href="${url}page=${p - 1}" tabindex="-1">${p}</a>
                     </li>
                 </#if>
             </#list>
 
             <#if page.getNumber() lt page.getTotalPages() - 1>
                 <li class="page-item">
-                    <a class="page-link" href="${url}?page=${page.getNumber() + 1}" aria-label="Next">
+                    <a class="page-link" href="${url}page=${page.getNumber() + 1}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
                     </a>

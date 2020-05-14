@@ -50,9 +50,9 @@
             <div class="recipe-categories-wrap mt-3 pb-3 border-bottom">
                 <h3 class="recipe-categories__heading">Категории</h3>
                 <#list recipe.categories as category>
-                    <div class="recipe-category-item rounded-lg mt-1 mr-2">
-                        ${category.name}
-                    </div>
+                    <a class="recipe-category-link" href="/?category=${category.name}">
+                        <div class="recipe-category-item rounded-lg mt-1 mr-1">${category.name}</div>
+                    </a>
                 </#list>
             </div>
 
@@ -69,9 +69,9 @@
         <div class="recipe-right-menu rounded-lg shadow-sm">
             <h6 class="recipe-find-categories__heading">Выберите категорию для поиска</h6>
             <#list categories as category>
-                <div class="recipe-category-item rounded-lg mt-1 mr-2">
-                    ${category.name}
-                </div>
+                <a class="recipe-category-link" href="/?category=${category.name}">
+                    <div class="recipe-category-item rounded-lg mt-1 mr-1">${category.name}</div>
+                </a>
             </#list>
         </div>
     </div>

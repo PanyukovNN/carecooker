@@ -95,7 +95,19 @@ body {
 
 .recipe-category-item:hover {
     background-color: #adedff;
+    color: #3a3a3a;
 }
+
+.recipe-category-link {
+    text-decoration: none;
+    color: #3a3a3a;
+}
+
+.recipe-category-link:hover {
+    text-decoration: none;
+    color: #3a3a3a;
+}
+
 
 .footer {
     position: static;
@@ -106,4 +118,14 @@ body {
     background-color: #7cdcef;
     color: white;
     text-align: center;
+}
+
+.zoom {
+    transition: .3s ease;
+    opacity: 1;
+}
+
+.zoom:hover {
+    transform: scale(1.03);
+    opacity: 0.9;
 }
