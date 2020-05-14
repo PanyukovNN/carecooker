@@ -6,7 +6,6 @@
         <input type="file" name="file" id="customFile" value="<#if recipe??>${recipe.mainImage}</#if>"/>
         <label class="custom-file-label" for="customFile">Выберите изображение блюда</label>
     </div>
-<#--     src="../../js/showImg.js"-->
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -39,7 +38,7 @@
            value="<#if recipe??>${recipe.serving}</#if>">
 </div>
 <div class="form-group">
-    <textarea class="form-control" name="ingredients" placeholder="Ингредиенты"><#if recipe??><#list recipe.ingredients as ingredient>
+    <textarea class="form-control" name="ingredients" rows="7" placeholder="Ингредиенты"><#if recipe??><#list recipe.ingredients as ingredient>
 ${ingredient}</#list></#if></textarea>
 </div>
 <div class="form-group">

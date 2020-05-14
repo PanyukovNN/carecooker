@@ -45,18 +45,14 @@ body {
     /*justify-content: space-between;*/
 }
 
-/*.recipe-leading-info {*/
-/*    width: 75%;*/
-/*}*/
+.recipe-image {
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+}
 
 .recipe-meta-block {
     width: 25%;
-}
-
-.recipe-media {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
 }
 
 .recipe-description-text {

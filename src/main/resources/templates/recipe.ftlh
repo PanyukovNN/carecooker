@@ -1,14 +1,16 @@
 <#import "parts/common.ftlh" as c>
 
 <@c.page>
-    <h2 class="mt-3">${recipe.name}</h2>
-
     <div class="recipe-main-info border-bottom">
-        <div class="recipe-leading-info mt-4">
-            <#if recipe.mainImage??>
-                <img src="/img/${recipe.mainImage}" class="card-img-top">
-            </#if>
-        </div>
+        <h2 class="mt-3">${recipe.name}</h2>
+        <#if recipe.mainImage??>
+            <div class="recipe-image mt-4"
+                 style="background-image: url('/img/${recipe.mainImage}');">
+                    <div style="padding-top: 56.25%;"></div>
+            </div>
+            <#else>
+            <div class="mb-5"></div>
+        </#if>
         <div class="recipe-description-text mt-3 border-bottom">
             <p>
                 ${recipe.description}
