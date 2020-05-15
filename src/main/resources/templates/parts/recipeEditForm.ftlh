@@ -12,7 +12,6 @@
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     $('#recipe-main-image').attr('src', e.target.result);
-                    // $('.recipe-main-image').style.backgroundImage = '/img/' + e.target.result;
                 }
                 reader.readAsDataURL(input.files[0]);
             }

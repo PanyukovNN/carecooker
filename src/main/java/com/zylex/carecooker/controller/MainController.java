@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -29,20 +30,38 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String mainPage(Model model,
-                           @RequestParam(name = "category", required = false, defaultValue = "") String categoryFilter,
-                           @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 6) Pageable pageable) {
-        Category category = categoryRepository.findByName(categoryFilter);
-        Page<Recipe> recipes = category == null
-                ? recipeRepository.findAll(pageable)
-                : recipeRepository.findByCategoriesContaining(category, pageable);
+    public String mainPage(@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 6) Pageable pageable,
+                           Model model) {
+        Page<Recipe> recipes = recipeRepository.findAll(pageable);
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("url", "/");
+
+        return "main";
+    }
+
+    @PostMapping("category")
+    public String getByCategory(@RequestParam(name = "category", required = false, defaultValue = "") String categoryName,
+                         @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 6) Pageable pageable,
+                         Model model) {
+        Category category = categoryRepository.findByName(categoryName);
+        Page<Recipe> recipes = recipeRepository.findByCategoriesContaining(category, pageable);
 
         model.addAttribute("recipes", recipes);
         model.addAttribute("category", category);
-        String url = category == null
-                ? "/?"
-                : "?category=" + category.getName() + "&";
-        model.addAttribute("url", url);
+        model.addAttribute("url", "/");
+
+        return "main";
+    }
+
+    @PostMapping("filter")
+    public String getByFilter(@RequestParam(name = "filter", required = false, defaultValue = "") String filter,
+                         @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 6) Pageable pageable,
+                         Model model) {
+        Page<Recipe> recipes = recipeRepository.findByNameContainingIgnoreCase(filter, pageable);
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("url", "/");
 
         return "main";
     }

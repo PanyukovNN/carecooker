@@ -4,29 +4,34 @@
     <div class="recipe-main-block">
         <div class="recipe-info">
             <h2 class="mt-3">${recipe.name}</h2>
-            <#if recipe.mainImage??>
-                <div class="recipe-main-image mt-4"
-                     style="background-image: url('/img/${recipe.mainImage}');">
-                        <div style="padding-top: 56.25%;"></div>
+            <div class="recipe-main-info">
+                <#if recipe.mainImage??>
+                    <div class="recipe-main-image mt-3"
+                         style="background-image: url('/img/${recipe.mainImage}');">
+                            <div style="padding-top: 52%;"></div>
+                    </div>
+                    <#else>
+                    <div class="recipe-main-image mb-5"></div>
+                </#if>
+
+                <div class="recipe-meta mt-3 ml-3">
+                    <div class="recipe-meta-wrap">
+                        <p class="recipe-meta-heading">Время приготовления</p>
+                        <p class="recipe-meta_prep-time mt-1">${recipe.cookTime}</p>
+                    </div>
+                    <div class="recipe-meta-wrap">
+                        <p class="recipe-meta-heading mt-3">Количество порций</p>
+                        <p class="recipe-meta_serving mt-1">${recipe.serving}</p>
+                    </div>
                 </div>
-                <#else>
-                <div class="mb-5"></div>
-            </#if>
+            </div>
+
             <div class="recipe-description-text mt-3 border-bottom">
                 <p>
                     ${recipe.description}
                 </p>
             </div>
-            <div class="recipe-meta mt-3 border-bottom">
-                <div class="recipe-meta-wrap">
-                    <p class="recipe-meta-heading">Время приготовления</p>
-                    <p class="recipe-meta_prep-time mt-1">${recipe.cookTime}</p>
-                </div>
-                <div class="recipe-meta-wrap">
-                    <p class="recipe-meta-heading mt-3">Количество порций</p>
-                    <p class="recipe-meta_serving mt-1">${recipe.serving}</p>
-                </div>
-            </div>
+
             <div class="recipe-ingredient-list-wrap mt-3 border-bottom">
                 <h3 class="recipe-ingredients__heading">Ингедиенты</h3>
                 <ul class="recipe-ingredients__list mt-3">
@@ -70,7 +75,7 @@
             <h6 class="recipe-find-categories__heading">Выберите категорию для поиска</h6>
             <#list categories as category>
                 <a class="recipe-category-link" href="/?category=${category.name}">
-                    <div class="recipe-category-item rounded-lg mt-1 mr-1">${category.name}</div>
+                    <div class="recipe-category-item rounded-lg my-1 mr-1">${category.name}</div>
                 </a>
             </#list>
         </div>

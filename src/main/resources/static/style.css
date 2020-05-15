@@ -54,26 +54,37 @@ body {
     background-color: #f3f3dd;
 }
 
+.recipe-main-info {
+    display: flex;
+    justify-content: space-between;
+}
+
 .recipe-main-image {
-    width: 100%;
+    width: 80%;
     background-size: cover;
     background-position: center;
 }
 
-.recipe-description-text {
-    text-align: justify;
+.recipe-meta {
+    width: 20%;
+}
+
+.recipe-meta-wrap {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.25rem;
 }
 
 .recipe-meta-heading {
-    font-size: 1rem;
-    line-height: 1.125rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
     color: #676767;
     font-weight: 400;
     margin-bottom: 4px;
 }
 
-.recipe-meta-wrap {
-    font-weight: 700;
+.recipe-description-text {
+    text-align: justify;
 }
 
 .recipe-ingredients__list {
