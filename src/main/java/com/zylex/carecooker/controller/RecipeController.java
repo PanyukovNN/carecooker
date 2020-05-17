@@ -151,7 +151,7 @@ public class RecipeController {
         for (String categoryName : categoryNames) {
             Category category = categoryRepository.findByName(categoryName);
             if (category == null) {
-                category = new Category(categoryName);
+                category = new Category(categoryName, null, 0);
                 categoryRepository.save(category);
             }
             categoryList.add(category);

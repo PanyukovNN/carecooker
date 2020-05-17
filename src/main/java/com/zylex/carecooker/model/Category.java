@@ -1,9 +1,6 @@
 package com.zylex.carecooker.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -15,11 +12,17 @@ public class Category {
 
     private String name;
 
+    private String sectionName;
+
+    private int sectionOrder;
+
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(String name, String sectionName, int sectionOrder) {
         this.name = name;
+        this.sectionName = sectionName;
+        this.sectionOrder = sectionOrder;
     }
 
     public long getId() {
@@ -36,6 +39,22 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
+    }
+
+    public int getSectionOrder() {
+        return sectionOrder;
+    }
+
+    public void setSectionOrder(int sectionOrder) {
+        this.sectionOrder = sectionOrder;
     }
 
     @Override

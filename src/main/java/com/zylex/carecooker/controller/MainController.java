@@ -5,7 +5,6 @@ import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -36,10 +37,17 @@ public class MainController {
     public String mainPage(
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = pageSize) Pageable pageable,
             Model model) {
-        Page<Recipe> recipes = recipeRepository.findAll(pageable);
+        List<Category> sectionCategories = categoryRepository.findBySectionNameNotNull();
+        sectionCategories.sort(Comparator.comparing(Category::getSectionOrder));
 
-        model.addAttribute("recipes", recipes);
+        Map<Category, Page<Recipe>> categoryRecipes = new LinkedHashMap<>();
+        for (Category sectionCategory : sectionCategories) {
+            categoryRecipes.put(sectionCategory, recipeRepository.findByCategoriesContaining(sectionCategory, pageable));
+        }
+
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("sectionCategories", sectionCategories);
+        model.addAttribute("categoryRecipes", categoryRecipes);
         model.addAttribute("url", "/?");
         model.addAttribute("mainPage", "");
 

@@ -27,10 +27,14 @@ body {
     width: 66.6%;
 }
 
+.section-header {
+    color: #3a3a3a !important;
+    text-align: center;
+}
+
 .card {
     color: #3a3a3a;
 }
-
 
 .card-text {
     text-align: justify;
