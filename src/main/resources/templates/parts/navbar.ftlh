@@ -13,7 +13,7 @@
                 <a class="nav-link" href="/recipe/add">Добавить рецепт</a>
             </li>
             <li>
-                <form class="form-inline" method="post" action="filter">
+                <form class="form-inline" method="post" action="/filter">
                     <input class="form-control mr-sm-2 ml-3" name="filter"  type="search" placeholder="Введите название" aria-label="Search"
                            value="<#if filter??>${filter}</#if>">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>

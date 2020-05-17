@@ -53,7 +53,7 @@ ${ingredient}</#list></#if></textarea>
 
 <div class="form-group">
     <textarea class="form-control" name="categories" placeholder="Категории"><#if recipe??><#list recipe.categories as category>
-${category}</#list></#if></textarea>
+${category.name}</#list></#if></textarea>
 </div>
 
 <input type="hidden" name="id" value="<#if recipe??>${recipe.id}</#if>" />

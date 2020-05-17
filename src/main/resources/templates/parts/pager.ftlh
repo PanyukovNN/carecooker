@@ -14,7 +14,7 @@
     <#else>
         <#assign body = 1..page.getTotalPages()>
     </#if>
-    <div class="mt-5">
+    <div class="pager mt-5">
         <ul class="pagination justify-content-center">
             <#if page.getNumber() gt 0>
                 <li class="page-item">
@@ -28,6 +28,10 @@
             <#list body as p>
                 <#if (p - 1) == page.getNumber()>
                     <li class="page-item active">
+<#--                        <form class="page-link" onclick="this.submit();" method="post" action="page">-->
+<#--                            <input type="hidden" name="category" class="form-control" value="${category.name}">-->
+<#--                            <div>${category.name}</div>-->
+<#--                        </form>-->
                         <a class="page-link" href="#" tabindex="-1" style="background-color: #7cdcef; border-color: #7cdcef;">${p}</a>
                     </li>
                 <#elseif p == -1>
