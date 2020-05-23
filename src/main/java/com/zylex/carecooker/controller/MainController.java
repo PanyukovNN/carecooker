@@ -38,7 +38,7 @@ public class MainController {
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = pageSize) Pageable pageable,
             Model model) {
         List<Category> sectionCategories = categoryRepository.findBySectionNameNotNull();
-        sectionCategories.sort(Comparator.comparing(Category::getSectionOrder));
+        sectionCategories.sort(Comparator.comparing(Category::getSectionOrder).thenComparing(Category::getId));
 
         Map<Category, Page<Recipe>> categoryRecipes = new LinkedHashMap<>();
         for (Category sectionCategory : sectionCategories) {

@@ -52,7 +52,7 @@ public class RecipeController {
 
     @GetMapping("/add")
     public String getSaveRecipe() {
-        return "saveUpdateRecipe";
+        return "recipeSaveUpdate";
     }
 
     @PostMapping("/add")
@@ -90,7 +90,7 @@ public class RecipeController {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
         model.addAttribute("recipe", recipe);
 
-        return "saveUpdateRecipe";
+        return "recipeSaveUpdate";
     }
 
     @PostMapping("/edit")

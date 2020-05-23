@@ -12,9 +12,9 @@
             <li class="nav-item ml-3">
                 <a class="nav-link" href="/recipe/add">Добавить рецепт</a>
             </li>
-<#--            <li class="nav-item ml-3">-->
-<#--                <a class="nav-link" href="/section/add">Добавить раздел</a>-->
-<#--            </li>-->
+            <li class="nav-item ml-3">
+                <a class="nav-link" href="/section/list">Редактировать разделы</a>
+            </li>
             <li>
                 <form class="form-inline" method="post" action="/filter">
                     <input class="form-control mr-sm-2 ml-3" name="filter"  type="search" placeholder="Введите название" aria-label="Search"

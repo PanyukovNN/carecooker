@@ -16,6 +16,8 @@ public class Category {
 
     private int sectionOrder;
 
+    private String sectionImage;
+
     public Category() {
     }
 
@@ -55,6 +57,14 @@ public class Category {
 
     public void setSectionOrder(int sectionOrder) {
         this.sectionOrder = sectionOrder;
+    }
+
+    public String getSectionImage() {
+        return sectionImage;
+    }
+
+    public void setSectionImage(String sectionImage) {
+        this.sectionImage = sectionImage;
     }
 
     @Override

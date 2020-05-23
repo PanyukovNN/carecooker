@@ -58,12 +58,14 @@
         </#list>
     </div>
 
-    <a href="/recipe/edit?id=${recipe.id}">
-        <button type="button" class="btn btn-primary mt-4">Редактировать рецепт</button>
-    </a>
+    <div class="recipe-button-block">
+        <a href="/recipe/edit?id=${recipe.id}">
+            <button type="button" class="btn btn-primary mt-4">Редактировать рецепт</button>
+        </a>
 
-    <a href="/recipe/delete?id=${recipe.id}"
-       onclick="return confirm('Вы действительно хотите удалить рецепт?');">
-        <button type="button" class="btn btn-danger mt-4">Удалить рецепт</button>
-    </a>
+        <a href="/recipe/delete?id=${recipe.id}"
+           onclick="return confirm('Вы действительно хотите удалить рецепт?');">
+            <button type="button" class="btn btn-danger mt-4">Удалить рецепт</button>
+        </a>
+    </div>
 </div>
