@@ -12,19 +12,11 @@ public class Category {
 
     private String name;
 
-    private String sectionName;
-
-    private int sectionOrder;
-
-    private String sectionImage;
-
     public Category() {
     }
 
-    public Category(String name, String sectionName, int sectionOrder) {
+    public Category(String name) {
         this.name = name;
-        this.sectionName = sectionName;
-        this.sectionOrder = sectionOrder;
     }
 
     public long getId() {
@@ -41,30 +33,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSectionName() {
-        return sectionName;
-    }
-
-    public void setSectionName(String sectionName) {
-        this.sectionName = sectionName;
-    }
-
-    public int getSectionOrder() {
-        return sectionOrder;
-    }
-
-    public void setSectionOrder(int sectionOrder) {
-        this.sectionOrder = sectionOrder;
-    }
-
-    public String getSectionImage() {
-        return sectionImage;
-    }
-
-    public void setSectionImage(String sectionImage) {
-        this.sectionImage = sectionImage;
     }
 
     @Override

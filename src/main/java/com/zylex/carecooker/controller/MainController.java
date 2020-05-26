@@ -2,8 +2,10 @@ package com.zylex.carecooker.controller;
 
 import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
+import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
+import com.zylex.carecooker.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,42 +24,46 @@ public class MainController {
 
     private final RecipeRepository recipeRepository;
 
+    private final SectionRepository sectionRepository;
+
     private final CategoryRepository categoryRepository;
 
-    private final int pageSize = 9;
+    public static final int PAGE_SIZE = 9;
 
     @Autowired
     public MainController(RecipeRepository recipeRepository,
+                          SectionRepository sectionRepository,
                           CategoryRepository categoryRepository) {
         this.recipeRepository = recipeRepository;
+        this.sectionRepository = sectionRepository;
         this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/")
     public String mainPage(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = pageSize) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
-        List<Category> sectionCategories = categoryRepository.findBySectionNameNotNull();
-        sectionCategories.sort(Comparator.comparing(Category::getSectionOrder).thenComparing(Category::getId));
+        List<Section> sections = sectionRepository.findAll();
+        sections.sort(Comparator.comparing(Section::getPosition).thenComparing(Section::getId));
 
-        Map<Category, Page<Recipe>> categoryRecipes = new LinkedHashMap<>();
-        for (Category sectionCategory : sectionCategories) {
-            categoryRecipes.put(sectionCategory, recipeRepository.findByCategoriesContaining(sectionCategory, pageable));
+        Map<Section, Page<Recipe>> sectionRecipes = new LinkedHashMap<>();
+        for (Section section : sections) {
+            sectionRecipes.put(section, recipeRepository.findByCategoriesContaining(section.getCategory(), pageable));
         }
 
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("sectionCategories", sectionCategories);
-        model.addAttribute("categoryRecipes", categoryRecipes);
+        model.addAttribute("sections", sections);
+        model.addAttribute("sectionRecipes", sectionRecipes);
         model.addAttribute("url", "/?");
         model.addAttribute("mainPage", "");
 
         return "main";
     }
 
-    @PostMapping("category")
-    public String postByCategory(
+    @GetMapping("category")
+    public String getByCategory(
             @RequestParam(name = "category", required = false, defaultValue = "") String categoryName,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = pageSize) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Category category = categoryRepository.findByName(categoryName);
         Page<Recipe> recipes = recipeRepository.findByCategoriesContaining(category, pageable);
@@ -70,10 +76,10 @@ public class MainController {
         return "main";
     }
 
-    @GetMapping("category")
-    public String getByCategory(
+    @PostMapping("category")
+    public String postByCategory(
             @RequestParam(name = "category", required = false, defaultValue = "") String categoryName,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = pageSize) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Category category = categoryRepository.findByName(categoryName);
         Page<Recipe> recipes = recipeRepository.findByCategoriesContaining(category, pageable);
@@ -89,7 +95,7 @@ public class MainController {
     @PostMapping("filter")
     public String postByFilter(
             @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = pageSize) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Page<Recipe> recipes = recipeRepository.findByNameContainingIgnoreCase(filter, pageable);
 
@@ -103,7 +109,7 @@ public class MainController {
     @GetMapping("filter")
     public String getByFilter(
             @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = pageSize) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Page<Recipe> recipes = recipeRepository.findByNameContainingIgnoreCase(filter, pageable);
 

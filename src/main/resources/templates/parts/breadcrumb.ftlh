@@ -1,4 +1,4 @@
-<nav class="mt-3" aria-label="breadcrumb">
+<#--<nav class="mt-3" aria-label="breadcrumb">-->
 <#--    <ol class="breadcrumb" >-->
 <#--        <#if category??>-->
 <#--            <li class="breadcrumb-item">${category.name}</li>-->
@@ -7,4 +7,4 @@
 <#--        </#if>-->
 <#--        <li class="breadcrumb-item active" aria-current="page">Страница ${recipes.getNumber() + 1}</li>-->
 <#--    </ol>-->
-</nav>
+<#--</nav>-->

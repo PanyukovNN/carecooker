@@ -1,11 +1,12 @@
 <#import "parts/common.ftlh" as c>
 
 <@c.page>
-    <#list sectionCategories as sectionCategory>
-        <a href="/section/edit?id=${sectionCategory.id}">
+    <#list sections as section>
+        <a href="/section/edit?id=${section.id}">
             <div class="section-header-parent shadow mt-3">
-                <h5>${sectionCategory.sectionName}</h5>
-                <div class="section-header" style="<#if sectionCategory.sectionImage??>background-image: url('/img/${sectionCategory.sectionImage}');</#if>"></div>
+                <h5>${section.sectionName}</h5>
+                <div class="section-header"
+                     style="<#if section.image??>background-image: url('/img/${section.image}');</#if>"></div>
             </div>
         </a>
     </#list>

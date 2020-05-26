@@ -7,13 +7,16 @@
 <#--            <p>Приветствуем вас на нашем кулинарном сайте, здесь собрана большая коллекция интересных и оригинальных кулинарных рецептов от знаменитых шеф-поваров со всего мира. Публикуются простые и быстрые рецепты на каждый день, рецепты здорового питания, а также, интересные и познавательные кулинарные статьи. На сайте имеется справочник продуктов с описанием как обычных, так и экзотических продуктов, из которого вы узнаете как покупать, обрабатывать, хранить и применять различные продукты в кулинарии.</p>-->
 <#--        </div>-->
 
-        <#list categoryRecipes as sectionCategory, recipes>
-            <div class="section-header-parent shadow mt-3">
-                <h5>${sectionCategory.sectionName}</h5>
-                <div class="section-header" style="<#if sectionCategory.sectionImage??>background-image: url('/img/${sectionCategory.sectionImage}');</#if>">
-                    <div class="inner"></div>
+        <#list sectionRecipes as section, recipes>
+            <a href="/section/${section.id}">
+                <div class="section-header-parent shadow mt-3">
+                    <h5>${section.name}</h5>
+                    <div class="section-header"
+                         style="<#if section.image??>background-image: url('/img/${section.image}');</#if>">
+                        <div class="section-overlay"></div>
+                    </div>
                 </div>
-            </div>
+            </a>
 <#--            <div class="row row-cols-1 row-cols-md-3 mt-3">-->
 <#--                <#list recipes.content as recipe>-->
 <#--                    <a href="/recipe/${recipe.id}" style="text-decoration: none;">-->

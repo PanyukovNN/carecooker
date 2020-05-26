@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+.navbar {
+    background-color: #fff0bd !important;
+}
+
 .navbar .navbar-brand {
     margin-left: 7.5%;
 }
@@ -13,6 +17,7 @@ body {
     font-size: 1.185rem;
     line-height: 1.6;
     color: #3a3a3a;
+    /*background-color: #fae9e7 !important;*/
 }
 
 .breadcrumb {
@@ -34,6 +39,35 @@ body {
 }
 
 /* Section */
+.section-top-parent {
+    height: 10rem;
+    overflow: hidden;
+    position: relative;
+
+    border-radius: 20px;
+}
+.section-top-parent h5 {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+
+    font-size: 70px;
+    font-family: 'Marck Script', cursive;
+    color: #fff !important;
+
+    transform: translate(-50%, -50%);
+}
+.section-top-child {
+    width: 100%;
+    height: 100%;
+
+    background-size: cover;
+    background-position: top;
+
+    transition: .3s ease;
+}
+
 .section-header-parent {
     height: 20rem;
     overflow: hidden;
@@ -54,7 +88,7 @@ body {
 
 .section-header-parent h5 {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     top: 50%;
     left: 50%;
 
@@ -69,14 +103,15 @@ body {
     transform: scale(1.05);
 }
 
-.inner {
+.section-overlay {
     position: relative;
     width: 100%;
     height: 100%;
-    z-index: 3;
-    color: #fff;
-    text-align: center;
-    padding: 50px;
+    z-index: 1;
+
+    background-color: #000;
+
+    opacity: 0.15;
 }
 
 /* Card */
@@ -100,13 +135,14 @@ body {
     margin-bottom: auto;
     margin-left: 1rem;
     padding: 1rem;
-    background-color: #f7f7f7;
+    background-color:
+            /*#ebc686;*/
+            #f7f7f7;
 }
 
 /* Recipe */
 .recipe-info {
     width: 66.6%;
-    margin-right: 1rem;
 }
 
 .recipe-main-info {
@@ -153,26 +189,32 @@ body {
     padding-left: 1rem;
 }
 
+/* Category */
 .recipe-category-item {
     display: inline-block;
-    background-color: #ebebeb;
+    background-color:
+            /*#ebc686;*/
+            /*#d9ccc1;*/
+            #ebebeb;
     padding: 0.25rem 0.875rem 0.35rem;
     cursor: pointer;
+
+    transition: .1s ease;
+}
+
+.recipe-category-item:hover {
+    background-color: #fd9334;
+    color: #fff;
 }
 
 .recipe-category-link {
     text-decoration: none;
-    color: #3a3a3a;
-}
-
-.recipe-category-item:hover {
-    background-color: #adedff;
-    color: #3a3a3a;
+    /*color: #3a3a3a;*/
 }
 
 .recipe-category-link:hover {
     text-decoration: none;
-    color: #3a3a3a;
+    /*color: #3a3a3a;*/
 }
 
 .recipe-button-block {

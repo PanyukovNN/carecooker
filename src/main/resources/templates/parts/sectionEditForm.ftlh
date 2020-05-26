@@ -1,9 +1,9 @@
 <div class="mb-3">
-    <img id="recipe-main-image" src="<#if sectionCategory.sectionImage??>/img/${sectionCategory.sectionImage}<#else>#</#if>" alt="" />
+    <img id="recipe-main-image" src="<#if section.image??>/img/${section.category}<#else>#</#if>" alt="" />
 </div>
 <div class="form-group">
     <div class="custom-file">
-        <input type="file" name="file" id="customFile" value="<#if sectionCategory.sectionImage??>${sectionCategory.sectionImage}</#if>" />
+        <input type="file" name="file" id="customFile" value="<#if section.image??>${section.image}</#if>" />
         <label class="custom-file-label" for="customFile">Выберите изображение раздела</label>
     </div>
     <script>
@@ -27,8 +27,8 @@
     <label for="exampleFormControlSelect">Выберите родительскую категорию</label>
     <select class="form-control" id="exampleFormControlSelect" name="category">
         <#list categories as category>
-            <#if sectionCategory??>
-                <#if sectionCategory.name == category.name>
+            <#if section??>
+                <#if section.name == category.name>
                     <option selected>${category.name}</option>
                     <#else>
                     <option>${category.name}</option>
@@ -42,16 +42,16 @@
 
 <div class="form-group">
     <input type="text" class="form-control" name="name" placeholder="Название раздела"
-           value="<#if sectionCategory??>${sectionCategory.name}</#if>"/>
+           value="<#if section??>${section.name}</#if>"/>
 </div>
 
 <div class="form-group">
-    <input type="text" class="form-control" name="order" placeholder="Порядковый номер"
-           value="<#if sectionCategory??>${sectionCategory.sectionOrder}</#if>"/>
+    <input type="text" class="form-control" name="position" placeholder="Порядковый номер"
+           value="<#if section??>${section.position}</#if>"/>
 </div>
 
-<input type="hidden" name="id" value="<#if sectionCategory??>${sectionCategory.id}</#if>" />
+<input type="hidden" name="id" value="<#if section??>${section.id}</#if>" />
 
 <div class="form-group">
-    <button type="submit" class="btn btn-primary"><#if sectionCategory??>Обновить раздел<#else>Сохранить раздел</#if></button>
+    <button type="submit" class="btn btn-primary"><#if section??>Обновить раздел<#else>Сохранить раздел</#if></button>
 </div>
