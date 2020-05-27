@@ -62,6 +62,7 @@ public class RecipeController {
             @RequestParam("file") MultipartFile file,
             @RequestParam String cookTime,
             @RequestParam String serving,
+            @RequestParam String complexity,
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam String categories) throws IOException {
@@ -69,6 +70,7 @@ public class RecipeController {
                 description,
                 cookTime,
                 serving,
+                complexity,
                 splitByNewLine(ingredients),
                 method,
                 parseCategories(categories));

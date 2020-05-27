@@ -70,7 +70,7 @@ public class SectionController {
 
         model.addAttribute("sections", sections);
 
-        return "sectionList";
+        return "sectionEditList";
     }
 
     @GetMapping("/add")

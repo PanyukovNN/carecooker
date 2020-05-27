@@ -53,9 +53,8 @@ public class MainController {
 
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("sections", sections);
-        model.addAttribute("sectionRecipes", sectionRecipes);
+//        model.addAttribute("sectionRecipes", sectionRecipes);
         model.addAttribute("url", "/?");
-        model.addAttribute("mainPage", "");
 
         return "main";
     }

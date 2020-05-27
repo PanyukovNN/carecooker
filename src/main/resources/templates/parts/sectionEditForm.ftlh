@@ -1,5 +1,5 @@
 <div class="mb-3">
-    <img id="recipe-main-image" src="<#if section.image??>/img/${section.category}<#else>#</#if>" alt="" />
+    <img id="recipe-main-image" src="<#if section.image??>/img/${section.image}<#else>#</#if>" alt="" />
 </div>
 <div class="form-group">
     <div class="custom-file">

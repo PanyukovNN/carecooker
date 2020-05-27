@@ -32,7 +32,7 @@
 <#--                            <input type="hidden" name="category" class="form-control" value="${category.name}">-->
 <#--                            <div>${category.name}</div>-->
 <#--                        </form>-->
-                        <a class="page-link" href="#" tabindex="-1" style="background-color: #7cdcef; border-color: #7cdcef;">${p}</a>
+                        <a class="page-link selected" href="#" tabindex="-1">${p}</a>
                     </li>
                 <#elseif p == -1>
                     <li class="page-item disabled">

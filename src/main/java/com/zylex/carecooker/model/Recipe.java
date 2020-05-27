@@ -22,6 +22,8 @@ public class Recipe {
 
     private String serving;
 
+    private String complexity;
+
     @ElementCollection
     private List<String> ingredients;
 
@@ -33,11 +35,12 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(String name, String description, String cookTime, String serving, List<String> ingredients, String method, List<Category> categories) {
+    public Recipe(String name, String description, String cookTime, String serving, String complexity, List<String> ingredients, String method, List<Category> categories) {
         this.name = name;
         this.description = description;
         this.cookTime = cookTime;
         this.serving = serving;
+        this.complexity = complexity;
         this.ingredients = ingredients;
         this.method = method;
         this.categories = categories;
@@ -97,6 +100,14 @@ public class Recipe {
         this.serving = serving;
     }
 
+    public String getComplexity() {
+        return complexity;
+    }
+
+    public void setComplexity(String complexity) {
+        this.complexity = complexity;
+    }
+
     public List<String> getIngredients() {
         return ingredients;
     }
@@ -150,6 +161,7 @@ public class Recipe {
                 ", mainImage='" + mainImage + '\'' +
                 ", cookTime='" + cookTime + '\'' +
                 ", serving='" + serving + '\'' +
+                ", complexity='" + complexity + '\'' +
                 ", ingredients=" + ingredients +
                 ", method='" + method + '\'' +
                 ", categories=" + categories +
