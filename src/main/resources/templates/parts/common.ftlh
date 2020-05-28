@@ -22,6 +22,7 @@
         </div>
     </body>
     <div class="footer">
+        <div class="section-overlay"></div>
     </div>
     </html>
 </#macro>

@@ -28,7 +28,7 @@ public class MainController {
 
     private final CategoryRepository categoryRepository;
 
-    public static final int PAGE_SIZE = 9;
+    public static final int PAGE_SIZE = 30;
 
     @Autowired
     public MainController(RecipeRepository recipeRepository,

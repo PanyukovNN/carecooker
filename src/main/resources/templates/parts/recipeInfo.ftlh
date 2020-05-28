@@ -6,18 +6,22 @@
     </div>
 
     <div class="recipe-meta mt-3">
-        <span class="recipe-meta-wrap meta-delimiter">
-            <div class="recipe-meta-heading">Время приготовления</div>
-            <div class="recipe-meta_prep-time mt-1">${recipe.cookTime}</div>
-        </span>
-        <span class="recipe-meta-wrap meta-delimiter">
-            <div class="recipe-meta-heading">Сложность</div>
-            <div class="recipe-meta_serving mt-1">${recipe.complexity}</div>
-        </span>
-        <span class="recipe-meta-wrap">
-            <div class="recipe-meta-heading">Количество порций</div>
-            <div class="recipe-meta_serving mt-1">${recipe.serving}</div>
-        </span>
+        <div class="recipe-meta-wrap meta-delimiter">
+            <div class="svg clock-svg"></div>
+            <div class="recipe-meta_prep-time">
+                ${recipe.cookTime}
+            </div>
+        </div>
+<#--        <span class="recipe-meta-wrap meta-delimiter">-->
+<#--            <div class="recipe-meta-heading">Сложность</div>-->
+<#--            <div class="recipe-meta_serving mt-1">${recipe.complexity}</div>-->
+<#--        </span>-->
+        <div class="recipe-meta-wrap">
+            <div class="svg serving-svg"></div>
+            <div class="recipe-meta_serving">
+                ${recipe.serving}
+            </div>
+        </div>
     </div>
 
     <div class="recipe-content mt-3">
