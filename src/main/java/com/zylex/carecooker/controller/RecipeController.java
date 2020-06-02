@@ -6,6 +6,10 @@ import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.zylex.carecooker.controller.MainController.PAGE_SIZE;
 
 @Controller
 @RequestMapping("/recipe")
@@ -37,6 +43,20 @@ public class RecipeController {
 
     @Value("${upload.path}")
     private String uploadPath;
+
+    @GetMapping("/all")
+    public String getAllRecipes(
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            Model model) {
+        Page<Recipe> recipes = recipeRepository.findAll(pageable);
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("recipesAll", "true");
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("url", "/recipe/all?");
+
+        return "recipesAll";
+    }
 
     @GetMapping("/{id}")
     public String getRecipe(@PathVariable long id,

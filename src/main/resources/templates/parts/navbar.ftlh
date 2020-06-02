@@ -10,7 +10,7 @@
                 <a class="nav-link font-weight-bold" href="/">Разделы</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link font-weight-bold" href="/">Все рецепты</a>
+                <a class="nav-link font-weight-bold" href="/recipe/all">Все рецепты</a>
             </li>
             <li class="nav-item ml-3">
                 <a class="nav-link font-weight-bold" href="/recipe/add">Добавить рецепт</a>

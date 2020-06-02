@@ -1,7 +1,12 @@
 <div class="greeting-block">
     <div class="greeting-block__title">
         <h1 class="greeting-header">
-            <#if section??>${section.name}<#else>Разделы</#if>
+            <#if recipesAll??>
+                Рецепты
+            <#else>
+                <#if section??>${section.name}<#else>Разделы</#if>
+            </#if>
+
         </h1>
     </div>
     <div class="greeting-block__description">

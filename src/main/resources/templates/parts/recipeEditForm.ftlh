@@ -1,18 +1,40 @@
 <form method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-        <img id="recipe-main-image" src="<#if recipe??>/img/${recipe.mainImage}<#else>#</#if>" alt="" />
+    <div class="recipe-edit-from-title">
+        <input type="text" class="recipe-edit-from-title-input" name="name" placeholder="Название блюда"
+               onfocus="this.placeholder = ''"
+               value="<#if recipe??>${recipe.name}</#if>"/>
     </div>
+
+
     <div class="form-group">
-        <div class="custom-file">
-            <input type="file" name="file" id="customFile" value="<#if recipe??>${recipe.mainImage}</#if>" />
-            <label class="custom-file-label" for="customFile">Выберите изображение блюда</label>
+        <div class="recipe-edit-from-image">
+            <label for="customFile">
+
+                <#if recipe??>
+                    <div class="recipe-main-image" id="recipe-main-image"
+                         style="background-image:url('/img/${recipe.mainImage}');">
+                        <div style="padding-top: 52%;"></div>
+                    </div>
+                <#else>
+                    <div class="recipe-main-image" id="recipe-main-image"
+                         style="background-image:url('../../static/img_placeholder.svg');">
+                        <div style="padding-top: 52%;"></div>
+                    </div>
+                </#if>
+            </label>
+            <input type="file" name="file" id="customFile" value="<#if recipe??>${recipe.mainImage}</#if>"/>
         </div>
+
+<#--        <div class="custom-file">-->
+<#--            <input type="file" name="file" id="customFile" value="<#if recipe??>${recipe.mainImage}</#if>" />-->
+<#--            <label class="custom-file-label" for="customFile">Выберите изображение блюда</label>-->
+<#--        </div>-->
         <script>
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#recipe-main-image').attr('src', e.target.result);
+                        $('#recipe-main-image').attr('style', "background-image: url(" + e.target.result) + ");";
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -22,11 +44,6 @@
                 readURL(this);
             });
         </script>
-    </div>
-
-    <div class="form-group">
-        <input type="text" class="form-control" name="name" placeholder="Название блюда"
-               value="<#if recipe??>${recipe.name}</#if>"/>
     </div>
 
     <div class="form-group">
