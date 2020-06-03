@@ -33,15 +33,6 @@
     transform: translate(-50%, -50%);
 }
 
-#navbarSupportedContent {
-    margin-left: 15%;
-}
-
-.search-form {
-    /*width: 0 !important;*/
-    margin-right: 5%;
-}
-
 .search-bar {
     display: flex;
     width: 100%;
@@ -82,7 +73,8 @@ body {
 
 .container-fluid {
     max-width: 70%;
-    padding: 0 2rem 2rem 2rem !important;
+    margin-top: 0;
+    padding: 2rem 2rem 2rem 2rem !important;
 
     background-color: #fff;
 
@@ -91,6 +83,10 @@ body {
 
 .main-list-block {
     /*width: 66.6%;*/
+    width: 100%;
+}
+.main-section-list {
+    display: flex;
     width: 100%;
 }
 

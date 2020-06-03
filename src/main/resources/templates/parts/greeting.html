@@ -1,15 +1,19 @@
-<div class="greeting-block">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<div th:fragment="greeting" class="greeting-block">
     <div class="greeting-block__title">
-        <h1 class="greeting-header">
-            <#if recipesAll??>
-                Рецепты
-            <#else>
-                <#if section??>${section.name}<#else>Разделы</#if>
-            </#if>
-
+        <h1 class="greeting-header" th:if="${recipesAll == 'true'}">
+            Рецепты
+        </h1>
+        <h1 class="greeting-header" th:if="${section}"
+            th:text="${section.name}">
+        </h1>
+        <h1 class="greeting-header" th:unless="${section}"
+            th:text="Разделы">
         </h1>
     </div>
     <div class="greeting-block__description">
         Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название и сайт подберет соответствующий.
     </div>
 </div>
+</html>

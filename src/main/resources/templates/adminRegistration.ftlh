@@ -2,9 +2,9 @@
 
 <@c.page>
     <div class="login-form-block">
-        <form method="post" class="login-form border" action="/registration">
+        <form method="post" class="login-form border" action="/admin/registration">
             <div class="mb-5">
-                <h4>Регистрация</h4>
+                <h4>Добавить администратора</h4>
             </div>
             <div class="form-group">
                 <label>Логин</label>
@@ -20,7 +20,7 @@
                     Администратор с таким именем уже существует
                 </div>
             </#if>
-            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
             <div class="form-group">
                 <button type="submit" class="login-from-submit-btn btn btn-primary">Зарегистрировать админа</button>
             </div>

@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+    <head th:replace="parts/common.html :: headerfiles"></head>
+    <body>
+        <div th:replace="parts/navbar.html :: navbar"></div>
+        <div class="container-fluid main-container">
+            <div th:replace="parts/sectionList.html :: sectionList"></div>
+        </div>
+        <div class="footer">
+            <div class="section-overlay"></div>
+        </div>
+    </body>
+</html>
+
+<!--    <div sec:authorize="isAuthenticated()">-->
+<!--        Text visible only to authenticated users.-->
+<!--    </div>-->

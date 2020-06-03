@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -106,6 +107,7 @@ public class RecipeController {
     }
 
     @GetMapping("/edit")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String getUpdateRecipe(
             @RequestParam long id,
             Model model) {
@@ -116,6 +118,7 @@ public class RecipeController {
     }
 
     @PostMapping("/edit")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String postUpdateRecipe(
             @RequestParam long id,
             @RequestParam String name,

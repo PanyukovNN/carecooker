@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<div class="main-list-block" th:fragment="sectionList">
+    <div th:replace="parts/greeting.html :: greeting"></div>
+
+    <div style="display: flex;" class="d-flex row row-cols-2">
+        <div class="col" th:each="section : ${sections}">
+            <a th:href="@{/section/} + ${section.id}">
+                <div class="section-header-parent shadow my-4">
+                    <h5 th:text="${section.name}"></h5>
+                    <div class="section-header"
+                         th:style="|background-image: url('/img/${section.image}');|">
+                        <div class="section-overlay"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</html>
+
