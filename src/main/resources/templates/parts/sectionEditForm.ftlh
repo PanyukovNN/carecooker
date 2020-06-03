@@ -51,6 +51,7 @@
 </div>
 
 <input type="hidden" name="id" value="<#if section??>${section.id}</#if>" />
+<input type="hidden" name="_csrf" value="${_csrf.token}" />
 
 <div class="form-group">
     <button type="submit" class="btn btn-primary"><#if section??>Обновить раздел<#else>Сохранить раздел</#if></button>

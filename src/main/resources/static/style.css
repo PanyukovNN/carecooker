@@ -427,6 +427,29 @@ body {
     border-color: #fd9334 !important;
 }
 
+/* Login form */
+.login-form-block {
+    width: 100%;
+    display: flex;
+
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    justify-content: center;
+}
+.login-form {
+    width: 24rem;
+    background-color: #f7f7f7;
+
+    padding: 2.5rem;
+
+    border-radius: 1px;
+}
+.login-from-submit-btn {
+    width: 100%;
+}
+
+/* Footer */
 .footer {
     margin: 0 0 0 0;
     /*position: static;*/
@@ -443,6 +466,7 @@ body {
     background-position: bottom;
 }
 
+/* Effects */
 .zoom {
     transition: .3s ease;
     opacity: 1;

@@ -18,6 +18,9 @@
             <li class="nav-item ml-3">
                 <a class="nav-link font-weight-bold" href="/section/list">Редактировать разделы</a>
             </li>
+            <li class="nav-item ml-3">
+                <a class="nav-link font-weight-bold" href="/registration">Добавить администратора</a>
+            </li>
         </ul>
     </div>
     <div class="search-form navbar-collapse collapse order-3 dual-collapse2">

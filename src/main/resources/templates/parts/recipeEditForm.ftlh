@@ -80,6 +80,7 @@ ${category.name}</#list></#if></textarea>
     </div>
 
     <input type="hidden" name="id" value="<#if recipe??>${recipe.id}</#if>" />
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary"><#if recipe??>Обновить рецепт<#else>Сохранить рецепт</#if></button>
