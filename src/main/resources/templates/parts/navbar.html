@@ -23,11 +23,7 @@
                 </ul>
             </div>
 
-<!--        <#&#45;&#45;    <div class="mr-3">&ndash;&gt;-->
-<!--        <#&#45;&#45;        <#if>&ndash;&gt;-->
-<!--        <#&#45;&#45;            &ndash;&gt;-->
-<!--        <#&#45;&#45;        </#if>&ndash;&gt;-->
-<!--        <#&#45;&#45;    </div>&ndash;&gt;-->
+           <span class="mr-3" sec:authentication="name"></span>
 
             <form action="/logout" method="post">
                 <input type="hidden" name="_csrf" th:value="${_csrf.token}" />

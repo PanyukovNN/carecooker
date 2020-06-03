@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+
+<div th:fragment="recipeList" class="main-list-block">
+    <div class="row row-cols-1 row-cols-md-3 mt-3">
+        <div th:each="recipe : ${recipes.content}">
+            <a th:href="@{/recipe/} + ${recipe.id}" style="text-decoration: none;">
+                <div class="col mb-4">
+                    <div class="recipe-card shadow zoom">
+                        <div th:if="${recipe.mainImage}" class="recipe-card-image">
+                            <img th:src="@{/img/} + ${recipe.mainImage}" class="card-img-top">
+                        </div>
+
+                        <div class="recipe-card-header">
+                            <h4 class="card-title" th:text="${recipe.name}"></h4>
+                        </div>
+                        <div class="recipe-card-meta">
+                            <div class="recipe-meta-wrap">
+                                <div class="svg clock-svg"></div>
+                                <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
+                            </div>
+                            <div class="recipe-meta-wrap">
+                                <div class="svg serving-svg"></div>
+                                <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div th:if="${#lists.isEmpty(recipes.content)}" class="alert alert-primary mt-3" role="alert">
+        На данной странице нет рецептов
+    </div>
+
+<#--    <@p.pager url recipes/>-->
+</div>
+
+</html>

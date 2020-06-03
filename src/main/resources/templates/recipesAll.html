@@ -4,7 +4,10 @@
     <body>
         <div th:replace="parts/navbar.html :: navbar"></div>
         <div class="container-fluid main-container">
-            <div th:replace="parts/sectionList.html :: sectionList"></div>
+            <div th:replace="parts/greeting.html :: greeting"></div>
+            <div class="content-container">
+                <div th:replace="parts/recipeList.html :: recipeList"></div>
+            </div>
         </div>
         <div th:replace="parts/common.html :: footer"></div>
     </body>
