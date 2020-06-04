@@ -36,7 +36,7 @@
             <div class="recipe-ingredient-list-wrap my-4">
                 <h3 class="recipe-ingredients__heading">Ингедиенты</h3>
                 <ul class="recipe-ingredients__list mt-3">
-                    <li class="recipe-ingredients__list-item" th:each="ingredient : ${recipe.ingredients}"></li>
+                    <li class="recipe-ingredients__list-item" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}"></li>
                 </ul>
             </div>
             <div class="recipe-method-wrap my-4">
@@ -58,15 +58,17 @@
 <!--                </#list>-->
 <!--            </div>-->
 
-            <div class="recipe-button-block">
-                <a th:href="@{/recipe/edit?id=} + ${recipe.id}">
-                    <button type="button" class="btn btn-primary mt-4">Редактировать рецепт</button>
-                </a>
+            <div sec:authorize="isAuthenticated()">
+                <div class="recipe-button-block">
+                    <a th:href="@{/recipe/edit?id=} + ${recipe.id}">
+                        <button type="button" class="btn btn-primary mt-4">Редактировать рецепт</button>
+                    </a>
 
-                <a th:href="@{/recipe/delete?id=} + ${recipe.id}"
-                   onclick="return confirm('Вы действительно хотите удалить рецепт?');">
-                    <button type="button" class="btn btn-danger mt-4">Удалить рецепт</button>
-                </a>
+                    <a th:href="@{/recipe/delete?id=} + ${recipe.id}"
+                       onclick="return confirm('Вы действительно хотите удалить рецепт?');">
+                        <button type="button" class="btn btn-danger mt-4">Удалить рецепт</button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

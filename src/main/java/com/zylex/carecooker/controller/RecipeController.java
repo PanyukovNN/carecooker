@@ -49,12 +49,12 @@ public class RecipeController {
     public String getAllRecipes(
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
-        Page<Recipe> recipes = recipeRepository.findAll(pageable);
+        Page<Recipe> page = recipeRepository.findAll(pageable);
 
-        model.addAttribute("recipes", recipes);
+        model.addAttribute("page", page);
         model.addAttribute("recipesAll", "true");
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("url", "/recipe/all?");
+        model.addAttribute("url", "/recipe/all");
 
         return "recipesAll";
     }

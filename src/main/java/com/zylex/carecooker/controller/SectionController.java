@@ -53,12 +53,12 @@ public class SectionController {
             Model model) {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        Page<Recipe> recipes = recipeRepository.findByCategoriesContaining(section.getCategory(), pageable);
+        Page<Recipe> page = recipeRepository.findByCategoriesContaining(section.getCategory(), pageable);
 
-        model.addAttribute("recipes", recipes);
+        model.addAttribute("page", page);
         model.addAttribute("section", section);
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("url", "/section/" + section.getId() + "?");
+        model.addAttribute("url", "/section/" + section.getId());
 
         return "section";
     }

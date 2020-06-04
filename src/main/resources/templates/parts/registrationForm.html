@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<div class="login-form-block" th:fragment="registrationForm">
+    <form method="post" class="login-form border" action="/admin/registration">
+        <div class="mb-5">
+            <h4>Добавить администратора</h4>
+        </div>
+
+        <div class="form-group">
+            <label>Логин</label>
+            <input type="text" class="form-control" name="username"/>
+        </div>
+
+        <div class="form-group mb-5">
+            <label>Пароль</label>
+            <input type="password" class="form-control" name="password"/>
+        </div>
+
+        <div th:if="${adminExists}" class="alert alert-primary mt-4" role="alert">
+            Администратор с таким именем уже существует
+        </div>
+
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+        <div class="form-group">
+            <button type="submit" class="login-from-submit-btn btn btn-primary">Зарегистрировать</button>
+        </div>
+    </form>
+</div>
+</html>

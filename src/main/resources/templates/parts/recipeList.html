@@ -3,12 +3,13 @@
 
 <div th:fragment="recipeList" class="main-list-block">
     <div class="row row-cols-1 row-cols-md-3 mt-3">
-        <div th:each="recipe : ${recipes.content}">
+        <div th:each="recipe : ${page.content}">
             <a th:href="@{/recipe/} + ${recipe.id}" style="text-decoration: none;">
                 <div class="col mb-4">
                     <div class="recipe-card shadow zoom">
-                        <div th:if="${recipe.mainImage}" class="recipe-card-image">
-                            <img th:src="@{/img/} + ${recipe.mainImage}" class="card-img-top">
+                        <div class="recipe-card-image">
+                            <img th:if="${recipe.mainImage}" th:src="@{/img/} + ${recipe.mainImage}" class="card-img-top">
+                            <img th:unless="${recipe.mainImage}" th:src="@{../../static/img_placeholder.svg}" class="card-img-top">
                         </div>
 
                         <div class="recipe-card-header">
@@ -29,11 +30,11 @@
             </a>
         </div>
     </div>
-    <div th:if="${#lists.isEmpty(recipes.content)}" class="alert alert-primary mt-3" role="alert">
+    <div th:if="${#lists.isEmpty(page.content)}" class="alert alert-primary mt-3" role="alert">
         На данной странице нет рецептов
     </div>
 
-<#--    <@p.pager url recipes/>-->
+    <div th:replace="parts/pager :: pager"></div>
 </div>
 
 </html>

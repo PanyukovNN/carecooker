@@ -278,18 +278,6 @@ body {
     /*transform: translateY(-50%);*/
 }
 
-/* Right menu */
-.right-menu {
-    width: 33.3%;
-    margin-right: 0;
-    margin-bottom: auto;
-    margin-left: 1rem;
-    padding: 1rem;
-    background-color:
-            /*#ebc686;*/
-            #f7f7f7;
-}
-
 /* Recipe */
 .recipe-container {
     /*width: 66.6%;*/
@@ -397,6 +385,23 @@ body {
     width: 75%;
 }
 .recipe-edit-from-image > input {
+    display: none;
+}
+
+/* Section edit form */
+.section-edit-from-image {
+    display: flex;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    justify-content: center;
+    width: 100%;
+}
+.section-edit-from-image > label {
+    width: 75%;
+
+    border-radius: 20px;
+}
+.section-edit-from-image > input {
     display: none;
 }
 

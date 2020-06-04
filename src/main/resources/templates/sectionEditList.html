@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head th:replace="parts/common.html :: headerfiles"></head>
+<body>
+    <div th:replace="parts/navbar.html :: navbar"></div>
+    <div class="container-fluid main-container">
+        <a th:each="section : ${sections}" th:href="@{/section/edit?id=} + ${section.id}">
+            <div class="section-header-parent shadow mt-3">
+                <h5 th:text="${section.name}"></h5>
+                <div class="section-header"
+                     th:style="|background-image: url('/img/${section.image}');|"></div>
+            </div>
+        </a>
+
+        <a href="/section/add">
+            <button type="button" class="btn btn-primary mt-4">Добавить раздел</button>
+        </a>
+    </div>
+    <div th:replace="parts/common.html :: footer"></div>
+</body>
+</html>
