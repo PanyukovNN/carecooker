@@ -29,13 +29,32 @@ public class Recipe {
 
     private String method;
 
+    @ManyToOne
+    private Section section;
+
+//    @ManyToOne
+//    private Dish dish;
+
     @ManyToMany
     private List<Category> categories;
+
+//    private boolean toPublication;
 
     public Recipe() {
     }
 
-    public Recipe(String name, String description, String cookTime, String serving, String complexity, List<String> ingredients, String method, List<Category> categories) {
+    public Recipe(String name,
+                  String description,
+                  String cookTime,
+                  String serving,
+                  String complexity,
+                  List<String> ingredients,
+                  String method,
+//                  Dish dish,
+                  Section section,
+                  List<Category> categories
+//                  boolean toPublication
+    ) {
         this.name = name;
         this.description = description;
         this.cookTime = cookTime;
@@ -43,7 +62,10 @@ public class Recipe {
         this.complexity = complexity;
         this.ingredients = ingredients;
         this.method = method;
+//        this.dish = dish;
+//        this.section = section;
         this.categories = categories;
+//        this.toPublication = toPublication;
     }
 
     public long getId() {
@@ -128,9 +150,33 @@ public class Recipe {
         this.method = method;
     }
 
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
+//
+//    public Dish getDish() {
+//        return dish;
+//    }
+//
+//    public void setDish(Dish dish) {
+//        this.dish = dish;
+//    }
+
     public List<Category> getCategories() {
         return categories;
     }
+
+//    public boolean isToPublication() {
+//        return toPublication;
+//    }
+//
+//    public void setToPublication(boolean toPublication) {
+//        this.toPublication = toPublication;
+//    }
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
@@ -164,7 +210,10 @@ public class Recipe {
                 ", complexity='" + complexity + '\'' +
                 ", ingredients=" + ingredients +
                 ", method='" + method + '\'' +
+//                ", section=" + section +
+//                ", dish=" + dish +
                 ", categories=" + categories +
+//                ", toPublication=" + toPublication +
                 '}';
     }
 }

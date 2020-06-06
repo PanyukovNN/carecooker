@@ -40,7 +40,8 @@
 
         <li th:each="pageNo : ${#numbers.sequence(0, page.totalPages - 1)}"
             th:class="${page.number eq pageNo}? 'page-item active selected' : 'page-item'">
-            <a class="page-link" th:if="${page.number eq pageNo}" href="javascript:void(0);">
+            <a class="page-link selected" th:if="${page.number eq pageNo}" href="javascript:void(0);"
+                style="background-color: #fd9334; border-color: #fd9334;">
                 <span th:text="${pageNo + 1}"></span>
             </a>
             <a class="page-link" th:if="${not (page.number eq pageNo)}" th:href="@{${url}(page=${pageNo})}">

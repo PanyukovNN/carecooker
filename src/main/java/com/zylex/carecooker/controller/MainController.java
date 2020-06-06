@@ -46,14 +46,8 @@ public class MainController {
         List<Section> sections = sectionRepository.findAll();
         sections.sort(Comparator.comparing(Section::getPosition).thenComparing(Section::getId));
 
-        Map<Section, Page<Recipe>> sectionRecipes = new LinkedHashMap<>();
-        for (Section section : sections) {
-            sectionRecipes.put(section, recipeRepository.findByCategoriesContaining(section.getCategory(), pageable));
-        }
-
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("sections", sections);
-//        model.addAttribute("sectionRecipes", sectionRecipes);
         model.addAttribute("mainPage", "true");
         model.addAttribute("url", "/?");
 

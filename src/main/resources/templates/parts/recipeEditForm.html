@@ -3,9 +3,9 @@
 
 <form method="post" enctype="multipart/form-data" th:fragment="recipeEditForm">
     <div class="recipe-edit-from-title">
-        <input type="text" class="recipe-edit-from-title-input" name="name" placeholder="Название блюда"
+        <textarea class="recipe-edit-from-title-input" name="name" placeholder="Название блюда"
                onfocus="this.placeholder = ''"
-               th:value="${recipe} ? ${recipe.name} : ''"/>
+                  th:text="${recipe} ? ${recipe.name} : ''"></textarea>
     </div>
 
 
@@ -67,10 +67,23 @@
                th:value="${recipe} ? ${recipe.complexity} : ''">
     </div>
 
-    <div class="form-group">
-        <textarea class="form-control" name="ingredients" rows="7" placeholder="Ингредиенты">
-<th:block th:if="${recipe}"><p th:remove="tag" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}"></p></th:block></textarea>
-    </div>
+<!--    <div style="border: 4px;" th:if="${recipe}">-->
+        <div class="form-group">
+<!--            <input type="text" class="form-control" name="ingredient" placeholder="Ингредиент"-->
+<!--                   th:value="${recipe} ? ${recipe.complexity} : ''">-->
+<textarea class="form-control" name="ingredients" rows="7" placeholder="Ингредиенты"><th:block th:if="${recipe}">
+<p th:remove="tag" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}">
+</p></th:block></textarea>
+        </div>
+<!--    </div>-->
+<!--    <div style="border: 4px;" th:unless="${recipe}">-->
+<!--        <div class="form-group" th:each="ingredient : ${recipe.ingredients}">-->
+<!--            <input type="text" class="form-control" name="ingredient" placeholder="Ингредиент"-->
+<!--                   th:value="${recipe} ? ${recipe.complexity} : ''">-->
+<!--            &lt;!&ndash;            <textarea class="form-control" name="ingredients" rows="7" placeholder="Ингредиенты">&ndash;&gt;-->
+<!--            &lt;!&ndash;    <th:block th:if="${recipe}"><p th:remove="tag" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient} + @{'&#10;'}"></p></th:block></textarea>&ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
 
     <div class="form-group">
         <textarea class="form-control" name="method" rows="7" placeholder="Способ приготвления"
@@ -78,8 +91,18 @@
     </div>
 
     <div class="form-group">
-        <textarea class="form-control" name="categories" placeholder="Категории">
-<th:block th:if="${recipe}"><p th:remove="tag" th:each="category : ${recipe.categories}" th:text="${category.name}"></p></th:block></textarea>
+        <label for="section-select">Раздел</label>
+        <select class="form-control" id="section-select" name="section">
+            <option>Выберите раздел</option>
+            <option th:each="section : ${sections}" th:text="${section.name}"
+                    th:selected="${section} and ${recipe.section} ? ${section.name == recipe.section.name}"></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <textarea class="form-control" name="categories" placeholder="Категории"><th:block th:if="${recipe}">
+<p th:remove="tag" th:each="category : ${recipe.categories}" th:text="${category.name}">
+</p></th:block></textarea>
     </div>
 
     <input type="hidden" name="id" th:value="${recipe} ? ${recipe.id} : ''" />

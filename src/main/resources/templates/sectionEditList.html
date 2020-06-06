@@ -4,8 +4,8 @@
 <body>
     <div th:replace="parts/navbar.html :: navbar"></div>
     <div class="container-fluid main-container">
-        <a th:each="section : ${sections}" th:href="@{/section/edit?id=} + ${section.id}">
-            <div class="section-header-parent shadow mt-3">
+        <a th:each="section : ${sections}" th:href="@{/section/edit(id=${section.id})}">
+            <div class="section-header-parent shadow mt-3 w-50">
                 <h5 th:text="${section.name}"></h5>
                 <div class="section-header"
                      th:style="|background-image: url('/img/${section.image}');|"></div>
