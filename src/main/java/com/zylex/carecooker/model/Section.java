@@ -12,9 +12,6 @@ public class Section {
 
     private String name;
 
-    @OneToOne
-    private Category category;
-
     private int position;
 
     private String image;
@@ -22,9 +19,8 @@ public class Section {
     public Section() {
     }
 
-    public Section(String name, Category category, int position) {
+    public Section(String name, int position) {
         this.name = name;
-        this.category = category;
         this.position = position;
     }
 
@@ -60,14 +56,6 @@ public class Section {
         this.image = image;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,7 +74,6 @@ public class Section {
         return "Section{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", category=" + category +
                 ", order=" + position +
                 ", image='" + image + '\'' +
                 '}';

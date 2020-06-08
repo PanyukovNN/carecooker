@@ -6,7 +6,7 @@
     <div style="display: flex;" class="d-flex row row-cols-2">
         <div class="col" th:each="section : ${sections}">
             <a th:href="@{/section/} + ${section.id}">
-                <div class="section-header-parent shadow my-4">
+                <div class="section-header-parent">
                     <h5 th:text="${section.name}"></h5>
                     <div class="section-header"
                          th:style="|background-image: url('/img/${section.image}');|">

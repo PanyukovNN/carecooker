@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.zylex.carecooker.controller.MainController.PAGE_SIZE;
-
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -52,7 +50,7 @@ public class RecipeController {
 
     @GetMapping("/all")
     public String getAllRecipes(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         Page<Recipe> page = recipeRepository.findAll(pageable);
 
@@ -60,6 +58,20 @@ public class RecipeController {
         model.addAttribute("recipesAll", "true");
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/all");
+
+        return "recipesAll";
+    }
+
+    @GetMapping("/no-section-list")
+    public String getNoSectionRecipes(
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
+            Model model) {
+        Page<Recipe> page = recipeRepository.findBySectionIsNull(pageable);
+
+        model.addAttribute("page", page);
+        model.addAttribute("recipesAll", "true");
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("url", "/recipe/no-section-list");
 
         return "recipesAll";
     }

@@ -28,7 +28,7 @@ public class MainController {
 
     private final CategoryRepository categoryRepository;
 
-    public static final int PAGE_SIZE = 2;
+    public final int PAGE_SIZE = 30;
 
     @Autowired
     public MainController(RecipeRepository recipeRepository,
@@ -41,7 +41,7 @@ public class MainController {
 
     @GetMapping("/")
     public String mainPage(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         List<Section> sections = sectionRepository.findAll();
         sections.sort(Comparator.comparing(Section::getPosition).thenComparing(Section::getId));
@@ -57,7 +57,7 @@ public class MainController {
     @GetMapping("category")
     public String getByCategory(
             @RequestParam(name = "category", required = false, defaultValue = "") String categoryName,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         Category category = categoryRepository.findByName(categoryName);
         Page<Recipe> recipes = recipeRepository.findByCategoriesContaining(category, pageable);
@@ -73,7 +73,7 @@ public class MainController {
     @PostMapping("category")
     public String postByCategory(
             @RequestParam(name = "category", required = false, defaultValue = "") String categoryName,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         Category category = categoryRepository.findByName(categoryName);
         Page<Recipe> recipes = recipeRepository.findByCategoriesContaining(category, pageable);
@@ -89,7 +89,7 @@ public class MainController {
     @PostMapping("filter")
     public String postByFilter(
             @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         Page<Recipe> recipes = recipeRepository.findByNameContainingIgnoreCase(filter, pageable);
 
@@ -103,7 +103,7 @@ public class MainController {
     @GetMapping("filter")
     public String getByFilter(
             @RequestParam(name = "filter", required = false, defaultValue = "") String filter,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         Page<Recipe> recipes = recipeRepository.findByNameContainingIgnoreCase(filter, pageable);
 

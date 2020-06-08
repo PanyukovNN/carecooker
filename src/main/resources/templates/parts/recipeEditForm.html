@@ -94,7 +94,7 @@
         <label for="section-select">Раздел</label>
         <select class="form-control" id="section-select" name="section">
             <option>Выберите раздел</option>
-            <option th:each="section : ${sections}" th:text="${section.name}"
+            <option th:each="section : ${sections}" th:text="${sections} ? ${section.name} : ''"
                     th:selected="${section} and ${recipe.section} ? ${section.name == recipe.section.name}"></option>
         </select>
     </div>

@@ -22,8 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static com.zylex.carecooker.controller.MainController.PAGE_SIZE;
-
 @Controller
 @RequestMapping("/section")
 public class SectionController {
@@ -49,11 +47,11 @@ public class SectionController {
     @GetMapping("/{id}")
     public String getSection(
             @PathVariable long id,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        Page<Recipe> page = recipeRepository.findByCategoriesContaining(section.getCategory(), pageable);
+        Page<Recipe> page = recipeRepository.findBySection(section, pageable);
 
         model.addAttribute("page", page);
         model.addAttribute("section", section);
@@ -86,11 +84,9 @@ public class SectionController {
     @PostMapping("/add")
     public String postSaveSection(
             @RequestParam("file") MultipartFile file,
-            @RequestParam String category,
             @RequestParam String name,
             @RequestParam int position) throws IOException {
-        Category sectionCategory = categoryRepository.findByName(category);
-        Section section = new Section(name, sectionCategory, position);
+        Section section = new Section(name, position);
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
@@ -121,13 +117,11 @@ public class SectionController {
     public String postEditSection(
             @RequestParam long id,
             @RequestParam("file") MultipartFile file,
-            @RequestParam String category,
             @RequestParam String name,
             @RequestParam int position) throws IOException {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
         section.setName(name);
-        section.setCategory(categoryRepository.findByName(category));
         section.setPosition(position);
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
@@ -136,6 +130,21 @@ public class SectionController {
         }
 
         sectionRepository.save(section);
+
+        return "redirect:/section/list";
+    }
+
+    @GetMapping("/delete")
+    public String getDeleteSection(@RequestParam long id) {
+        Section section = sectionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        List<Recipe> recipes = recipeRepository.findBySection(section);
+        for (Recipe recipe : recipes) {
+            recipe.setSection(null);
+            recipeRepository.save(recipe);
+        }
+
+        sectionRepository.delete(section);
 
         return "redirect:/section/list";
     }

@@ -4,17 +4,51 @@
 <body>
     <div th:replace="parts/navbar.html :: navbar"></div>
     <div class="container-fluid main-container">
-        <a th:each="section : ${sections}" th:href="@{/section/edit(id=${section.id})}">
-            <div class="section-header-parent shadow mt-3 w-50">
-                <h5 th:text="${section.name}"></h5>
-                <div class="section-header"
-                     th:style="|background-image: url('/img/${section.image}');|"></div>
-            </div>
-        </a>
+        <h1 class="greeting-header mt-3">
+            Разделы
+        </h1>
 
-        <a href="/section/add">
-            <button type="button" class="btn btn-primary mt-4">Добавить раздел</button>
-        </a>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Превью</th>
+                    <th scope="col">Позиция</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="section : ${sections}">
+                    <td class="text-center align-middle" style="width: 31rem; height: 20rem;">
+                        <div class="section-header-parent">
+                            <h5 th:text="${section.name}"></h5>
+                            <div class="section-header"
+                                 th:style="|background-image: url('/img/${section.image}');|">
+                                <div class="section-overlay"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center align-middle" th:text="${section.position}"></td>
+                    <td class="text-center align-middle">
+                        <a th:href="@{/section/edit(id=${section.id})}">
+                            <button type="button" class="btn btn-outline-primary">Редактировать</button>
+                        </a>
+                    </td>
+                    <td class="text-center align-middle">
+                        <a th:href="@{/section/delete(id=${section.id})}"
+                           onclick="return confirm('Вы действительно хотите удалить раздел?');">
+                            <button type="button" class="btn btn-outline-danger">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-flex" style="justify-content: right">
+            <a href="/section/add">
+                <button type="button" class="btn btn-outline-primary mt-4">Добавить раздел</button>
+            </a>
+        </div>
     </div>
     <div th:replace="parts/common.html :: footer"></div>
 </body>
