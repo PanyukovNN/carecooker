@@ -56,7 +56,7 @@
         </div>
     </div>
     <div class="recipe-method-block">
-        <div class="recipe-method-wrap">
+        <div class="recipe-method-wrap border-bottom">
             <div class="recipe-method__heading">СПОСОБ ПРИГОТОВЛЕНИЯ</div>
             <div class="recipe-method__list">
                 <div class="recipe-method__list-item-text" th:each="step, iter : ${recipe.methodSteps}">
@@ -66,28 +66,33 @@
             </div>
         </div>
 
-        <div sec:authorize="isAuthenticated()">
-            <div class="recipe-categories-wrap">
-                <div class="recipe-categories__heading">КАТЕГОРИИ</div>
-                <div th:each="category : ${recipe.categories}"
-                    class="category-item rounded-lg my-1 mr-1">
-                    <div th:text="${category.name}"></div>
-                </div>
-            </div>
-        </div>
+<!--        <div sec:authorize="isAuthenticated()">-->
+<!--            <div class="recipe-categories-wrap">-->
+<!--                <div class="recipe-categories__heading">КАТЕГОРИИ</div>-->
+<!--                <div th:each="category : ${recipe.categories}"-->
+<!--                    class="category-item rounded-lg my-1 mr-1">-->
+<!--                    <div th:text="${category.name}"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <div sec:authorize="isAuthenticated()"
              class="mt-4">
             <div class="recipe-button-block">
                 <a th:href="@{/recipe/edit(id=${recipe.id})}">
-                    <button type="button" class="btn btn-primary">Редактировать рецепт</button>
+                    <button type="button" class="btn btn-primary">Редактировать</button>
                 </a>
 
                 <a th:href="@{/recipe/delete(id=${recipe.id})}"
                    onclick="return confirm('Вы действительно хотите удалить рецепт?');">
-                    <button type="button" class="btn btn-danger">Удалить рецепт</button>
+                    <button type="button" class="btn btn-danger">Удалить</button>
                 </a>
             </div>
+        </div>
+
+        <div class="recipe-similar-recipes-wrap" th:if="${similarRecipes}">
+            <div class="recipe-similar-recipes__heading">ПОХОЖИЕ РЕЦЕПТЫ</div>
+            <div th:replace="parts/recipeSimilarList.html :: recipeSimilarList"></div>
         </div>
     </div>
 

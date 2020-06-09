@@ -95,6 +95,14 @@ public class RecipeController {
     public String getRecipe(@PathVariable long id,
                             Model model) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
+        Section section = recipe.getSections().get(0);
+        if (section != null) {
+            List<Recipe> similarRecipes = recipeRepository.findTop6BySectionsContaining(section);
+//            if (similarRecipes.size() > 6) {
+//                similarRecipes = similarRecipes.subList(0, 5);
+//            }
+            model.addAttribute("similarRecipes", similarRecipes);
+        }
         model.addAttribute("recipe", recipe);
 
         List<Category> categories = categoryRepository.findAll();

@@ -140,7 +140,7 @@ public class SectionController {
     public String getDeleteSection(@RequestParam long id) {
         Section section = sectionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
-        List<Recipe> recipes = recipeRepository.findBySectionsContaining(section);
+            List<Recipe> recipes = recipeRepository.findBySectionsContaining(section);
         for (Recipe recipe : recipes) {
             List<Section> sections = recipe.getSections();
             sections.remove(section);

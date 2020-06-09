@@ -378,7 +378,7 @@ body {
     font-weight: 700;
 
     color: #fd9334;
-    margin: 9px 2px 0 6px;
+    margin: 2px 5px 0 5px;
     vertical-align: top;
 }
 .recipe-title-header {
@@ -431,7 +431,8 @@ body {
 .recipe-description-text,
 .recipe-ingredient-list-wrap,
 .recipe-method-wrap,
-.recipe-categories-wrap {
+.recipe-categories-wrap,
+.recipe-similar-recipes-wrap {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
 }
@@ -439,6 +440,10 @@ body {
 .recipe-method__heading,
 .recipe-categories__heading {
     padding-bottom: 2.7rem;
+}
+.recipe-similar-recipes__heading {
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
 }
 .recipe-ingredients__list {
     list-style: none;
@@ -455,6 +460,9 @@ body {
 .recipe-button-block {
     display: flex;
     justify-content: space-between;
+}
+.recipe-similar-recipes-wrap {
+    width: 66.6%;
 }
 
 /* Recipe edit from */
