@@ -40,9 +40,6 @@ public class Recipe {
 //    @ManyToOne
 //    private Dish dish;
 
-    @ManyToMany
-    private List<Category> categories;
-
     private boolean toPublication;
 
     public Recipe() {
@@ -58,7 +55,6 @@ public class Recipe {
 //                  Dish dish,
                   List<Section> sections,
                   User author,
-                  List<Category> categories,
                   boolean toPublication
     ) {
         this.name = name;
@@ -71,7 +67,6 @@ public class Recipe {
 //        this.dish = dish;
         this.sections = sections;
         this.author = author;
-        this.categories = categories;
         this.toPublication = toPublication;
     }
 
@@ -182,20 +177,12 @@ public class Recipe {
 //        this.dish = dish;
 //    }
 
-    public List<Category> getCategories() {
-        return categories;
-    }
-
     public boolean isToPublication() {
         return toPublication;
     }
 
     public void setToPublication(boolean toPublication) {
         this.toPublication = toPublication;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
     }
 
     @Override

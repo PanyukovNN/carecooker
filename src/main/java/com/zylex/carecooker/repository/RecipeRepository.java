@@ -1,6 +1,5 @@
 package com.zylex.carecooker.repository;
 
-import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import org.springframework.data.domain.Page;
@@ -18,8 +17,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Page<Recipe> findBySectionsIsNull(Pageable pageable);
 
     Page<Recipe> findByToPublicationIsFalse(Pageable pageable);
-
-    Page<Recipe> findByCategoriesContaining(Category category, Pageable pageable);
 
     Page<Recipe> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
 

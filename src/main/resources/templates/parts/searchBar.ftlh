@@ -1,68 +1,29 @@
 <div class="search-bar border-bottom">
     <form class="search-bar-form">
         <div>
-            <select class="search-bar-input" name="category">
-                <option selected>Любая категория</option>
-                <#list categories as category>
-                    <#if section??>
-                        <#if section.name == category.name>
-                            <option selected>${category.name}</option>
-                        <#else>
-                            <option>${category.name}</option>
-                        </#if>
-                    <#else>
-                        <option>${category.name}</option>
-                    </#if>
-                </#list>
-            </select>
+
         </div>
         <div>
-            <select  class="search-bar-input" name="category">
-                <option selected>Любое бллюдо</option>
-                <#list categories as category>
-                    <#if section??>
-                        <#if section.name == category.name>
-                            <option selected>${category.name}</option>
-                        <#else>
-                            <option>${category.name}</option>
-                        </#if>
-                    <#else>
-                        <option>${category.name}</option>
-                    </#if>
-                </#list>
-            </select>
+
         </div>
         <div>
-            <select class="search-bar-input" name="category">
-                <option selected>Любая кухня</option>
-                <#list categories as category>
-                    <#if section??>
-                        <#if section.name == category.name>
-                            <option selected>${category.name}</option>
-                        <#else>
-                            <option>${category.name}</option>
-                        </#if>
-                    <#else>
-                        <option>${category.name}</option>
-                    </#if>
-                </#list>
-            </select>
+
         </div>
         <div>
-            <select class="search-bar-input" name="category">
-                <option selected>Любое меню</option>
-                <#list categories as category>
-                    <#if section??>
-                        <#if section.name == category.name>
-                            <option selected>${category.name}</option>
-                        <#else>
-                            <option>${category.name}</option>
-                        </#if>
-                    <#else>
-                        <option>${category.name}</option>
-                    </#if>
-                </#list>
-            </select>
+<#--            <select class="search-bar-input" name="category">-->
+<#--                <option selected>Любое меню</option>-->
+<#--                <#list categories as category>-->
+<#--                    <#if section??>-->
+<#--                        <#if section.name == category.name>-->
+<#--                            <option selected>${category.name}</option>-->
+<#--                        <#else>-->
+<#--                            <option>${category.name}</option>-->
+<#--                        </#if>-->
+<#--                    <#else>-->
+<#--                        <option>${category.name}</option>-->
+<#--                    </#if>-->
+<#--                </#list>-->
+<#--            </select>-->
         </div>
         <button type="submit" class="btn btn-primary">Подобрать рецепты</button>
     </form>

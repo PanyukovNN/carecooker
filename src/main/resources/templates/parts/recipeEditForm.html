@@ -109,15 +109,7 @@
                     th:selected="${section} and ${recipe} and ${recipe.sections} ? ${#lists.contains(recipe.sections, section)}">
             </option>
         </select>
-
-
     </div>
-
-<!--    <div class="form-group">-->
-<!--        <textarea class="form-control" name="categories" placeholder="Категории"><th:block th:if="${recipe}">-->
-<!--<p th:remove="tag" th:each="category : ${recipe.categories}" th:text="${category.name}">-->
-<!--</p></th:block></textarea>-->
-<!--    </div>-->
 
     <div class="form-check my-3">
         <input class="form-check-input" name="toPublication" type="checkbox" th:checked="${recipe} ? ${recipe.toPublication}" id="readyToPublication">
@@ -128,7 +120,7 @@
     </div>
 
 
-    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+<!--    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />-->
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>

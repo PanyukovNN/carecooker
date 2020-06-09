@@ -67,16 +67,6 @@
             </div>
         </div>
 
-<!--        <div sec:authorize="hasRole('ROLE_ADMIN')">-->
-<!--            <div class="recipe-categories-wrap">-->
-<!--                <div class="recipe-categories__heading">КАТЕГОРИИ</div>-->
-<!--                <div th:each="category : ${recipe.categories}"-->
-<!--                    class="category-item rounded-lg my-1 mr-1">-->
-<!--                    <div th:text="${category.name}"></div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
         <div sec:authorize="hasRole('ROLE_ADMIN')"
              class="mt-4">
             <div class="recipe-button-block">

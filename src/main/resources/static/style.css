@@ -431,14 +431,12 @@ body {
 .recipe-description-text,
 .recipe-ingredient-list-wrap,
 .recipe-method-wrap,
-.recipe-categories-wrap,
 .recipe-similar-recipes-wrap {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
 }
 .recipe-ingredients__heading,
-.recipe-method__heading,
-.recipe-categories__heading {
+.recipe-method__heading {
     padding-bottom: 2.7rem;
 }
 .recipe-similar-recipes__heading {
@@ -518,24 +516,7 @@ body {
     background-position: center;
 }
 
-/* Category */
-.category-item {
-    display: inline-block;
-    background-color:
-            /*#ebc686;*/
-            /*#d9ccc1;*/
-            #ebebeb;
-    padding: 0.25rem 0.875rem 0.35rem;
-    /*cursor: pointer;*/
-
-    transition: .1s ease;
-}
-
-/*.category-item:hover {*/
-/*    background-color: #fd9334;*/
-/*    color: #fff;*/
-/*}*/
-
+/* Pager */
 .page-link .selected {
     background-color: #fd9334 !important;
     border-color: #fd9334 !important;

@@ -1,11 +1,9 @@
 package com.zylex.carecooker.controller;
 
-import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.User;
 import com.zylex.carecooker.model.dto.GreetingDto;
-import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import com.zylex.carecooker.service.UserService;
@@ -26,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -38,19 +35,15 @@ public class RecipeController {
 
     private final RecipeRepository recipeRepository;
 
-    private final CategoryRepository categoryRepository;
-
     private final SectionRepository sectionRepository;
 
     private final UserService userService;
 
     @Autowired
     public RecipeController(RecipeRepository recipeRepository,
-                            CategoryRepository categoryRepository,
                             SectionRepository sectionRepository,
                             UserService userService) {
         this.recipeRepository = recipeRepository;
-        this.categoryRepository = categoryRepository;
         this.sectionRepository = sectionRepository;
         this.userService = userService;
     }
@@ -66,7 +59,6 @@ public class RecipeController {
 
         model.addAttribute("page", page);
         model.addAttribute("greetingDto", new GreetingDto("Все рецепты", null));
-        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/all");
 
         return "recipesAll";
@@ -80,7 +72,6 @@ public class RecipeController {
 
         model.addAttribute("page", page);
         model.addAttribute("greetingDto", new GreetingDto("Рецепты без раздела", ""));
-        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/no-section-list");
 
         return "recipesAll";
@@ -94,7 +85,6 @@ public class RecipeController {
 
         model.addAttribute("page", page);
         model.addAttribute("greetingDto", new GreetingDto("Неопубликованные рецепты", ""));
-        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/no-section-list");
 
         return "recipesAll";
@@ -113,9 +103,6 @@ public class RecipeController {
             model.addAttribute("similarRecipes", similarRecipes);
         }
         model.addAttribute("recipe", recipe);
-
-        List<Category> categories = categoryRepository.findAll();
-        model.addAttribute("categories", categories);
 
         return "recipe";
     }
@@ -137,7 +124,6 @@ public class RecipeController {
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam("sections") List<String> sectionNameList,
-//            @RequestParam String categories,
             @RequestParam String toPublication) throws IOException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -153,7 +139,6 @@ public class RecipeController {
 //                sectionRepository.findByName(section),
                 sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()),
                 (User) user,
-                null, // parseCategories(categories),
                 !toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
@@ -233,20 +218,6 @@ public class RecipeController {
         String resultFileName = uidFile + "." + file.getOriginalFilename();
         file.transferTo(new File(uploadPath + "/" + resultFileName));
         return resultFileName;
-    }
-
-    private List<Category> parseCategories(@RequestParam String categories) {
-        List<String> categoryNames = splitByNewLine(categories);
-        List<Category> categoryList = new ArrayList<>();
-        for (String categoryName : categoryNames) {
-            Category category = categoryRepository.findByName(categoryName);
-            if (category == null) {
-                category = new Category(categoryName);
-                categoryRepository.save(category);
-            }
-            categoryList.add(category);
-        }
-        return categoryList;
     }
 
     private List<String> splitByNewLine(@RequestParam String ingredients) {

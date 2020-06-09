@@ -1,10 +1,8 @@
 package com.zylex.carecooker.controller;
 
-import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.dto.GreetingDto;
-import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +25,13 @@ import java.util.*;
 @RequestMapping("/section")
 public class SectionController {
 
-    private final CategoryRepository categoryRepository;
-
     private final SectionRepository sectionRepository;
 
     private final RecipeRepository recipeRepository;
 
     @Autowired
-    public SectionController(CategoryRepository categoryRepository,
-                             SectionRepository sectionRepository,
+    public SectionController(SectionRepository sectionRepository,
                              RecipeRepository recipeRepository) {
-        this.categoryRepository = categoryRepository;
         this.sectionRepository = sectionRepository;
         this.recipeRepository = recipeRepository;
     }
@@ -75,11 +69,6 @@ public class SectionController {
 
     @GetMapping("/add")
     public String getSaveSection(Model model) {
-        List<Category> categories = categoryRepository.findAll();
-        categories.sort(Comparator.comparing(Category::getId));
-
-        model.addAttribute("categories", categories);
-
         return "sectionEdit";
     }
 
@@ -106,11 +95,8 @@ public class SectionController {
             Model model) {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        List<Category> categories = categoryRepository.findAll();
-        categories.sort(Comparator.comparing(Category::getId));
 
         model.addAttribute("section", section);
-        model.addAttribute("categories" ,categories);
 
         return "sectionEdit";
     }
