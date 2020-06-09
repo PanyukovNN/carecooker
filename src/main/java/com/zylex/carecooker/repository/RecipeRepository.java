@@ -15,7 +15,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findAllByToPublicationIsTrue(Pageable pageable);
 
-    Page<Recipe> findBySectionIsNull(Pageable pageable);
+    Page<Recipe> findBySectionsIsNull(Pageable pageable);
 
     Page<Recipe> findByToPublicationIsFalse(Pageable pageable);
 
@@ -23,7 +23,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
 
-    Page<Recipe> findBySectionAndToPublicationIsTrue(Section section, Pageable pageable);
+    Page<Recipe> findBySectionsContainingAndToPublicationIsTrue(Section section, Pageable pageable);
 
-    List<Recipe> findBySection(Section section);
+    List<Recipe> findBySectionsContaining(Section section);
 }

@@ -52,7 +52,7 @@ public class SectionController {
             Model model) {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        Page<Recipe> page = recipeRepository.findBySectionAndToPublicationIsTrue(section, pageable);
+        Page<Recipe> page = recipeRepository.findBySectionsContainingAndToPublicationIsTrue(section, pageable);
 
         model.addAttribute("page", page);
         model.addAttribute("section", section);
@@ -140,9 +140,10 @@ public class SectionController {
     public String getDeleteSection(@RequestParam long id) {
         Section section = sectionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
-        List<Recipe> recipes = recipeRepository.findBySection(section);
+        List<Recipe> recipes = recipeRepository.findBySectionsContaining(section);
         for (Recipe recipe : recipes) {
-            recipe.setSection(null);
+            List<Section> sections = recipe.getSections();
+            sections.remove(section);
             recipeRepository.save(recipe);
         }
 

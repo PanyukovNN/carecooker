@@ -2,6 +2,7 @@ package com.zylex.carecooker.controller;
 
 import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
+import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
@@ -66,10 +67,10 @@ public class RecipeController {
     public String getNoSectionRecipes(
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
-        Page<Recipe> page = recipeRepository.findBySectionIsNull(pageable);
+        Page<Recipe> page = recipeRepository.findBySectionsIsNull(pageable);
 
         model.addAttribute("page", page);
-        model.addAttribute("greetingDto", new GreetingDto("Рецепты без раздела", null));
+        model.addAttribute("greetingDto", new GreetingDto("Рецепты без раздела", ""));
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/no-section-list");
 
@@ -83,7 +84,7 @@ public class RecipeController {
         Page<Recipe> page = recipeRepository.findByToPublicationIsFalse(pageable);
 
         model.addAttribute("page", page);
-        model.addAttribute("greetingDto", new GreetingDto("Неопубликованные рецепты", null));
+        model.addAttribute("greetingDto", new GreetingDto("Неопубликованные рецепты", ""));
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/no-section-list");
 
@@ -104,7 +105,7 @@ public class RecipeController {
 
     @GetMapping("/add")
     public String getSaveRecipe(Model model) {
-        model.addAttribute("sections", sectionRepository.findAll());
+        model.addAttribute("allSections", sectionRepository.findAll());
         return "recipeSaveUpdate";
     }
 
@@ -118,10 +119,10 @@ public class RecipeController {
             @RequestParam String complexity,
             @RequestParam String ingredients,
             @RequestParam String method,
-            @RequestParam String section,
-            @RequestParam String categories,
+            @RequestParam("sections") List<String> sectionNameList,
+//            @RequestParam String categories,
             @RequestParam String toPublication) throws IOException {
-        Recipe recipe = new Recipe(name,
+        Recipe newRecipe = new Recipe(name,
                 description,
                 cookTime,
                 serving,
@@ -129,18 +130,20 @@ public class RecipeController {
                 splitByNewLine(ingredients),
                 method,
 //                null,
-                sectionRepository.findByName(section),
-                parseCategories(categories),
+//                sectionRepository.findByName(section),
+                sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()),
+//                parseCategories(categories),
+                null,
                 !toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
-            recipe.setMainImage(resultFileName);
+            newRecipe.setMainImage(resultFileName);
         }
 
-        recipeRepository.save(recipe);
+        recipeRepository.save(newRecipe);
 
-        return "redirect:/recipe/" + recipe.getId();
+        return "redirect:/recipe/" + newRecipe.getId();
     }
 
     @GetMapping("/edit")
@@ -149,7 +152,7 @@ public class RecipeController {
             Model model) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
         model.addAttribute("recipe", recipe);
-        model.addAttribute("sections", sectionRepository.findAll());
+        model.addAttribute("allSections", sectionRepository.findAll());
 
         return "recipeSaveUpdate";
     }
@@ -164,26 +167,28 @@ public class RecipeController {
             @RequestParam String serving,
             @RequestParam String ingredients,
             @RequestParam String method,
-            @RequestParam String section,
-            @RequestParam String categories,
+            @RequestParam("sections") List<String> sectionNameList,
+//            @RequestParam String categories,
             @RequestParam String toPublication) throws IOException {
-        Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
-        recipe.setName(name);
-        recipe.setDescription(description);
-        recipe.setCookTime(cookTime);
-        recipe.setServing(serving);
-        recipe.setMethod(method);
-        recipe.setSection(sectionRepository.findByName(section));
-        recipe.setIngredients(splitByNewLine(ingredients));
-        recipe.setCategories(parseCategories(categories));
-        recipe.setToPublication(!toPublication.isEmpty());
+
+        Recipe editedRecipe = recipeRepository.findById(id).orElse(new Recipe());
+        editedRecipe.setName(name);
+        editedRecipe.setDescription(description);
+        editedRecipe.setCookTime(cookTime);
+        editedRecipe.setServing(serving);
+        editedRecipe.setMethod(method);
+//        editedRecipe.setSections(sectionRepository.findByName(section));
+        editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
+        editedRecipe.setIngredients(splitByNewLine(ingredients));
+//        editedRecipe.setCategories(parseCategories(categories));
+        editedRecipe.setToPublication(!toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
-            recipe.setMainImage(resultFileName);
+            editedRecipe.setMainImage(resultFileName);
         }
 
-        recipeRepository.save(recipe);
+        recipeRepository.save(editedRecipe);
 
         return "redirect:/recipe/" + id;
     }

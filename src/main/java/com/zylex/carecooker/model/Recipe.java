@@ -29,8 +29,8 @@ public class Recipe {
 
     private String method;
 
-    @ManyToOne
-    private Section section;
+    @ManyToMany
+    private List<Section> sections;
 
 //    @ManyToOne
 //    private Dish dish;
@@ -51,7 +51,7 @@ public class Recipe {
                   List<String> ingredients,
                   String method,
 //                  Dish dish,
-                  Section section,
+                  List<Section> sections,
                   List<Category> categories,
                   boolean toPublication
     ) {
@@ -63,7 +63,7 @@ public class Recipe {
         this.ingredients = ingredients;
         this.method = method;
 //        this.dish = dish;
-        this.section = section;
+        this.sections = sections;
         this.categories = categories;
         this.toPublication = toPublication;
     }
@@ -150,12 +150,12 @@ public class Recipe {
         this.method = method;
     }
 
-    public Section getSection() {
-        return section;
+    public List<Section> getSections() {
+        return sections;
     }
 
-    public void setSection(Section section) {
-        this.section = section;
+    public void setSections(List<Section> sections) {
+        this.sections = sections;
     }
 //
 //    public Dish getDish() {
