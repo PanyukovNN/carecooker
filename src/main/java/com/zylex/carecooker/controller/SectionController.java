@@ -29,7 +29,7 @@ public class SectionController {
 
     private final RecipeRepository recipeRepository;
 
-    public final int PAGE_SIZE = 30;
+    public final int PAGE_SIZE = 15;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -44,7 +44,7 @@ public class SectionController {
     @GetMapping("/{id}")
     public String getSection(
             @PathVariable long id,
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);

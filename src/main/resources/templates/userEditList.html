@@ -5,7 +5,7 @@
     <div th:replace="parts/navbar.html :: navbar"></div>
     <div class="container-fluid main-container">
         <h1 class="greeting-header mt-3">
-            Список администраторов
+            Список пользователей
         </h1>
 
         <table class="table">
@@ -13,12 +13,17 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Имя</th>
+                <th scope="col">Роли</th>
             </tr>
         </thead>
             <tbody>
-                <tr th:each="admin, iter : ${admins}">
+                <tr th:each="user, iter : ${users}">
                     <th scope="row" th:text="${iter.index + 1}"></th>
-                    <td th:text="${admin.username}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td>
+                        <span th:each="role, iter : ${user.roles}"
+                              th:text="${iter.index != iter.size - 1} ? ${role.name} + @{', '} : ${role.name}"></span>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -2,6 +2,7 @@ package com.zylex.carecooker.repository;
 
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
+import com.zylex.carecooker.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findBySectionsContaining(Section section);
 
     List<Recipe> findTop6BySectionsContaining(Section section);
+
+    Long countByAuthor(User author);
 }

@@ -18,8 +18,6 @@ public class MainController {
 
     private final SectionRepository sectionRepository;
 
-
-
     @Autowired
     public MainController(SectionRepository sectionRepository) {
         this.sectionRepository = sectionRepository;

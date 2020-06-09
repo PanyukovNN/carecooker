@@ -16,25 +16,26 @@
     </div>
 
     <div class="recipe-meta mt-3">
-        <div class="recipe-meta-wrap">
+        <div class="recipe-meta-wrap meta-delimiter">
             <div class="svg clock-svg"></div>
             <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
         </div>
-<!--        <span class="recipe-meta-wrap meta-delimiter">-->
-<!--            <div class="recipe-meta-heading">Сложность</div>-->
-<!--            <div class="recipe-meta_serving mt-1" th:text="${recipe.complexity}"></div>-->
-<!--        </span>-->
-        <div class="recipe-meta-wrap">
+        <div class="recipe-meta-wrap meta-delimiter">
             <div class="svg serving-svg"></div>
             <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
         </div>
-<!--        <div class="recipe-meta-wrap">-->
-<!--            <div class="svg like-svg"></div>-->
-<!--            <div class="recipe-meta_like">0</div>-->
-<!--        </div>-->
-<!--        <div class="recipe-meta-wrap">-->
-<!--            <div class="svg dislike-svg"></div>-->
-<!--            <div class="recipe-meta_dislike">0</div>-->
+        <div class="recipe-meta-wrap">
+            <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>
+        </div>
+<!--        <div class="d-flex" sec:authorize="isAuthenticated()">-->
+<!--            <div class="recipe-meta-wrap">-->
+<!--                <div class="svg like-svg"></div>-->
+<!--                <div class="recipe-meta_like">0</div>-->
+<!--            </div>-->
+<!--            <div class="recipe-meta-wrap">-->
+<!--                <div class="svg dislike-svg"></div>-->
+<!--                <div class="recipe-meta_dislike">0</div>-->
+<!--            </div>-->
 <!--        </div>-->
     </div>
 
@@ -45,6 +46,17 @@
                     <div style="padding-top: 75%;"></div>
             </div>
             <div class="recipe-main-image" th:unless="${recipe.mainImage}"></div>
+
+            <div class="recipe__author">
+<!--                th:text="${recipe.author.username}"-->
+                <p class="author-header">Автор рецепта</p>
+                <div class="author-name" >
+                    <span th:text="${recipe.author.username}">Автор рецепта</span>
+                    <br>
+                    <span th:text="${authorRecipesNumber} + @{' рецептов'}">Автор рецепта</span>
+                </div>
+<!--                <div class="author-recipes-number" th:text="${authorRecipesNumber} + @{' рецептов'}"></div>-->
+            </div>
 
             <div class="recipe-description-text" th:text="${recipe.description}"></div>
 

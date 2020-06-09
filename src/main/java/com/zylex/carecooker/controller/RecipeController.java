@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -25,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
+
+    private static final int PAGE_SIZE = 15;
 
     private final RecipeRepository recipeRepository;
 
@@ -53,7 +55,7 @@ public class RecipeController {
 
     @GetMapping("/all")
     public String getAllRecipes(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Page<Recipe> page = recipeRepository.findAllByToPublicationIsTrue(pageable);
 
@@ -66,7 +68,7 @@ public class RecipeController {
 
     @GetMapping("/no-section-list")
     public String getNoSectionRecipes(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Page<Recipe> page = recipeRepository.findBySectionsIsNull(pageable);
 
@@ -79,7 +81,7 @@ public class RecipeController {
 
     @GetMapping("/to-publication")
     public String getToPublicationRecipes(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
         Page<Recipe> page = recipeRepository.findByToPublicationIsFalse(pageable);
 
@@ -94,15 +96,17 @@ public class RecipeController {
     public String getRecipe(@PathVariable long id,
                             Model model) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
-        Section section = recipe.getSections().get(0);
-        if (section != null) {
-            List<Recipe> similarRecipes = recipeRepository.findTop6BySectionsContaining(section);
-//            if (similarRecipes.size() > 6) {
-//                similarRecipes = similarRecipes.subList(0, 5);
-//            }
-            model.addAttribute("similarRecipes", similarRecipes);
+        if (!recipe.getSections().isEmpty()) {
+            Section section = recipe.getSections().get(0);
+            if (section != null) {
+                List<Recipe> similarRecipes = recipeRepository.findTop6BySectionsContaining(section);
+                model.addAttribute("similarRecipes", similarRecipes);
+            }
         }
         model.addAttribute("recipe", recipe);
+
+        User user = (User) recipe.getAuthor();
+        model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthor(user));
 
         return "recipe";
     }
@@ -123,14 +127,12 @@ public class RecipeController {
             @RequestParam String complexity,
             @RequestParam String ingredients,
             @RequestParam String method,
-            @RequestParam("sections") List<String> sectionNameList,
+            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
             @RequestParam String toPublication) throws IOException {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails user = userService.loadUserByUsername(auth.getPrincipal().toString());
-        if (complexity.equals("Сложность")) {
-            complexity = null;
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) userService.loadUserByUsername(authentication.getName());
+
         Recipe newRecipe = new Recipe(name,
                 description,
                 cookTime,
@@ -139,9 +141,10 @@ public class RecipeController {
                 splitByNewLine(ingredients),
                 method,
 //                null,
-//                sectionRepository.findByName(section),
-                sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()),
-                (User) user,
+                sectionNameList != null
+                        ? sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList())
+                        : Collections.emptyList(),
+                user,
                 !toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
@@ -176,7 +179,7 @@ public class RecipeController {
             @RequestParam String complexity,
             @RequestParam String ingredients,
             @RequestParam String method,
-            @RequestParam("sections") List<String> sectionNameList,
+            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
 //            @RequestParam String categories,
             @RequestParam String toPublication) throws IOException {
 
@@ -189,8 +192,9 @@ public class RecipeController {
         editedRecipe.setCookTime(cookTime);
         editedRecipe.setServing(serving);
         editedRecipe.setMethod(method);
-//        editedRecipe.setSections(sectionRepository.findByName(section));
-        editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
+        if (sectionNameList != null) {
+            editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
+        }
         editedRecipe.setComplexity(complexity);
         editedRecipe.setIngredients(splitByNewLine(ingredients));
 //        editedRecipe.setCategories(parseCategories(categories));

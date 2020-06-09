@@ -14,6 +14,7 @@
                      th:unless="${section}"
                      th:style="|background-image:url('../../static/img_placeholder.svg');|">
                     <div style="padding-top: 52%;"></div>
+                    <div class="choose-photo">Нажмите для выбора фото</div>
                 </div>
             </label>
             <input type="file" name="file" id="customFile" th:value="${section} ? ${section.image} : ''"/>
@@ -25,6 +26,7 @@
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         $('#section-image').attr('style', "background-image: url(" + e.target.result) + ");";
+                        $('.choose-photo').remove();
                     }
                     reader.readAsDataURL(input.files[0]);
                 }

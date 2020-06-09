@@ -50,14 +50,13 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/admin/list")
-    public String getAdminList(Model model) {
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-        List<User> admins = userRepository.findByRolesContaining(adminRole);
+    @GetMapping("/admin/user-list")
+    public String getUserList(Model model) {
+        List<User> users = userRepository.findAll();
 
-        model.addAttribute("admins", admins);
+        model.addAttribute("users", users);
 
-        return "adminEditList";
+        return "userEditList";
     }
 
     @GetMapping("/user/registration")
