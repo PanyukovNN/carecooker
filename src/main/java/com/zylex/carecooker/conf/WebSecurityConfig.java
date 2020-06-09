@@ -40,7 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             "/section/add/**",
                             "/section/edit/**",
                             "/section/list",
-                            "/admin/list").authenticated()
+                            "/admin/list",
+                            "/recipe/no-section-list",
+                            "/recipe/to-publication").authenticated()
                     .antMatchers("/**").permitAll()
                 .and()
                     .formLogin()

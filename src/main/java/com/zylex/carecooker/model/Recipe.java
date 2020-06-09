@@ -38,7 +38,7 @@ public class Recipe {
     @ManyToMany
     private List<Category> categories;
 
-//    private boolean toPublication;
+    private boolean toPublication;
 
     public Recipe() {
     }
@@ -52,8 +52,8 @@ public class Recipe {
                   String method,
 //                  Dish dish,
                   Section section,
-                  List<Category> categories
-//                  boolean toPublication
+                  List<Category> categories,
+                  boolean toPublication
     ) {
         this.name = name;
         this.description = description;
@@ -63,9 +63,9 @@ public class Recipe {
         this.ingredients = ingredients;
         this.method = method;
 //        this.dish = dish;
-//        this.section = section;
+        this.section = section;
         this.categories = categories;
-//        this.toPublication = toPublication;
+        this.toPublication = toPublication;
     }
 
     public long getId() {
@@ -170,13 +170,13 @@ public class Recipe {
         return categories;
     }
 
-//    public boolean isToPublication() {
-//        return toPublication;
-//    }
-//
-//    public void setToPublication(boolean toPublication) {
-//        this.toPublication = toPublication;
-//    }
+    public boolean isToPublication() {
+        return toPublication;
+    }
+
+    public void setToPublication(boolean toPublication) {
+        this.toPublication = toPublication;
+    }
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;

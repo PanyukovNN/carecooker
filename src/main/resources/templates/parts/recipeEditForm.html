@@ -94,8 +94,8 @@
         <label for="section-select">Раздел</label>
         <select class="form-control" id="section-select" name="section">
             <option>Выберите раздел</option>
-            <option th:each="section : ${sections}" th:text="${sections} ? ${section.name} : ''"
-                    th:selected="${section} and ${recipe.section} ? ${section.name == recipe.section.name}"></option>
+            <option th:each="section : ${sections}" th:text="${sections}? ${section.name} : ''"
+                    th:selected="${section} and ${recipe} and ${recipe.section} ? ${section.name == recipe.section.name}"></option>
         </select>
     </div>
 
@@ -103,6 +103,14 @@
         <textarea class="form-control" name="categories" placeholder="Категории"><th:block th:if="${recipe}">
 <p th:remove="tag" th:each="category : ${recipe.categories}" th:text="${category.name}">
 </p></th:block></textarea>
+    </div>
+
+    <div class="form-check my-3">
+        <input class="form-check-input" name="toPublication" type="checkbox" th:checked="${recipe} ? ${recipe.toPublication}" id="readyToPublication">
+        <input name="toPublication" type="hidden" value="" />
+        <label class="form-check-label" for="readyToPublication">
+            Готово к публикации
+        </label>
     </div>
 
     <input type="hidden" name="id" th:value="${recipe} ? ${recipe.id} : ''" />

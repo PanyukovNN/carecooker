@@ -3,6 +3,7 @@ package com.zylex.carecooker.controller;
 import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
+import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
@@ -47,6 +48,7 @@ public class MainController {
         sections.sort(Comparator.comparing(Section::getPosition).thenComparing(Section::getId));
 
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("greetingDto", new GreetingDto("Разделы", "Выберите интересующий раздел."));
         model.addAttribute("sections", sections);
         model.addAttribute("mainPage", "true");
         model.addAttribute("url", "/?");

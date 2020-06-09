@@ -13,15 +13,17 @@ import java.util.List;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-    Page<Recipe> findAll(Pageable pageable);
+    Page<Recipe> findAllByToPublicationIsTrue(Pageable pageable);
 
     Page<Recipe> findBySectionIsNull(Pageable pageable);
+
+    Page<Recipe> findByToPublicationIsFalse(Pageable pageable);
 
     Page<Recipe> findByCategoriesContaining(Category category, Pageable pageable);
 
     Page<Recipe> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
 
-    Page<Recipe> findBySection(Section section, Pageable pageable);
+    Page<Recipe> findBySectionAndToPublicationIsTrue(Section section, Pageable pageable);
 
     List<Recipe> findBySection(Section section);
 }

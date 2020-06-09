@@ -3,6 +3,7 @@ package com.zylex.carecooker.controller;
 import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
+import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
@@ -51,11 +52,12 @@ public class SectionController {
             Model model) {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        Page<Recipe> page = recipeRepository.findBySection(section, pageable);
+        Page<Recipe> page = recipeRepository.findBySectionAndToPublicationIsTrue(section, pageable);
 
         model.addAttribute("page", page);
         model.addAttribute("section", section);
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("greetingDto", new GreetingDto(section.getName(), null));
+//        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/section/" + section.getId());
 
         return "section";

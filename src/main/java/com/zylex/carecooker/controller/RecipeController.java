@@ -2,6 +2,7 @@ package com.zylex.carecooker.controller;
 
 import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
+import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -52,10 +52,10 @@ public class RecipeController {
     public String getAllRecipes(
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
-        Page<Recipe> page = recipeRepository.findAll(pageable);
+        Page<Recipe> page = recipeRepository.findAllByToPublicationIsTrue(pageable);
 
         model.addAttribute("page", page);
-        model.addAttribute("recipesAll", "true");
+        model.addAttribute("greetingDto", new GreetingDto("Все рецепты", null));
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/all");
 
@@ -69,7 +69,21 @@ public class RecipeController {
         Page<Recipe> page = recipeRepository.findBySectionIsNull(pageable);
 
         model.addAttribute("page", page);
-        model.addAttribute("recipesAll", "true");
+        model.addAttribute("greetingDto", new GreetingDto("Рецепты без раздела", null));
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("url", "/recipe/no-section-list");
+
+        return "recipesAll";
+    }
+
+    @GetMapping("/to-publication")
+    public String getToPublicationRecipes(
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
+            Model model) {
+        Page<Recipe> page = recipeRepository.findByToPublicationIsFalse(pageable);
+
+        model.addAttribute("page", page);
+        model.addAttribute("greetingDto", new GreetingDto("Неопубликованные рецепты", null));
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("url", "/recipe/no-section-list");
 
@@ -105,7 +119,8 @@ public class RecipeController {
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam String section,
-            @RequestParam String categories) throws IOException {
+            @RequestParam String categories,
+            @RequestParam String toPublication) throws IOException {
         Recipe recipe = new Recipe(name,
                 description,
                 cookTime,
@@ -115,8 +130,8 @@ public class RecipeController {
                 method,
 //                null,
                 sectionRepository.findByName(section),
-                parseCategories(categories));
-//                true
+                parseCategories(categories),
+                !toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
@@ -150,7 +165,8 @@ public class RecipeController {
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam String section,
-            @RequestParam String categories) throws IOException {
+            @RequestParam String categories,
+            @RequestParam String toPublication) throws IOException {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
         recipe.setName(name);
         recipe.setDescription(description);
@@ -160,6 +176,7 @@ public class RecipeController {
         recipe.setSection(sectionRepository.findByName(section));
         recipe.setIngredients(splitByNewLine(ingredients));
         recipe.setCategories(parseCategories(categories));
+        recipe.setToPublication(!toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
