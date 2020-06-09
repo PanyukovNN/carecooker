@@ -47,7 +47,7 @@
     </div>
 
     <input type="hidden" name="id" th:value="${section} ? ${section.id} : ''" />
-<!--    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />-->
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary" th:text="${section} ? 'Обновить раздел' : 'Сохранить раздел'"></button>

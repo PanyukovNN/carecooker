@@ -29,15 +29,17 @@ public class SectionController {
 
     private final RecipeRepository recipeRepository;
 
+    public final int PAGE_SIZE = 30;
+
+    @Value("${upload.path}")
+    private String uploadPath;
+
     @Autowired
     public SectionController(SectionRepository sectionRepository,
                              RecipeRepository recipeRepository) {
         this.sectionRepository = sectionRepository;
         this.recipeRepository = recipeRepository;
     }
-
-    @Value("${upload.path}")
-    private String uploadPath;
 
     @GetMapping("/{id}")
     public String getSection(

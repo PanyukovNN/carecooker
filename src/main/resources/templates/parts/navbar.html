@@ -24,17 +24,10 @@
                         <a class="nav-link font-weight-bold" href="/section/list">Редактировать разделы</a>
                     </li>
                     <li class="nav-item ml-3">
-                        <a class="nav-link font-weight-bold" href="/admin/list">Администраторы</a>
+                        <a class="nav-link font-weight-bold" href="/admin/list">Пользователи</a>
                     </li>
                 </ul>
             </div>
-
-           <span class="mr-3" sec:authentication="name"></span>
-
-            <form action="/logout" method="post">
-<!--                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />-->
-                <button class="btn btn-outline-secondary my-2 my-sm-0 mr-3" type="submit" value="Sign Out">Выйти</button>
-            </form>
         </nav>
     </div>
 
@@ -47,24 +40,41 @@
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold" href="/recipe/all">Все рецепты</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link font-weight-bold" href="/recipe/all">Поиск</a>
+                </li>
             </ul>
         </div>
-        <form class="form-inline my-2 my-lg-0 mr-3" method="post" action="/filter">
-            <input class="form-control mr-sm-1" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search"
-                   th:value="${filter}">
-            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Найти</button>
-        </form>
+<!--        <form class="form-inline my-2 my-lg-0 mr-3" method="post" action="/filter">-->
+<!--&lt;!&ndash;            <input class="form-control mr-sm-1" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search"&ndash;&gt;-->
+<!--&lt;!&ndash;                   th:value="${filter}">&ndash;&gt;-->
+<!--            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Поиск рецептов</button>-->
+<!--        </form>-->
         <div sec:authorize="isAnonymous()" class="mr-3">
             <div class="collapse navbar-collapse order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <form action="/login" method="post">
-<!--                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />-->
-                            <button class="btn btn-outline-secondary my-2 my-sm-0 mr-3" type="submit" value="Sign Out">Войти</button>
+                        <form action="/login" method="get">
+                            <button class="btn btn-outline-secondary my-2 my-sm-0 mr-3" type="submit" value="Sign in">Войти</button>
                         </form>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Зарегистрироваться</button>
+                        <form action="/user/registration" method="get">
+                            <button class="btn btn-outline-secondary my-2 my-sm-0 mr-3" type="submit" value="Registration">Регистрация</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div sec:authorize="isAuthenticated()" class="mr-3">
+            <div class="collapse navbar-collapse order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav">
+                    <li class="nav-item mr-3 mt-2" sec:authentication="name"></li>
+                    <li class="nav-item">
+                        <form action="/logout" method="post">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                            <button class="btn btn-outline-secondary my-2 my-sm-0 mr-3" type="submit" value="Sign Out">Выйти</button>
+                        </form>
                     </li>
                 </ul>
             </div>

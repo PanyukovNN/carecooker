@@ -29,13 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers(
-                            "/admin/registration",
+                            "/admin/**",
                             "/recipe/edit/**",
                             "/recipe/add/**",
                             "/section/add/**",
                             "/section/edit/**",
                             "/section/list",
-                            "/admin/list",
                             "/recipe/no-section-list",
                             "/recipe/to-publication").hasRole("ADMIN")
                     .antMatchers("/**").permitAll()

@@ -18,7 +18,7 @@ public class MainController {
 
     private final SectionRepository sectionRepository;
 
-    public final int PAGE_SIZE = 30;
+
 
     @Autowired
     public MainController(SectionRepository sectionRepository) {
@@ -26,7 +26,7 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String mainPage(
+    public String allSections(
             @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 30) Pageable pageable,
             Model model) {
         List<Section> sections = sectionRepository.findAll();
@@ -34,8 +34,7 @@ public class MainController {
 
         model.addAttribute("greetingDto", new GreetingDto("Разделы", "Выберите интересующий раздел."));
         model.addAttribute("sections", sections);
-        model.addAttribute("mainPage", "true");
-        model.addAttribute("url", "/?");
+        model.addAttribute("url", "/");
 
         return "main";
     }

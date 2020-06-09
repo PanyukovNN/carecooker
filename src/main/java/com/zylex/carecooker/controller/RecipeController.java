@@ -128,6 +128,9 @@ public class RecipeController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = userService.loadUserByUsername(auth.getPrincipal().toString());
+        if (complexity.equals("Сложность")) {
+            complexity = null;
+        }
         Recipe newRecipe = new Recipe(name,
                 description,
                 cookTime,
@@ -170,12 +173,16 @@ public class RecipeController {
             @RequestParam("file") MultipartFile file,
             @RequestParam String cookTime,
             @RequestParam String serving,
+            @RequestParam String complexity,
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam("sections") List<String> sectionNameList,
 //            @RequestParam String categories,
             @RequestParam String toPublication) throws IOException {
 
+        if (complexity.equals("Сложность")) {
+            complexity = null;
+        }
         Recipe editedRecipe = recipeRepository.findById(id).orElse(new Recipe());
         editedRecipe.setName(name);
         editedRecipe.setDescription(description);
@@ -184,6 +191,7 @@ public class RecipeController {
         editedRecipe.setMethod(method);
 //        editedRecipe.setSections(sectionRepository.findByName(section));
         editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
+        editedRecipe.setComplexity(complexity);
         editedRecipe.setIngredients(splitByNewLine(ingredients));
 //        editedRecipe.setCategories(parseCategories(categories));
         editedRecipe.setToPublication(!toPublication.isEmpty());

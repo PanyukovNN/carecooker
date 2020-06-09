@@ -11,21 +11,37 @@
                              th:style="|background-image: url('@{/img/}${recipe.mainImage}');|">
                             <div class="section-overlay"></div>
                             <h4 class="card-title" th:text="${recipe.name}"></h4>
+                            <div class="recipe-card-meta align-self-end">
+                                <div class="recipe-meta-wrap">
+                                    <div class="svg-white clock-white-svg meta-delimiter"></div>
+                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
+                                </div>
+                                <div class="recipe-meta-wrap">
+                                    <div class="svg-white serving-white-svg meta-delimiter"></div>
+                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
+                                </div>
+                                <div class="recipe-meta-wrap">
+                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="recipe-card-image" th:unless="${recipe.mainImage}"
                              th:style="|background-image: url('@{../../static/img_placeholder.svg}');|">
                             <div class="section-overlay"></div>
                             <h4 class="recipe-card-title" th:text="${recipe.name}"></h4>
-<!--                            <div class="recipe-card-meta">-->
-<!--                                <div class="recipe-meta-wrap">-->
-<!--                                    <div class="svg clock-svg"></div>-->
-<!--                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>-->
-<!--                                </div>-->
-<!--                                <div class="recipe-meta-wrap">-->
-<!--                                    <div class="svg serving-svg"></div>-->
-<!--                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="recipe-card-meta align-self-end">
+                                <div class="recipe-meta-wrap">
+                                    <div class="svg-white clock-white-svg meta-delimiter"></div>
+                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
+                                </div>
+                                <div class="recipe-meta-wrap">
+                                    <div class="svg-white serving-white-svg meta-delimiter"></div>
+                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
+                                </div>
+                                <div class="recipe-meta-wrap">
+                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

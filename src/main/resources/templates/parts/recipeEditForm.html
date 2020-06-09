@@ -67,8 +67,12 @@
     </div>
 
     <div class="form-group">
-        <input type="text" class="form-control" name="complexity" placeholder="Сложность"
-               th:value="${recipe} ? ${recipe.complexity} : ''">
+        <select class="form-control" name="complexity">
+            <option selected>Сложность</option>
+            <option value="легко" th:selected="${recipe} ? ${recipe.complexity == 'легко'}">Легко</option>
+            <option value="средне" th:selected="${recipe} ? ${recipe.complexity == 'средне'}">Средне</option>
+            <option value="сложно" th:selected="${recipe} ? ${recipe.complexity == 'сложно'}">Сложно</option>
+        </select>
     </div>
 
 <!--    <div style="border: 4px;" th:if="${recipe}">-->
@@ -120,7 +124,7 @@
     </div>
 
 
-<!--    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />-->
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>

@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -63,8 +61,16 @@ public class UserService implements UserDetailsService {
             adminRole = new Role("ROLE_ADMIN");
             adminRole = roleRepository.save(adminRole);
         }
+        Role userRole = roleRepository.findByName("ROLE_USER");
+        if (userRole == null) {
+            userRole = new Role("ROLE_USER");
+            userRole = roleRepository.save(userRole);
+        }
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
+        roles.add(adminRole);
 
-        return save(user, adminRole);
+        return save(user, roles);
     }
 
     public boolean saveUser(User user) {
@@ -74,17 +80,17 @@ public class UserService implements UserDetailsService {
             userRole = roleRepository.save(userRole);
         }
 
-        return save(user, userRole);
+        return save(user, Collections.singleton(userRole));
     }
 
-    private boolean save(User user, Role role) {
+    private boolean save(User user, Set<Role> roles) {
         User userFromDB = userRepository.findByUsernameIgnoreCase(user.getUsername());
 
         if (userFromDB != null) {
             return false;
         }
 
-        user.setRoles(Collections.singleton(role));
+        user.setRoles(roles);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
