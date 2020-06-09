@@ -66,7 +66,7 @@
             </div>
         </div>
 
-<!--        <div sec:authorize="isAuthenticated()">-->
+<!--        <div sec:authorize="hasRole('ROLE_ADMIN')">-->
 <!--            <div class="recipe-categories-wrap">-->
 <!--                <div class="recipe-categories__heading">КАТЕГОРИИ</div>-->
 <!--                <div th:each="category : ${recipe.categories}"-->
@@ -76,7 +76,7 @@
 <!--            </div>-->
 <!--        </div>-->
 
-        <div sec:authorize="isAuthenticated()"
+        <div sec:authorize="hasRole('ROLE_ADMIN')"
              class="mt-4">
             <div class="recipe-button-block">
                 <a th:href="@{/recipe/edit(id=${recipe.id})}">
