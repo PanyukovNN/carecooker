@@ -1,5 +1,7 @@
 package com.zylex.carecooker.model;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +34,9 @@ public class Recipe {
     @ManyToMany
     private List<Section> sections;
 
+    @ManyToOne
+    private User author;
+
 //    @ManyToOne
 //    private Dish dish;
 
@@ -52,6 +57,7 @@ public class Recipe {
                   String method,
 //                  Dish dish,
                   List<Section> sections,
+                  User author,
                   List<Category> categories,
                   boolean toPublication
     ) {
@@ -64,6 +70,7 @@ public class Recipe {
         this.method = method;
 //        this.dish = dish;
         this.sections = sections;
+        this.author = author;
         this.categories = categories;
         this.toPublication = toPublication;
     }
@@ -157,7 +164,16 @@ public class Recipe {
     public void setSections(List<Section> sections) {
         this.sections = sections;
     }
-//
+
+    public UserDetails getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    //
 //    public Dish getDish() {
 //        return dish;
 //    }
@@ -198,6 +214,7 @@ public class Recipe {
         return Objects.hash(name, description, ingredients, method);
     }
 
+
     @Override
     public String toString() {
         return "Recipe{" +
@@ -210,10 +227,10 @@ public class Recipe {
                 ", complexity='" + complexity + '\'' +
                 ", ingredients=" + ingredients +
                 ", method='" + method + '\'' +
-//                ", section=" + section +
-//                ", dish=" + dish +
-                ", categories=" + categories +
-//                ", toPublication=" + toPublication +
+                ", sections=" + sections +
+                ", author=" + author +
+//                ", categories=" + categories +
+                ", toPublication=" + toPublication +
                 '}';
     }
 }

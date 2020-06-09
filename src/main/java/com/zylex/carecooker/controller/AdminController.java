@@ -16,14 +16,15 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     private final UserRepository userRepository;
 
     @Autowired
-    public AdminController(UserRepository userRepository) {
+    public AdminController(UserRepository userRepository,
+                           UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @GetMapping("/registration")

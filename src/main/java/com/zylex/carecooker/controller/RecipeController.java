@@ -3,16 +3,21 @@ package com.zylex.carecooker.controller;
 import com.zylex.carecooker.model.Category;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
+import com.zylex.carecooker.model.User;
 import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.repository.CategoryRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
+import com.zylex.carecooker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -37,13 +42,17 @@ public class RecipeController {
 
     private final SectionRepository sectionRepository;
 
+    private final UserService userService;
+
     @Autowired
     public RecipeController(RecipeRepository recipeRepository,
                             CategoryRepository categoryRepository,
-                            SectionRepository sectionRepository) {
+                            SectionRepository sectionRepository,
+                            UserService userService) {
         this.recipeRepository = recipeRepository;
         this.categoryRepository = categoryRepository;
         this.sectionRepository = sectionRepository;
+        this.userService = userService;
     }
 
     @Value("${upload.path}")
@@ -130,6 +139,9 @@ public class RecipeController {
             @RequestParam("sections") List<String> sectionNameList,
 //            @RequestParam String categories,
             @RequestParam String toPublication) throws IOException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails user = userService.loadUserByUsername(auth.getPrincipal().toString());
         Recipe newRecipe = new Recipe(name,
                 description,
                 cookTime,
@@ -140,8 +152,8 @@ public class RecipeController {
 //                null,
 //                sectionRepository.findByName(section),
                 sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()),
-//                parseCategories(categories),
-                null,
+                (User) user,
+                null, // parseCategories(categories),
                 !toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {

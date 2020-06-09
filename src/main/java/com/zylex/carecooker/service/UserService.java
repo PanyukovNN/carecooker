@@ -19,14 +19,22 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
+
     @PersistenceContext
     private EntityManager em;
+
+    private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -41,6 +49,7 @@ public class UserService implements UserDetailsService {
 
     public User findUserById(Long userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
+
         return userFromDb.orElse(new User());
     }
 
@@ -49,39 +58,33 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean saveAdmin(User user) {
-        User userFromDB = userRepository.findByUsernameIgnoreCase(user.getUsername());
-
-        if (userFromDB != null) {
-            return false;
-        }
-
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         if (adminRole == null) {
             adminRole = new Role("ROLE_ADMIN");
             adminRole = roleRepository.save(adminRole);
         }
 
-        user.setRoles(Collections.singleton(adminRole));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return true;
+        return save(user, adminRole);
     }
 
     public boolean saveUser(User user) {
+        Role userRole = roleRepository.findByName("ROLE_USER");
+        if (userRole == null) {
+            userRole = new Role("ROLE_USER");
+            userRole = roleRepository.save(userRole);
+        }
+
+        return save(user, userRole);
+    }
+
+    private boolean save(User user, Role role) {
         User userFromDB = userRepository.findByUsernameIgnoreCase(user.getUsername());
 
         if (userFromDB != null) {
             return false;
         }
 
-        Role userRole = roleRepository.findByName("ROLE_USER");
-        if (userRole == null) {
-            userRole = new Role("ROLE_USER");
-            userRole = roleRepository.save(userRole);
-        }
-        System.out.println(userRole);
-
-        user.setRoles(Collections.singleton(userRole));
+        user.setRoles(Collections.singleton(role));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
@@ -92,6 +95,7 @@ public class UserService implements UserDetailsService {
             userRepository.deleteById(userId);
             return true;
         }
+
         return false;
     }
 
