@@ -617,6 +617,11 @@ body {
     width: 100%;
 }
 
+/* Dish  edit list */
+.row_data:focus {
+    outline: 1px solid #007bff;
+}
+
 /* Footer */
 .footer {
     position: relative;

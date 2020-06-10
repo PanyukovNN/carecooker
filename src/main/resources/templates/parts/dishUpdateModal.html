@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<div th:fragment="dishUpdateModal">
+    <div class="modal fade" id="addDishModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{/dish/update}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="idInput" name="id" value="0"/>
+
+                        <div class="form-group">
+                            <label>Название</label>
+                            <input id="nameInput" type="text" class="form-control" name="name" placeholder="Название"/>
+                        </div>
+
+                        <select class="custom-select form-control" name="section">
+                            <option th:each="section : ${sections}"
+                                    th:value="${{section.id}}"
+                                    th:text="${section.name}"
+                                    th:selected="${section == currentSection}">
+                            </option>
+                        </select>
+
+                        <div class="form-group">
+                            <label>Описание</label>
+                            <textarea id="descriptionInput" class="form-control" name="titleDescription" placeholder="Описание"></textarea>
+                        </div>
+
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updateDishModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{/dish/update}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="idInputUpdate" name="id" value="0"/>
+
+                        <div class="form-group">
+                            <label>Название</label>
+                            <input id="nameInputUpdate" type="text" class="form-control" name="name" placeholder="Название"/>
+                        </div>
+
+                        <select class="custom-select form-control" name="section">
+                            <option th:each="section : ${sections}"
+                                    th:value="${{section.id}}"
+                                    th:text="${section.name}"
+                                    th:selected="${section == currentSection}">
+                            </option>
+                        </select>
+
+                        <div class="form-group">
+                            <label>Описание</label>
+                            <textarea id="descriptionInputUpdate" class="form-control" name="titleDescription" placeholder="Описание"></textarea>
+                        </div>
+
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-outline-primary">Обновить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".edit-dish-btn-link").on("click", function(event) {
+
+            event.preventDefault();
+
+            var href = $(this).attr('href');
+
+            $.get(href, function(dish, status) {
+                $("#idInputUpdate").val(dish.id);
+                $("#nameInputUpdate").val(dish.name);
+                $("#descriptionInputUpdate").val(dish.titleDescription);
+            });
+
+            $("#updateDishModal").modal();
+        });
+        $('#addDishModal').on('shown.bs.modal', function() {
+            $('#nameInput').focus();
+        })
+        $('#updateDishModal').on('shown.bs.modal', function() {
+            $('#nameInputUpdate').focus();
+        })
+    </script>
+</div>
+</html>

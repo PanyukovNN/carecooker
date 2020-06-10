@@ -12,6 +12,27 @@
              th:text="${'Блюдо с таким именем уже существует'}">
         </div>
 
+        <div class="d-flex" style="justify-content: right">
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addDishModal">Добавить тип блюда</button>
+        </div>
+
+        <form method="post" th:action="@{/dish/list}">
+            <label>Выберите раздел</label>
+            <div class="input-group mb-3">
+                <select class="custom-select" name="section">
+                    <option th:each="section : ${sections}"
+                            th:value="${{section.id}}"
+                            th:text="${section.name}"
+                            th:selected="${section == currentSection}">
+                    </option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit">Показать</button>
+                </div>
+            </div>
+        </form>
+
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -23,12 +44,14 @@
             </thead>
             <tbody>
                 <tr th:each="dish, iter : ${dishes}">
-                    <td class="text-center align-middle" th:text="${iter.index + 1}">
+                    <td class="text-center align-middle" th:text="${iter.index + 1}"></td>
+                    <td class="text-center align-middle" >
+                        <div class="row_data" th:text="${dish.name}"></div>
                     </td>
-                    <td class="text-center align-middle" th:text="${dish.name}">
+                    <td class="text-center align-middle">
+                        <div class="row_data"  th:text="${dish.titleDescription} ? ${dish.titleDescription} : ''"></div>
                     </td>
-                    <td class="text-center align-middle" th:text="${dish.titleDescription} ? ${dish.titleDescription} : ''"></td>
-                    <td class="text-center align-middle d-flex justify-content-around">
+                    <td class="row_data text-center align-middle d-flex justify-content-around">
                         <a class="edit-dish-btn-link" th:href="@{/dish/json/} + ${dish.id}">
                             <button type="button" class="btn btn-outline-primary">Редактировать</button>
                         </a>
@@ -37,6 +60,13 @@
                             <button type="button" class="btn btn-outline-danger">Удалить</button>
                         </a>
                     </td>
+<!--                    <script>-->
+<!--                        $(document).on('click', '.row_data'), function(event) {-->
+<!--                            event.preventDefault();-->
+<!--                    contenteditable="true"-->
+<!--                            $(this).focus();-->
+<!--                        }-->
+<!--                    </script>-->
                 </tr>
             </tbody>
         </table>
@@ -45,56 +75,7 @@
             <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addDishModal">Добавить тип блюда</button>
         </div>
 
-        <div class="modal fade" id="addDishModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form th:action="@{/dish/update}" method="post">
-                        <div class="modal-body">
-                            <input type="hidden" id="idInput" name="id" value="0"/>
-
-                            <div class="form-group">
-                                <label>Название</label>
-                                <input id="nameInput" type="text" class="form-control" name="name" placeholder="Название"/>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Описание</label>
-                                <textarea id="descriptionInput" class="form-control" name="titleDescription" placeholder="Описание"></textarea>
-                            </div>
-
-                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
-                            <button type="submit" class="btn btn-outline-primary" th:text="${dish} ? 'Обновить' : 'Сохранить'"></button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            $(".edit-dish-btn-link").on("click", function(event) {
-
-                event.preventDefault();
-
-                var href = $(this).attr('href');
-
-                $.get(href, function(dish, status) {
-                    $("#idInput").val(dish.id);
-                    $("#nameInput").val(dish.name);
-                    $("#descriptionInput").val(dish.titleDescription);
-                });
-
-                $("#addDishModal").modal();
-            });
-        </script>
+        <div th:replace="parts/dishUpdateModal.html :: dishUpdateModal"></div>
 
     </div>
     <div th:replace="parts/common.html :: footer"></div>

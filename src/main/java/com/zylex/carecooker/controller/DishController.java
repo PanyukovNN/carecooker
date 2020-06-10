@@ -3,25 +3,19 @@ package com.zylex.carecooker.controller;
 import com.zylex.carecooker.model.Dish;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
-import com.zylex.carecooker.model.User;
 import com.zylex.carecooker.repository.DishRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
+import com.zylex.carecooker.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.time.LocalTime;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/dish")
@@ -31,16 +25,44 @@ public class DishController {
 
     private final RecipeRepository recipeRepository;
 
+    private final SectionRepository sectionRepository;
+
     @Autowired
     public DishController(DishRepository dishRepository,
-                          RecipeRepository recipeRepository) {
+                          RecipeRepository recipeRepository,
+                          SectionRepository sectionRepository) {
         this.dishRepository = dishRepository;
         this.recipeRepository = recipeRepository;
+        this.sectionRepository = sectionRepository;
     }
 
     @GetMapping("/list")
-    public String getSections(Model model) {
-        List<Dish> dishes = dishRepository.findAll();
+    public String getDishes(Model model) {
+        List<Section> sections = sectionRepository.findAll();
+        sections.sort(Comparator.comparing(Section::getPosition).thenComparing(Section::getId));
+
+        model.addAttribute("sections", sections);
+        model.addAttribute("currentSection", sections.get(0));
+
+        List<Dish> dishes = dishRepository.findBySection(sections.get(0));
+        dishes.sort(Comparator.comparing(Dish::getId));
+
+        model.addAttribute("dishes", dishes);
+
+        return "dishEditList";
+    }
+
+    @PostMapping("/list")
+    public String postDishes(
+            @RequestParam Section section,
+            Model model) {
+        List<Section> sections = sectionRepository.findAll();
+        sections.sort(Comparator.comparing(Section::getPosition).thenComparing(Section::getId));
+
+        model.addAttribute("sections", sections);
+        model.addAttribute("currentSection", section);
+
+        List<Dish> dishes = dishRepository.findBySection(section);
         dishes.sort(Comparator.comparing(Dish::getId));
 
         model.addAttribute("dishes", dishes);
@@ -54,50 +76,34 @@ public class DishController {
         return dishRepository.findById(id);
     }
 
-    @PostMapping("/add")
-    public String postAddDish(
-            @RequestParam String name,
-            @RequestParam String description,
-            Model model) {
-        Dish dishFromDb = dishRepository.findByName(name);
-        if (dishFromDb != null) {
-            model.addAttribute("dishExists", "");
-
-            return "redirect:/dish/list";
-        }
-
-        Dish dish = new Dish(name, description);
-        dishRepository.save(dish);
-
-        return "redirect:/dish/list";
-    }
-
     @PostMapping("/update")
-    public String postUpdateDish(
+    public ModelAndView postUpdateDish(
             Dish dish,
-            Model model) {
+            ModelMap model) {
+
+        model.addAttribute("currentSection", dish.getSection());
         if (dish.getId() == 0) {
             Dish dishFromDb = dishRepository.findByName(dish.getName());
             if (dishFromDb != null) {
                 model.addAttribute("dishExists", "");
 
-                return "redirect:/dish/list";
+                return new ModelAndView("forward:/dish/list", model);
             } else {
                 dishRepository.save(dish);
 
-                return "redirect:/dish/list";
+                return new ModelAndView("forward:/dish/list", model);
             }
         } else {
             Dish dishWithSameName = dishRepository.findByName(dish.getName());
             if (dishWithSameName != null && dishWithSameName.getId() != dish.getId()) {
                 model.addAttribute("dishExists", "");
 
-                return "redirect:/dish/list";
+                return new ModelAndView("forward:/dish/list", model);
             }
 
             dishRepository.save(dish);
 
-            return "redirect:/dish/list";
+            return new ModelAndView("forward:/dish/list", model);
         }
     }
 

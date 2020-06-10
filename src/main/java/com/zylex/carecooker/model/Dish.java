@@ -1,9 +1,6 @@
 package com.zylex.carecooker.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -17,16 +14,21 @@ public class Dish {
 
     private String titleDescription;
 
+    @ManyToOne
+    private Section section;
+
     public Dish() {
     }
 
-    public Dish(String name) {
+    public Dish(String name, Section section) {
         this.name = name;
+        this.section = section;
     }
 
-    public Dish(String name, String titleDescription) {
+    public Dish(String name, String titleDescription, Section section) {
         this.name = name;
         this.titleDescription = titleDescription;
+        this.section = section;
     }
 
     public long getId() {
@@ -53,12 +55,20 @@ public class Dish {
         this.titleDescription = titleDescription;
     }
 
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Dish dish = (Dish) o;
-        return Objects.equals(name, dish.name);
+        return id == dish.id;
     }
 
     @Override
@@ -72,6 +82,7 @@ public class Dish {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", titleDescription='" + titleDescription + '\'' +
+                ", section=" + section +
                 '}';
     }
 }
