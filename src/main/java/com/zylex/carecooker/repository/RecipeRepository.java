@@ -1,5 +1,6 @@
 package com.zylex.carecooker.repository;
 
+import com.zylex.carecooker.model.Dish;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.User;
@@ -24,6 +25,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Page<Recipe> findBySectionsContainingAndToPublicationIsTrue(Section section, Pageable pageable);
 
     List<Recipe> findBySectionsContaining(Section section);
+
+    List<Recipe> findByDish(Dish dish);
 
     List<Recipe> findTop6BySectionsContaining(Section section);
 

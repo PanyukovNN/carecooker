@@ -36,7 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             "/section/edit/**",
                             "/section/list",
                             "/recipe/no-section-list",
-                            "/recipe/to-publication").hasRole("ADMIN")
+                            "/recipe/to-publication",
+                            "/dish/list").hasRole("ADMIN")
                     .antMatchers("/**").permitAll()
                 .and()
                     .formLogin()

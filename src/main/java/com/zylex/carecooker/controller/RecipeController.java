@@ -1,9 +1,11 @@
 package com.zylex.carecooker.controller;
 
+import com.zylex.carecooker.model.Dish;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.User;
 import com.zylex.carecooker.model.dto.GreetingDto;
+import com.zylex.carecooker.repository.DishRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import com.zylex.carecooker.service.UserService;
@@ -42,13 +44,17 @@ public class RecipeController {
 
     private final UserService userService;
 
+    private final DishRepository dishRepository;
+
     @Autowired
     public RecipeController(RecipeRepository recipeRepository,
                             SectionRepository sectionRepository,
-                            UserService userService) {
+                            UserService userService,
+                            DishRepository dishRepository) {
         this.recipeRepository = recipeRepository;
         this.sectionRepository = sectionRepository;
         this.userService = userService;
+        this.dishRepository = dishRepository;
     }
 
     @Value("${upload.path}")
@@ -130,10 +136,17 @@ public class RecipeController {
             @RequestParam String cookTime,
             @RequestParam String serving,
             @RequestParam String complexity,
+            @RequestParam String dish,
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam(required = false, name = "sections") List<String> sectionNameList,
             @RequestParam String toPublication) throws IOException {
+
+        Dish dishEntry = dishRepository.findByName(dish);
+        if (dishEntry == null) {
+            dishEntry = new Dish(dish);
+            dishEntry = dishRepository.save(dishEntry);
+        }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.loadUserByUsername(authentication.getName());
@@ -147,7 +160,7 @@ public class RecipeController {
                 complexity,
                 splitByNewLine(ingredients),
                 method,
-//                null,
+                dishEntry,
                 sectionNameList != null
                         ? sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList())
                         : Collections.emptyList(),
@@ -184,10 +197,12 @@ public class RecipeController {
             @RequestParam("cookTime") String cookTimeStr,
             @RequestParam String serving,
             @RequestParam String complexity,
+            @RequestParam String dish,
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam(required = false, name = "sections") List<String> sectionNameList,
             @RequestParam String toPublication) throws IOException {
+
 
         if (complexity.equals("Сложность")) {
             complexity = null;
@@ -206,6 +221,14 @@ public class RecipeController {
             editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
         }
         editedRecipe.setComplexity(complexity);
+
+        Dish dishEntry = dishRepository.findByName(dish);
+        if (dishEntry == null) {
+            dishEntry = new Dish(dish);
+            dishEntry = dishRepository.save(dishEntry);
+        }
+        editedRecipe.setDish(dishEntry);
+
         editedRecipe.setIngredients(splitByNewLine(ingredients));
         editedRecipe.setToPublication(!toPublication.isEmpty());
 

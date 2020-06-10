@@ -76,6 +76,12 @@
     </div>
 
     <div class="form-group">
+        <label>Тип блюда</label>
+        <input type="text" class="form-control" name="dish" placeholder="Тип блюда"
+               th:value="${recipe} and ${recipe.dish} ? ${recipe.dish.name} : ''">
+    </div>
+
+    <div class="form-group">
         <label>Ингредиенты</label>
         <textarea class="form-control" name="ingredients" rows="7" placeholder="Ингредиенты"><th:block th:if="${recipe}">
 <p th:remove="tag" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}">

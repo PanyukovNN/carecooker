@@ -38,8 +38,8 @@ public class Recipe {
     @ManyToOne
     private User author;
 
-//    @ManyToOne
-//    private Dish dish;
+    @ManyToOne
+    private Dish dish;
 
     private boolean toPublication;
 
@@ -55,7 +55,7 @@ public class Recipe {
                   String complexity,
                   List<String> ingredients,
                   String method,
-//                  Dish dish,
+                  Dish dish,
                   List<Section> sections,
                   User author,
                   boolean toPublication
@@ -67,7 +67,7 @@ public class Recipe {
         this.complexity = complexity;
         this.ingredients = ingredients;
         this.method = method;
-//        this.dish = dish;
+        this.dish = dish;
         this.sections = sections;
         this.author = author;
         this.toPublication = toPublication;
@@ -171,14 +171,13 @@ public class Recipe {
         this.author = author;
     }
 
-    //
-//    public Dish getDish() {
-//        return dish;
-//    }
-//
-//    public void setDish(Dish dish) {
-//        this.dish = dish;
-//    }
+    public Dish getDish() {
+        return dish;
+    }
+
+    public void setDish(Dish dish) {
+        this.dish = dish;
+    }
 
     public boolean isToPublication() {
         return toPublication;
@@ -216,7 +215,6 @@ public class Recipe {
         return Objects.hash(name, description, ingredients, method);
     }
 
-
     @Override
     public String toString() {
         return "Recipe{" +
@@ -224,15 +222,16 @@ public class Recipe {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", mainImage='" + mainImage + '\'' +
-                ", cookTime='" + cookTime + '\'' +
-                ", serving='" + serving + '\'' +
+                ", cookTime=" + cookTime +
+                ", serving=" + serving +
                 ", complexity='" + complexity + '\'' +
                 ", ingredients=" + ingredients +
                 ", method='" + method + '\'' +
                 ", sections=" + sections +
                 ", author=" + author +
-//                ", categories=" + categories +
+                ", dish=" + dish +
                 ", toPublication=" + toPublication +
+                ", views=" + views +
                 '}';
     }
 }

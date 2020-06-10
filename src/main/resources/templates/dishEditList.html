@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head th:replace="parts/common.html :: headerfiles"></head>
+<body>
+    <div th:replace="parts/navbar.html :: navbar"></div>
+    <div class="container-fluid main-container">
+        <h1 class="greeting-header mt-3">
+            Типы блюд
+        </h1>
+
+        <div th:if="${dishExists}" class="alert alert-primary my-3" role="alert"
+             th:text="${'Блюдо с таким именем уже существует'}">
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">#</th>
+                    <th class="text-center" scope="col">Тип блюда</th>
+                    <th class="text-center" scope="col">Описание</th>
+                    <th class="text-center col-4" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="dish, iter : ${dishes}">
+                    <td class="text-center align-middle" th:text="${iter.index + 1}">
+                    </td>
+                    <td class="text-center align-middle" th:text="${dish.name}">
+                    </td>
+                    <td class="text-center align-middle" th:text="${dish.titleDescription} ? ${dish.titleDescription} : ''"></td>
+                    <td class="text-center align-middle d-flex justify-content-around">
+                        <a class="edit-dish-btn-link" th:href="@{/dish/json/} + ${dish.id}">
+                            <button type="button" class="btn btn-outline-primary">Редактировать</button>
+                        </a>
+                        <a th:href="@{/dish/delete(id=${dish.id})}"
+                           onclick="return confirm('Вы действительно хотите удалить?');">
+                            <button type="button" class="btn btn-outline-danger">Удалить</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-flex" style="justify-content: right">
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addDishModal">Добавить тип блюда</button>
+        </div>
+
+        <div class="modal fade" id="addDishModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Добавить</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form th:action="@{/dish/update}" method="post">
+                        <div class="modal-body">
+                            <input type="hidden" id="idInput" name="id" value="0"/>
+
+                            <div class="form-group">
+                                <label>Название</label>
+                                <input id="nameInput" type="text" class="form-control" name="name" placeholder="Название"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Описание</label>
+                                <textarea id="descriptionInput" class="form-control" name="titleDescription" placeholder="Описание"></textarea>
+                            </div>
+
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-outline-primary" th:text="${dish} ? 'Обновить' : 'Сохранить'"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(".edit-dish-btn-link").on("click", function(event) {
+
+                event.preventDefault();
+
+                var href = $(this).attr('href');
+
+                $.get(href, function(dish, status) {
+                    $("#idInput").val(dish.id);
+                    $("#nameInput").val(dish.name);
+                    $("#descriptionInput").val(dish.titleDescription);
+                });
+
+                $("#addDishModal").modal();
+            });
+        </script>
+
+    </div>
+    <div th:replace="parts/common.html :: footer"></div>
+</body>
+</html>

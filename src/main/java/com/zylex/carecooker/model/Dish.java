@@ -20,6 +20,10 @@ public class Dish {
     public Dish() {
     }
 
+    public Dish(String name) {
+        this.name = name;
+    }
+
     public Dish(String name, String titleDescription) {
         this.name = name;
         this.titleDescription = titleDescription;
