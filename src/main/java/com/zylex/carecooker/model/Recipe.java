@@ -3,6 +3,7 @@ package com.zylex.carecooker.model;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -20,9 +21,9 @@ public class Recipe {
 
     private String mainImage;
 
-    private String cookTime;
+    private LocalTime cookTime;
 
-    private String serving;
+    private int serving;
 
     private String complexity;
 
@@ -42,13 +43,15 @@ public class Recipe {
 
     private boolean toPublication;
 
+    private int views;
+
     public Recipe() {
     }
 
     public Recipe(String name,
                   String description,
-                  String cookTime,
-                  String serving,
+                  LocalTime cookTime,
+                  int serving,
                   String complexity,
                   List<String> ingredients,
                   String method,
@@ -108,19 +111,19 @@ public class Recipe {
         this.mainImage = mainImage;
     }
 
-    public String getCookTime() {
+    public LocalTime getCookTime() {
         return cookTime;
     }
 
-    public void setCookTime(String cookTime) {
+    public void setCookTime(LocalTime cookTime) {
         this.cookTime = cookTime;
     }
 
-    public String getServing() {
+    public int getServing() {
         return serving;
     }
 
-    public void setServing(String serving) {
+    public void setServing(int serving) {
         this.serving = serving;
     }
 
@@ -183,6 +186,18 @@ public class Recipe {
 
     public void setToPublication(boolean toPublication) {
         this.toPublication = toPublication;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    public void incrementViews() {
+        this.views++;
     }
 
     @Override

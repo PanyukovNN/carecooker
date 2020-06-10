@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -103,6 +104,10 @@ public class RecipeController {
                 model.addAttribute("similarRecipes", similarRecipes);
             }
         }
+        recipe.incrementViews();
+        if (recipe.getId() != 0) {
+            recipeRepository.save(recipe);
+        }
         model.addAttribute("recipe", recipe);
 
         User user = (User) recipe.getAuthor();
@@ -135,8 +140,10 @@ public class RecipeController {
 
         Recipe newRecipe = new Recipe(name,
                 description,
-                cookTime,
-                serving,
+                LocalTime.parse(cookTime),
+                serving == null || serving.isEmpty()
+                        ? 0
+                        : Integer.parseInt(serving),
                 complexity,
                 splitByNewLine(ingredients),
                 method,
@@ -174,13 +181,12 @@ public class RecipeController {
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam("file") MultipartFile file,
-            @RequestParam String cookTime,
+            @RequestParam("cookTime") String cookTimeStr,
             @RequestParam String serving,
             @RequestParam String complexity,
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam(required = false, name = "sections") List<String> sectionNameList,
-//            @RequestParam String categories,
             @RequestParam String toPublication) throws IOException {
 
         if (complexity.equals("Сложность")) {
@@ -189,15 +195,18 @@ public class RecipeController {
         Recipe editedRecipe = recipeRepository.findById(id).orElse(new Recipe());
         editedRecipe.setName(name);
         editedRecipe.setDescription(description);
-        editedRecipe.setCookTime(cookTime);
-        editedRecipe.setServing(serving);
+        editedRecipe.setCookTime(LocalTime.parse(cookTimeStr));
+        if (serving == null || serving.isEmpty()) {
+            editedRecipe.setServing(0);
+        } else {
+            editedRecipe.setServing(Integer.parseInt(serving));
+        }
         editedRecipe.setMethod(method);
         if (sectionNameList != null) {
             editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
         }
         editedRecipe.setComplexity(complexity);
         editedRecipe.setIngredients(splitByNewLine(ingredients));
-//        editedRecipe.setCategories(parseCategories(categories));
         editedRecipe.setToPublication(!toPublication.isEmpty());
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
