@@ -86,8 +86,7 @@
     </div>
 
     <script>
-        $(".edit-dish-btn-link").on("click", function(event) {
-
+        $(document).on("click", '.edit-dish-btn-link', function(event) {
             event.preventDefault();
 
             var href = $(this).attr('href');

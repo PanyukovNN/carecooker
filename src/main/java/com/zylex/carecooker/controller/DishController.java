@@ -76,6 +76,12 @@ public class DishController {
         return dishRepository.findById(id);
     }
 
+    @ResponseBody
+    @PostMapping("/json/section")
+    public List<Dish> getJsonDishesBySection(@RequestParam Section section) {
+        return dishRepository.findBySection(section);
+    }
+
     @PostMapping("/update")
     public ModelAndView postUpdateDish(
             Dish dish,

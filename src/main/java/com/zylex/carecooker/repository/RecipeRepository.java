@@ -28,7 +28,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     List<Recipe> findByDish(Dish dish);
 
-    List<Recipe> findTop6BySectionsContaining(Section section);
+    List<Recipe> findTop7BySectionsContaining(Section section);
 
     Long countByAuthor(User author);
 }

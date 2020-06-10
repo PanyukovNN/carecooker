@@ -1,6 +1,5 @@
 package com.zylex.carecooker.controller;
 
-import com.zylex.carecooker.model.Dish;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.User;
@@ -106,7 +105,11 @@ public class RecipeController {
         if (!recipe.getSections().isEmpty()) {
             Section section = recipe.getSections().get(0);
             if (section != null) {
-                List<Recipe> similarRecipes = recipeRepository.findTop6BySectionsContaining(section);
+                List<Recipe> similarRecipes = recipeRepository.findTop7BySectionsContaining(section);
+                similarRecipes.remove(recipe);
+                if (similarRecipes.size() > 6) {
+                    similarRecipes.remove(6);
+                }
                 model.addAttribute("similarRecipes", similarRecipes);
             }
         }
@@ -136,17 +139,11 @@ public class RecipeController {
             @RequestParam String cookTime,
             @RequestParam String serving,
             @RequestParam String complexity,
-            @RequestParam String dish,
+//            @RequestParam String dish,
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam(required = false, name = "sections") List<String> sectionNameList,
             @RequestParam String toPublication) throws IOException {
-
-        Dish dishEntry = dishRepository.findByName(dish);
-        if (dishEntry == null) {
-            dishEntry = new Dish(dish);
-            dishEntry = dishRepository.save(dishEntry);
-        }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.loadUserByUsername(authentication.getName());
@@ -160,7 +157,7 @@ public class RecipeController {
                 complexity,
                 splitByNewLine(ingredients),
                 method,
-                dishEntry,
+                null, //dishEntry,
                 sectionNameList != null
                         ? sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList())
                         : Collections.emptyList(),
@@ -197,7 +194,7 @@ public class RecipeController {
             @RequestParam("cookTime") String cookTimeStr,
             @RequestParam String serving,
             @RequestParam String complexity,
-            @RequestParam String dish,
+//            @RequestParam String dish,
             @RequestParam String ingredients,
             @RequestParam String method,
             @RequestParam(required = false, name = "sections") List<String> sectionNameList,
@@ -221,13 +218,6 @@ public class RecipeController {
             editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
         }
         editedRecipe.setComplexity(complexity);
-
-        Dish dishEntry = dishRepository.findByName(dish);
-        if (dishEntry == null) {
-            dishEntry = new Dish(dish);
-            dishEntry = dishRepository.save(dishEntry);
-        }
-        editedRecipe.setDish(dishEntry);
 
         editedRecipe.setIngredients(splitByNewLine(ingredients));
         editedRecipe.setToPublication(!toPublication.isEmpty());

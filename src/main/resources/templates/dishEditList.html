@@ -16,20 +16,21 @@
             <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addDishModal">Добавить тип блюда</button>
         </div>
 
-        <form method="post" th:action="@{/dish/list}">
+        <form id="sectionForm" method="post" th:action="@{/dish/list}">
             <label>Выберите раздел</label>
             <div class="input-group mb-3">
-                <select class="custom-select" name="section">
+                <select class="custom-select select-section" name="section">
                     <option th:each="section : ${sections}"
                             th:value="${{section.id}}"
                             th:text="${section.name}"
                             th:selected="${section == currentSection}">
                     </option>
                 </select>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="submit">Показать</button>
-                </div>
+<!--                <div class="input-group-append">-->
+<!--                    <button class="btn btn-outline-primary" type="submit">Показать</button>-->
+<!--                </div>-->
             </div>
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
         </form>
 
 
@@ -39,35 +40,31 @@
                     <th class="text-center" scope="col">#</th>
                     <th class="text-center" scope="col">Тип блюда</th>
                     <th class="text-center" scope="col">Описание</th>
-                    <th class="text-center col-4" scope="col"></th>
+                    <th class="text-center col-3" scope="col"></th>
+                    <th class="text-center col-1" scope="col"></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="dish, iter : ${dishes}">
-                    <td class="text-center align-middle" th:text="${iter.index + 1}"></td>
-                    <td class="text-center align-middle" >
-                        <div class="row_data" th:text="${dish.name}"></div>
-                    </td>
-                    <td class="text-center align-middle">
-                        <div class="row_data"  th:text="${dish.titleDescription} ? ${dish.titleDescription} : ''"></div>
-                    </td>
-                    <td class="row_data text-center align-middle d-flex justify-content-around">
-                        <a class="edit-dish-btn-link" th:href="@{/dish/json/} + ${dish.id}">
-                            <button type="button" class="btn btn-outline-primary">Редактировать</button>
-                        </a>
-                        <a th:href="@{/dish/delete(id=${dish.id})}"
-                           onclick="return confirm('Вы действительно хотите удалить?');">
-                            <button type="button" class="btn btn-outline-danger">Удалить</button>
-                        </a>
-                    </td>
-<!--                    <script>-->
-<!--                        $(document).on('click', '.row_data'), function(event) {-->
-<!--                            event.preventDefault();-->
-<!--                    contenteditable="true"-->
-<!--                            $(this).focus();-->
-<!--                        }-->
-<!--                    </script>-->
-                </tr>
+            <tbody class="dish-table-body">
+<!--                <tr th:each="dish, iter : ${dishes}">-->
+<!--                    <td class="text-center align-middle" th:text="${iter.index + 1}"></td>-->
+<!--                    <td class="text-center align-middle" >-->
+<!--                        <div class="row_data" th:text="${dish.name}"></div>-->
+<!--                    </td>-->
+<!--                    <td class="text-center align-middle">-->
+<!--                        <div class="row_data"  th:text="${dish.titleDescription} ? ${dish.titleDescription} : ''"></div>-->
+<!--                    </td>-->
+<!--                    <td class="row_data text-center align-middle">-->
+<!--                        <a class="edit-dish-btn-link" th:href="@{/dish/json/} + ${dish.id}">-->
+<!--                            <button type="button" class="btn btn-outline-primary">Редактировать</button>-->
+<!--                        </a>-->
+<!--                    </td>-->
+<!--                    <td class="row_data text-center align-middle">-->
+<!--                        <a th:href="@{/dish/delete(id=${dish.id})}"-->
+<!--                           onclick="return confirm('Вы действительно хотите удалить?');">-->
+<!--                            <button type="button" class="btn btn-outline-danger">Удалить</button>-->
+<!--                        </a>-->
+<!--                    </td>-->
+<!--                </tr>-->
             </tbody>
         </table>
 
@@ -77,7 +74,49 @@
 
         <div th:replace="parts/dishUpdateModal.html :: dishUpdateModal"></div>
 
+        <script>
+            $(document).ready(function () {
+                fullTable();
+            });
+            $(".select-section").on("change", function (event) {
+                event.preventDefault();
+                fullTable();
+            });
+            function fullTable() {
+                var url = '/dish/json/section';
+
+                var dataToBeSent = $("#sectionForm").serialize();
+
+                $(".dish-table-body").empty();
+                $.post(url, dataToBeSent, function(data, textStatus) {
+                    $.each(data, function(i , value) {
+                        $(".dish-table-body").append(
+                            "<tr> " +
+                                "<td class='text-center align-middle'>" + ++i + "</td>" +
+                                "<td class='text-center align-middle' >" +
+                                    "<div class='row_data'>" + value.name + "</div>" +
+                                "</td>" +
+                                "<td class='text-center align-middle' >" +
+                                    "<div class='row_data'>" + value.titleDescription + "</div>" +
+                                "</td>" +
+                                "<td class='row_data text-center align-middle'>" +
+                                    "<a class='edit-dish-btn-link' href='/dish/json/" + value.id + "'>" +
+                                        "<button type='button' class='btn btn-outline-primary'>Редактировать</button>" +
+                                    "</a>" +
+                                "</td>" +
+                                "<td class='row_data text-center align-middle'>" +
+                                    "<a href='/dish/delete?id=" + value.id +  "'" +
+                                        "onclick=\"return confirm('Вы действительно хотите удалить?');\">" +
+                                        "<button type='button' class='btn btn-outline-danger'>Удалить</button>" +
+                                    "</a>" +
+                                "</td>" +
+                            "</tr>");
+                    });
+                }, "json");
+            };
+        </script>
     </div>
+
     <div th:replace="parts/common.html :: footer"></div>
 </body>
 </html>
