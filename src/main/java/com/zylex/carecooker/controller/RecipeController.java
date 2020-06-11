@@ -11,6 +11,7 @@ import com.zylex.carecooker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -61,15 +62,25 @@ public class RecipeController {
 
     @GetMapping("/all")
     public String getAllRecipes(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
             Model model) {
+        Pageable pageable = PageRequest.of(0, 3);
         Page<Recipe> page = recipeRepository.findAllByToPublicationIsTrue(pageable);
 
         model.addAttribute("page", page);
+
         model.addAttribute("greetingDto", new GreetingDto("Все рецепты", null));
         model.addAttribute("url", "/recipe/all");
 
         return "recipesAll";
+    }
+
+    @ResponseBody
+    @GetMapping("/all/page/{number}")
+    public List<Recipe> getRecipesPage(@PathVariable int number) {
+        Pageable pageable = PageRequest.of(number, 3);
+        Page<Recipe> page = recipeRepository.findAllByToPublicationIsTrue(pageable);
+
+        return page.stream().collect(Collectors.toList());
     }
 
     @GetMapping("/no-section-list")

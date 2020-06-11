@@ -2,59 +2,137 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <div th:fragment="recipeList" class="main-list-block">
-    <div class="row row-cols-1 row-cols-md-3 mt-3">
-        <div th:each="recipe : ${page.content}">
-            <a th:href="@{/recipe/} + ${recipe.id}" style="text-decoration: none;">
-                <div class="col">
-                    <div class="recipe-card overlay">
-                        <div class="recipe-card-image" th:if="${recipe.mainImage}"
-                             th:style="|background-image: url('@{/img/}${recipe.mainImage}');|">
-                            <div class="section-overlay"></div>
-                            <h4 class="card-title" th:text="${recipe.name}"></h4>
-
-                            <div class="recipe-card-meta align-self-end">
-                                <div class="recipe-meta-wrap">
-                                    <div class="svg-white clock-white-svg meta-delimiter"></div>
-                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
-                                </div>
-                                <div class="recipe-meta-wrap">
-                                    <div class="svg-white serving-white-svg meta-delimiter"></div>
-                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
-                                </div>
-                                <div class="recipe-meta-wrap">
-                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="recipe-card-image" th:unless="${recipe.mainImage}"
-                             th:style="|background-image: url('@{../../static/img_placeholder.svg}');|">
-                            <div class="section-overlay"></div>
-                            <h4 class="recipe-card-title" th:text="${recipe.name}"></h4>
-
-                            <div class="recipe-card-meta align-self-end">
-                                <div class="recipe-meta-wrap">
-                                    <div class="svg-white clock-white-svg meta-delimiter"></div>
-                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
-                                </div>
-                                <div class="recipe-meta-wrap">
-                                    <div class="svg-white serving-white-svg meta-delimiter"></div>
-                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
-                                </div>
-                                <div class="recipe-meta-wrap">
-                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
+    <div id="recipe-card-block" class="row row-cols-1 row-cols-md-3 mt-3">
+        <!-- Fills by js-->
     </div>
-    <div th:if="${#lists.isEmpty(page.content)}" class="alert alert-primary mt-3" role="alert">
+    <div class="alert alert-primary mt-3" role="alert" style="display: none">
         На данной странице нет рецептов
     </div>
 
-    <div th:replace="parts/pager :: pager"></div>
+    <div style="display: none;" class="page-link" th:text="${url}"></div>
+    <div style="display: none;" class="total-pages" th:text="${page.totalPages}"></div>
+
+<!--    <div th:replace="parts/pager :: pager"></div>-->
+    <div class="d-flex justify-content-center mt-4">
+        <button class="btn btn-outline-secondary show-more">Показать еще</button>
+    </div>
+
+    <script>
+        var pageNumber = 0;
+        var totalPages = parseInt($(".total-pages").text());
+
+        console.log(pageNumber);
+        console.log(totalPages);
+
+        $(document).ready(function() {
+            showMore()
+
+            $(document).on("click", '.show-more', function(event) {
+                event.preventDefault();
+
+                showMore();
+            });
+        });
+
+        function showMore() {
+            var link = $(".page-link").text() + "/page/" + pageNumber;
+            pageNumber++;
+
+            var recipeOnPageNumber = 0;
+
+            $.get(link, function(recipes, status) {
+                $.each(recipes, function(i, recipe) {
+                    recipeOnPageNumber = recipes.length;
+                    $("#recipe-card-block").append(
+                        "<div>" +
+                        "<a href='/recipe/" + recipe.id + "' style='text-decoration: none;'>" +
+                        "<div class='col'>" +
+                        "<div class='recipe-card overlay'>" +
+                        "<div class='recipe-card-image' style=\"background-image: url('/img/" + recipe.mainImage + "');\">" +
+                        "<div class='section-overlay'></div>" +
+                        "<h4 class='card-title'>" + recipe.name + "</h4>" +
+
+                        "<div class='recipe-card-meta align-self-end'>" +
+                        "<div class='recipe-meta-wrap'>" +
+                        "<div class='svg-white clock-white-svg meta-delimiter'></div>" +
+                        "<div class='recipe-meta_prep-time' >" + recipe.cookTime + "</div>" +
+                        "</div>" +
+                        "<div class='recipe-meta-wrap'>" +
+                        "<div class='svg-white serving-white-svg meta-delimiter'></div>" +
+                        "<div class='recipe-meta_serving'>" + recipe.serving + "</div>" +
+                        "</div>" +
+                        "<div class='recipe-meta-wrap'>" +
+                        "<div class='recipe-meta_complexity'>" + recipe.complexity + "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</a>" +
+                        "</div>"
+                    );
+                });
+            });
+
+            if (pageNumber === totalPages) {
+                $(".show-more").css("display", "none");
+            }
+
+            if (recipeOnPageNumber === 0 && totalPages === 0) {
+                $(".alert").css("display", "block");
+                $(".show-more").css("display", "none");
+            }
+        }
+
+    </script>
 </div>
 
 </html>
+
+
+<!--        <div th:each="recipe : ${page.content}"> -->
+<!--            <a th:href="@{/recipe/} + ${recipe.id}" style="text-decoration: none;">-->
+<!--                <div class="col">-->
+<!--                    <div class="recipe-card overlay">-->
+<!--                        <div class="recipe-card-image" th:if="${recipe.mainImage}"-->
+<!--                             th:style="|background-image: url('@{/img/}${recipe.mainImage}');|">-->
+<!--                            <div class="section-overlay"></div>-->
+<!--                            <h4 class="card-title" th:text="${recipe.name}"></h4>-->
+
+<!--                            <div class="recipe-card-meta align-self-end">-->
+<!--                                <div class="recipe-meta-wrap">-->
+<!--                                    <div class="svg-white clock-white-svg meta-delimiter"></div>-->
+<!--                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>-->
+<!--                                </div>-->
+<!--                                <div class="recipe-meta-wrap">-->
+<!--                                    <div class="svg-white serving-white-svg meta-delimiter"></div>-->
+<!--                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>-->
+<!--                                </div>-->
+<!--                                <div class="recipe-meta-wrap">-->
+<!--                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--&lt;!&ndash;                        <div class="recipe-card-image" th:unless="${recipe.mainImage}"&ndash;&gt;-->
+<!--&lt;!&ndash;                             th:style="|background-image: url('@{../../static/img_placeholder.svg}');|">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="section-overlay"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h4 class="recipe-card-title" th:text="${recipe.name}"></h4>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div class="recipe-card-meta align-self-end">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="recipe-meta-wrap">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="svg-white clock-white-svg meta-delimiter"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="recipe-meta-wrap">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="svg-white serving-white-svg meta-delimiter"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="recipe-meta-wrap">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
