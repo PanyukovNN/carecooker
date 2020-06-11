@@ -9,7 +9,7 @@
                  th:if="${recipe} and ${recipe.sections}"
                  th:each="section, iter : ${recipe.sections}">
                 <a th:class="${iter.index != iter.size-1} ? 'recipe-title-section-name-link dot-delimiter' : 'recipe-title-section-name-link'"
-                   th:href="@{/section/} + ${section.id}"
+                   th:href="@{/recipe/section/} + ${section.id}"
                    th:text="${#strings.toUpperCase(section.name)}"></a></span>
         </div>
         <h1 class="recipe-title-header" th:text="${recipe.name}"></h1>

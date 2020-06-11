@@ -4,6 +4,7 @@ import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.User;
 import com.zylex.carecooker.model.dto.GreetingDto;
+import com.zylex.carecooker.model.dto.RecipeCardDto;
 import com.zylex.carecooker.repository.DishRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
@@ -59,23 +60,22 @@ public class RecipeController {
     @Value("${upload.path}")
     private String uploadPath;
 
-    @GetMapping("/all")
+    @GetMapping(value = "/all", produces = "text/html")
     public String getAllRecipes(Model model) {
         model.addAttribute("greetingDto", new GreetingDto("Все рецепты", null));
-        model.addAttribute("url", "/recipe/all");
 
         return "recipesAll";
     }
 
     @ResponseBody
-    @GetMapping("/all/page/{number}")
-    public Page<Recipe> getRecipesPage(@PathVariable int number) {
-        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+    @GetMapping(value = "/all", produces = "application/json")
+    public Page<RecipeCardDto> getRecipesPage(@RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
 
-        return recipeRepository.findAllByToPublicationIsTrue(pageable);
+        return recipeRepository.findAllByToPublicationIsTrue(pageable).map(RecipeCardDto::new);
     }
 
-    @GetMapping("/section/{id}")
+    @GetMapping(value = "/section/{id}", produces = "text/html")
     public String getSectionRecipes(
             @PathVariable long id,
             Model model) {
@@ -83,23 +83,22 @@ public class RecipeController {
 
         model.addAttribute("section", section);
         model.addAttribute("greetingDto", new GreetingDto(section.getName(), null));
-        model.addAttribute("url", "/recipe/section/" + section.getId());
 
         return "section";
     }
 
     @ResponseBody
-    @GetMapping("/section/{id}/page/{number}")
-    public Page<Recipe> getSectionRecipesPage(
+    @GetMapping(value = "/section/{id}", produces = "application/json")
+    public Page<RecipeCardDto> getSectionRecipesPage(
             @PathVariable long id,
-            @PathVariable int number) {
-        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+            @RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
         Section section = sectionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
-        return recipeRepository.findBySectionsContainingAndToPublicationIsTrue(section, pageable);
+        return recipeRepository.findBySectionsContainingAndToPublicationIsTrue(section, pageable).map(RecipeCardDto::new);
     }
 
-    @GetMapping("/no-section-list")
+    @GetMapping(value = "/no-section-list", produces = "text/html")
     public String getNoSectionRecipes(Model model) {
         model.addAttribute("greetingDto", new GreetingDto("Рецепты без раздела", ""));
         model.addAttribute("url", "/recipe/no-section-list");
@@ -108,14 +107,14 @@ public class RecipeController {
     }
 
     @ResponseBody
-    @GetMapping("/no-section-list/page/{number}")
-    public Page<Recipe> getNoSectionRecipesPage(@PathVariable int number) {
-        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+    @GetMapping(value = "/no-section-list", produces = "application/json")
+    public Page<RecipeCardDto> getNoSectionRecipesPage(@RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
 
-        return recipeRepository.findBySectionsIsNull(pageable);
+        return recipeRepository.findBySectionsIsNull(pageable).map(RecipeCardDto::new);
     }
 
-    @GetMapping("/to-publication")
+    @GetMapping(value = "/to-publication", produces = "text/html")
     public String getToPublicationRecipes(Model model) {
         model.addAttribute("greetingDto", new GreetingDto("Неопубликованные рецепты", ""));
         model.addAttribute("url", "/recipe/to-publication");
@@ -124,11 +123,11 @@ public class RecipeController {
     }
 
     @ResponseBody
-    @GetMapping("/to-publication/page/{number}")
-    public Page<Recipe> getToPublicationRecipesPage(@PathVariable int number) {
-        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+    @GetMapping(value = "/to-publication", produces = "application/json")
+    public Page<RecipeCardDto> getToPublicationRecipesPage(@RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
 
-        return recipeRepository.findByToPublicationIsFalse(pageable);
+        return recipeRepository.findByToPublicationIsFalse(pageable).map(RecipeCardDto::new);
     }
 
     @GetMapping("/{id}")

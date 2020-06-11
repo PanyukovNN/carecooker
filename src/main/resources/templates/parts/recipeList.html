@@ -30,21 +30,18 @@
         });
 
         function getPage() {
-            var link = window.location.pathname + "/page/" + pageNumber;
+            var link = window.location.pathname + "?page=" + pageNumber;
             pageNumber++;
 
             $.get(link, function(page, status) {
                 showMoreBtn.css("display", "none");
                 spinner.css("display", "block");
 
-                var recipeOnPageNumber = 0;
                 var totalPages = 0;
 
                 if (!Array.isArray(page)) { // page будет являться массивом, только если элементы отсутствуют
-
                     totalPages = page.totalPages;
                     $.each(page.content, function(i, recipe) {
-                        recipeOnPageNumber = page.content.length;
                         $("#recipe-card-block").append(
                             "<div>" +
                                 "<a href='/recipe/" + recipe.id + "' style='text-decoration: none;'>" +

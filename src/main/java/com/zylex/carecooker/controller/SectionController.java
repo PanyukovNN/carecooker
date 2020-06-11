@@ -2,6 +2,7 @@ package com.zylex.carecooker.controller;
 
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
+import com.zylex.carecooker.model.dto.SectionDto;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/section")
@@ -42,6 +44,17 @@ public class SectionController {
         model.addAttribute("sections", sections);
 
         return "sectionEditList";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/all", produces = "application/json")
+    public List<SectionDto> getSectionsDto() {
+        List<Section> sections = sectionRepository.findAll();
+        sections.sort(Comparator.comparing(Section::getPosition));
+
+        return sections.stream()
+                .map(SectionDto::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/add")

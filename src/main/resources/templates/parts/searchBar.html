@@ -1,26 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
-<div class="search-bar border-bottom" th:fragment="search-bar">
-    <form class="search-bar-form" method="post">
-        <div>
-            <select class="search-bar-input" name="category">
-                        <option selected>Любое меню</option>
-                        <#list categories as category>
-                        <#if section??>
-                        <#if section.name == category.name>
-                        <option selected>${category.name}</option>
-                        <#else>
-                        <option>${category.name}</option>
-                    </#if>
-                    <#else>
-                    <option>${category.name}</option>
-                </#if>
-            </#list>
-            </select>
+<div th:fragment="search-bar">
+    <div class="collapse" id="collapseSearchBar">
+    <div class="search-bar border-bottom" >
+        <div class="search-bar-form">
+            <form method="post">
+                <div class="input-group">
+                    <select class="search-bar-select custom-select" id="inputGroupSelect">
+                        <option value="">Любой раздел</option>
+                        <!-- Fills by js -->
+                    </select>
+                    <select class="search-bar-select custom-select ml-4" id="inputGroupSelect2" disabled>
+                        <option value="">Любое блюдо</option>
+                        <!-- Fills by js -->
+                    </select>
+                    <div class="input-group-append ml-4">
+                        <button class="btn btn-light search-bar-btn" type="submit">Подобрать рецепты</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Подобрать рецепты</button>
-    </form>
+    </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            var link = "/section/all";
+
+            $.get(link, function(sections, status) {
+                $.each(sections, function(i, section) {
+                    $("#inputGroupSelect").append(
+                        "<option value='" + section.id + "'>" + section.name + "</option>"
+                    );
+                });
+
+                /*<![CDATA[*/
+                var sectionId = /*[[${section} ? ${section.id} : '']]*/ 'default';
+                if (sectionId !== '') {
+                    $("#inputGroupSelect").val(sectionId);
+                }
+
+                /*]]>*/
+            });
+        });
+    </script>
 </div>
 
 </html>
