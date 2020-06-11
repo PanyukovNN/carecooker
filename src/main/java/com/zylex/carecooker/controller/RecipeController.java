@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/recipe")
 public class RecipeController {
 
-    public static final int PAGE_SIZE = 3;
+    public static final int PAGE_SIZE = 9;
 
     private final RecipeRepository recipeRepository;
 
@@ -62,7 +62,7 @@ public class RecipeController {
 
     @GetMapping(value = "/all", produces = "text/html")
     public String getAllRecipes(Model model) {
-        model.addAttribute("greetingDto", new GreetingDto("Все рецепты", null));
+        model.addAttribute("greetingDto", new GreetingDto("Рецепты", null));
 
         return "recipesAll";
     }
