@@ -12,7 +12,6 @@
     <div style="display: none;" class="page-link" th:text="${url}"></div>
     <div style="display: none;" class="total-pages" th:text="${page.totalPages}"></div>
 
-<!--    <div th:replace="parts/pager :: pager"></div>-->
     <div class="d-flex justify-content-center mt-4">
         <button class="btn btn-outline-secondary show-more">Показать еще</button>
     </div>
@@ -88,51 +87,3 @@
 </div>
 
 </html>
-
-
-<!--        <div th:each="recipe : ${page.content}"> -->
-<!--            <a th:href="@{/recipe/} + ${recipe.id}" style="text-decoration: none;">-->
-<!--                <div class="col">-->
-<!--                    <div class="recipe-card overlay">-->
-<!--                        <div class="recipe-card-image" th:if="${recipe.mainImage}"-->
-<!--                             th:style="|background-image: url('@{/img/}${recipe.mainImage}');|">-->
-<!--                            <div class="section-overlay"></div>-->
-<!--                            <h4 class="card-title" th:text="${recipe.name}"></h4>-->
-
-<!--                            <div class="recipe-card-meta align-self-end">-->
-<!--                                <div class="recipe-meta-wrap">-->
-<!--                                    <div class="svg-white clock-white-svg meta-delimiter"></div>-->
-<!--                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>-->
-<!--                                </div>-->
-<!--                                <div class="recipe-meta-wrap">-->
-<!--                                    <div class="svg-white serving-white-svg meta-delimiter"></div>-->
-<!--                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>-->
-<!--                                </div>-->
-<!--                                <div class="recipe-meta-wrap">-->
-<!--                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--&lt;!&ndash;                        <div class="recipe-card-image" th:unless="${recipe.mainImage}"&ndash;&gt;-->
-<!--&lt;!&ndash;                             th:style="|background-image: url('@{../../static/img_placeholder.svg}');|">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="section-overlay"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <h4 class="recipe-card-title" th:text="${recipe.name}"></h4>&ndash;&gt;-->
-
-<!--&lt;!&ndash;                            <div class="recipe-card-meta align-self-end">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div class="recipe-meta-wrap">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="svg-white clock-white-svg meta-delimiter"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div class="recipe-meta-wrap">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="svg-white serving-white-svg meta-delimiter"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div class="recipe-meta-wrap">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </a>-->
-<!--        </div>-->

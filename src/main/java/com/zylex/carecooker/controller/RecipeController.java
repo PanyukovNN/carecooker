@@ -161,7 +161,9 @@ public class RecipeController {
 
         Recipe newRecipe = new Recipe(name,
                 description,
-                LocalTime.parse(cookTime),
+                cookTime == null || cookTime.isEmpty()
+                        ? LocalTime.of(0, 0)
+                        : LocalTime.parse(cookTime),
                 serving == null || serving.isEmpty()
                         ? 0
                         : Integer.parseInt(serving),
@@ -218,7 +220,9 @@ public class RecipeController {
         Recipe editedRecipe = recipeRepository.findById(id).orElse(new Recipe());
         editedRecipe.setName(name);
         editedRecipe.setDescription(description);
-        editedRecipe.setCookTime(LocalTime.parse(cookTimeStr));
+        editedRecipe.setCookTime(cookTimeStr == null || cookTimeStr.isEmpty()
+                ? LocalTime.of(0, 0)
+                : LocalTime.parse(cookTimeStr));
         if (serving == null || serving.isEmpty()) {
             editedRecipe.setServing(0);
         } else {
