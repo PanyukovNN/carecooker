@@ -35,8 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             "/section/add/**",
                             "/section/edit/**",
                             "/section/list",
-                            "/recipe/no-section-list",
-                            "/recipe/to-publication",
+                            "/recipe/no-section-list**",
+                            "/recipe/to-publication**",
                             "/dish/list").hasRole("ADMIN")
                     .antMatchers("/**").permitAll()
                 .and()

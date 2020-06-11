@@ -2,16 +2,10 @@ package com.zylex.carecooker.controller;
 
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
-import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -21,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/section")
@@ -31,8 +24,6 @@ public class SectionController {
 
     private final RecipeRepository recipeRepository;
 
-    public final int PAGE_SIZE = 15;
-
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -41,38 +32,6 @@ public class SectionController {
                              RecipeRepository recipeRepository) {
         this.sectionRepository = sectionRepository;
         this.recipeRepository = recipeRepository;
-    }
-
-    @GetMapping("/{id}")
-    public String getSection(
-            @PathVariable long id,
-            Model model) {
-        Section section = sectionRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-
-        Pageable pageable = PageRequest.of(0, 3);
-        Page<Recipe> page = recipeRepository.findBySectionsContainingAndToPublicationIsTrue(section, pageable);
-
-        model.addAttribute("page", page);
-        model.addAttribute("section", section);
-        model.addAttribute("greetingDto", new GreetingDto(section.getName(), null));
-        model.addAttribute("url", "/section/" + section.getId());
-
-        return "section";
-    }
-
-    @ResponseBody
-    @GetMapping("/{id}/page/{number}")
-    public List<Recipe> getSectionRecipesPage(
-            @PathVariable long id,
-            @PathVariable int number) {
-        Pageable pageable = PageRequest.of(number, 3);
-        Section section = sectionRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-
-        Page<Recipe> page = recipeRepository.findBySectionsContainingAndToPublicationIsTrue(section, pageable);
-
-        return page.stream().collect(Collectors.toList());
     }
 
     @GetMapping("/list")

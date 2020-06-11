@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -36,7 +35,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/recipe")
 public class RecipeController {
 
-    private static final int PAGE_SIZE = 15;
+    public static final int PAGE_SIZE = 3;
 
     private final RecipeRepository recipeRepository;
 
@@ -61,13 +60,7 @@ public class RecipeController {
     private String uploadPath;
 
     @GetMapping("/all")
-    public String getAllRecipes(
-            Model model) {
-        Pageable pageable = PageRequest.of(0, 3);
-        Page<Recipe> page = recipeRepository.findAllByToPublicationIsTrue(pageable);
-
-        model.addAttribute("page", page);
-
+    public String getAllRecipes(Model model) {
         model.addAttribute("greetingDto", new GreetingDto("Все рецепты", null));
         model.addAttribute("url", "/recipe/all");
 
@@ -76,37 +69,66 @@ public class RecipeController {
 
     @ResponseBody
     @GetMapping("/all/page/{number}")
-    public List<Recipe> getRecipesPage(@PathVariable int number) {
-        Pageable pageable = PageRequest.of(number, 3);
-        Page<Recipe> page = recipeRepository.findAllByToPublicationIsTrue(pageable);
+    public Page<Recipe> getRecipesPage(@PathVariable int number) {
+        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
 
-        return page.stream().collect(Collectors.toList());
+        return recipeRepository.findAllByToPublicationIsTrue(pageable);
+    }
+
+    @GetMapping("/section/{id}")
+    public String getSectionRecipes(
+            @PathVariable long id,
+            Model model) {
+        Section section = sectionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        model.addAttribute("section", section);
+        model.addAttribute("greetingDto", new GreetingDto(section.getName(), null));
+        model.addAttribute("url", "/recipe/section/" + section.getId());
+
+        return "section";
+    }
+
+    @ResponseBody
+    @GetMapping("/section/{id}/page/{number}")
+    public Page<Recipe> getSectionRecipesPage(
+            @PathVariable long id,
+            @PathVariable int number) {
+        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+        Section section = sectionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        return recipeRepository.findBySectionsContainingAndToPublicationIsTrue(section, pageable);
     }
 
     @GetMapping("/no-section-list")
-    public String getNoSectionRecipes(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
-            Model model) {
-        Page<Recipe> page = recipeRepository.findBySectionsIsNull(pageable);
-
-        model.addAttribute("page", page);
+    public String getNoSectionRecipes(Model model) {
         model.addAttribute("greetingDto", new GreetingDto("Рецепты без раздела", ""));
         model.addAttribute("url", "/recipe/no-section-list");
 
         return "recipesAll";
     }
 
-    @GetMapping("/to-publication")
-    public String getToPublicationRecipes(
-            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = PAGE_SIZE) Pageable pageable,
-            Model model) {
-        Page<Recipe> page = recipeRepository.findByToPublicationIsFalse(pageable);
+    @ResponseBody
+    @GetMapping("/no-section-list/page/{number}")
+    public Page<Recipe> getNoSectionRecipesPage(@PathVariable int number) {
+        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
 
-        model.addAttribute("page", page);
+        return recipeRepository.findBySectionsIsNull(pageable);
+    }
+
+    @GetMapping("/to-publication")
+    public String getToPublicationRecipes(Model model) {
         model.addAttribute("greetingDto", new GreetingDto("Неопубликованные рецепты", ""));
-        model.addAttribute("url", "/recipe/no-section-list");
+        model.addAttribute("url", "/recipe/to-publication");
 
         return "recipesAll";
+    }
+
+    @ResponseBody
+    @GetMapping("/to-publication/page/{number}")
+    public Page<Recipe> getToPublicationRecipesPage(@PathVariable int number) {
+        Pageable pageable = PageRequest.of(number, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+
+        return recipeRepository.findByToPublicationIsFalse(pageable);
     }
 
     @GetMapping("/{id}")

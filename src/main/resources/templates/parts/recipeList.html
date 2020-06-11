@@ -9,80 +9,86 @@
         На данной странице нет рецептов
     </div>
 
-    <div style="display: none;" class="page-link" th:text="${url}"></div>
-    <div style="display: none;" class="total-pages" th:text="${page.totalPages}"></div>
-
-    <div class="d-flex justify-content-center mt-4">
-        <button class="btn btn-outline-secondary show-more">Показать еще</button>
+    <div class="d-flex justify-content-center mt-5">
+        <button class="btn btn-outline-secondary show-more" style="display: none">Показать еще</button>
+        <div class="spinner-border spinner-show-more" role="status"></div>
     </div>
 
     <script>
         var pageNumber = 0;
-        var totalPages = parseInt($(".total-pages").text());
-
-        console.log(pageNumber);
-        console.log(totalPages);
+        var showMoreBtn = $(".show-more");
+        var spinner = $(".spinner-show-more");
 
         $(document).ready(function() {
-            showMore()
+            getPage()
 
             $(document).on("click", '.show-more', function(event) {
                 event.preventDefault();
 
-                showMore();
+                getPage();
             });
         });
 
-        function showMore() {
-            var link = $(".page-link").text() + "/page/" + pageNumber;
+        function getPage() {
+            var link = window.location.pathname + "/page/" + pageNumber;
             pageNumber++;
 
-            var recipeOnPageNumber = 0;
+            $.get(link, function(page, status) {
+                showMoreBtn.css("display", "none");
+                spinner.css("display", "block");
 
-            $.get(link, function(recipes, status) {
-                $.each(recipes, function(i, recipe) {
-                    recipeOnPageNumber = recipes.length;
-                    $("#recipe-card-block").append(
-                        "<div>" +
-                        "<a href='/recipe/" + recipe.id + "' style='text-decoration: none;'>" +
-                        "<div class='col'>" +
-                        "<div class='recipe-card overlay'>" +
-                        "<div class='recipe-card-image' style=\"background-image: url('/img/" + recipe.mainImage + "');\">" +
-                        "<div class='section-overlay'></div>" +
-                        "<h4 class='card-title'>" + recipe.name + "</h4>" +
+                var recipeOnPageNumber = 0;
+                var totalPages = 0;
 
-                        "<div class='recipe-card-meta align-self-end'>" +
-                        "<div class='recipe-meta-wrap'>" +
-                        "<div class='svg-white clock-white-svg meta-delimiter'></div>" +
-                        "<div class='recipe-meta_prep-time' >" + recipe.cookTime + "</div>" +
-                        "</div>" +
-                        "<div class='recipe-meta-wrap'>" +
-                        "<div class='svg-white serving-white-svg meta-delimiter'></div>" +
-                        "<div class='recipe-meta_serving'>" + recipe.serving + "</div>" +
-                        "</div>" +
-                        "<div class='recipe-meta-wrap'>" +
-                        "<div class='recipe-meta_complexity'>" + recipe.complexity + "</div>" +
-                        "</div>" +
-                        "</div>" +
-                        "</div>" +
-                        "</div>" +
-                        "</div>" +
-                        "</a>" +
-                        "</div>"
-                    );
-                });
+                if (!Array.isArray(page)) { // page будет являться массивом, только если элементы отсутствуют
+
+                    totalPages = page.totalPages;
+                    $.each(page.content, function(i, recipe) {
+                        recipeOnPageNumber = page.content.length;
+                        $("#recipe-card-block").append(
+                            "<div>" +
+                                "<a href='/recipe/" + recipe.id + "' style='text-decoration: none;'>" +
+                                    "<div class='col'>" +
+                                        "<div class='recipe-card overlay'>" +
+                                            "<div class='recipe-card-image' style=\"background-image: url('/img/" + recipe.mainImage + "');\">" +
+                                                "<div class='section-overlay'></div>" +
+                                                "<h4 class='card-title'>" + recipe.name + "</h4>" +
+
+                                                "<div class='recipe-card-meta align-self-end'>" +
+                                                    "<div class='recipe-meta-wrap'>" +
+                                                        "<div class='svg-white clock-white-svg meta-delimiter'></div>" +
+                                                        "<div class='recipe-meta_prep-time' >" + recipe.cookTime.slice(0, 5) + "</div>" +
+                                                    "</div>" +
+                                                    "<div class='recipe-meta-wrap'>" +
+                                                        "<div class='svg-white serving-white-svg meta-delimiter'></div>" +
+                                                        "<div class='recipe-meta_serving'>" + recipe.serving + "</div>" +
+                                                    "</div>" +
+                                                    "<div class='recipe-meta-wrap'>" +
+                                                        "<div class='recipe-meta_complexity'>" + recipe.complexity + "</div>" +
+                                                    "</div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</div>" +
+                                    "</div>" +
+                                "</a>" +
+                            "</div>"
+                        );
+                    });
+                }
+
+                showMoreBtn.css("display", "block");
+                spinner.css("display", "none");
+
+                if (pageNumber === totalPages) {
+                    $(".show-more").css("display", "none");
+                }
+
+                if (totalPages === 0) {
+                    $(".alert").css("display", "block");
+                    $(".show-more").css("display", "none");
+                }
             });
-
-            if (pageNumber === totalPages) {
-                $(".show-more").css("display", "none");
-            }
-
-            if (recipeOnPageNumber === 0 && totalPages === 0) {
-                $(".alert").css("display", "block");
-                $(".show-more").css("display", "none");
-            }
         }
-
     </script>
 </div>
 
