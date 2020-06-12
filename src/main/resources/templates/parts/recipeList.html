@@ -2,11 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <div th:fragment="recipeList" class="main-list-block">
+    <div id="totalElements" class="total-elements-lable py-3">
+        <!-- Fills by js -->
+    </div>
     <div id="recipe-card-block" class="row row-cols-1 row-cols-md-3 mt-3">
         <!-- Fills by js-->
     </div>
-    <div class="alert alert-primary mt-3" role="alert" style="display: none">
-        На данной странице нет рецептов
+    <div class="no-recipes-block mt-3" style="display: none">
     </div>
 
     <div class="d-flex justify-content-center mt-5">
@@ -40,6 +42,18 @@
                 var totalPages = 0;
 
                 if (!Array.isArray(page)) { // page будет являться массивом, только если элементы отсутствуют
+                    var totalElementsNumber = parseInt(page.totalElements);
+                    var lastTwoDigits = totalElementsNumber % 100;
+                    if (totalElementsNumber === 0) {
+                        $("#totalElements").text("Найдено 0 рецептов");
+                    } else if (lastTwoDigits === 1) {
+                        $("#totalElements").text("Найден " + page.totalElements + " рецепт");
+                    } else if (lastTwoDigits >= 2 && lastTwoDigits <= 4) {
+                        $("#totalElements").text("Найдено " + page.totalElements + " рецепта");
+                    } else {
+                        $("#totalElements").text("Найдено " + page.totalElements + " рецептов");
+                    }
+
                     totalPages = page.totalPages;
                     $.each(page.content, function(i, recipe) {
                         $("#recipe-card-block").append(
@@ -81,7 +95,7 @@
                 }
 
                 if (totalPages === 0) {
-                    $(".alert").css("display", "block");
+                    $(".no-recipes-block").css("display", "block");
                     $(".show-more").css("display", "none");
                 }
             });

@@ -234,6 +234,18 @@ body {
     opacity: 0.3;
 }
 
+/* Recipe list */
+.total-elements-lable {
+    font: 700 13px/14px PT Serif,Georgia,serif;
+}
+.no-recipes-block {
+    position: relative;
+    width: 65%;
+    height: 18rem;
+    background-image: url("icons/no-food.svg");
+    background-size: cover;
+}
+
 /* Card */
 .recipe-card {
     height: 18rem;
