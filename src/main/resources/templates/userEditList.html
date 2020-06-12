@@ -8,6 +8,12 @@
             Список пользователей
         </h1>
 
+        <div class="d-flex mb-3" style="justify-content: right">
+            <a href="/admin/registration">
+                <button type="button" class="btn btn-outline-primary">Добавить администратора</button>
+            </a>
+        </div>
+
         <table class="table">
         <thead>
             <tr>
@@ -28,9 +34,11 @@
             </tbody>
         </table>
 
-        <a href="/admin/registration">
-            <button type="button" class="btn btn-primary">Добавить администратора</button>
-        </a>
+        <div class="d-flex mb-3" style="justify-content: right">
+            <a href="/admin/registration">
+                <button type="button" class="btn btn-outline-primary">Добавить администратора</button>
+            </a>
+        </div>
     </div>
     <div th:replace="parts/common.html :: footer"></div>
 </body>

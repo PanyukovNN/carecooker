@@ -49,7 +49,7 @@ public class SectionController {
         model.addAttribute("sections", sections);
         model.addAttribute("url", "/");
 
-        return "main";
+        return "sectionAll";
     }
 
     @GetMapping("/list")
