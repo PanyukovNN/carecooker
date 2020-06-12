@@ -2,11 +2,15 @@ package com.zylex.carecooker.controller;
 
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
+import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.model.dto.SectionDto;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -34,6 +38,18 @@ public class SectionController {
                              RecipeRepository recipeRepository) {
         this.sectionRepository = sectionRepository;
         this.recipeRepository = recipeRepository;
+    }
+
+    @GetMapping(value = "/all", produces = "text/html")
+    public String allSections(Model model) {
+        List<Section> sections = sectionRepository.findAll();
+        sections.sort(Comparator.comparing(Section::getPosition).thenComparing(Section::getId));
+
+        model.addAttribute("greetingDto", new GreetingDto("Разделы", "Выберите интересующий вас раздел."));
+        model.addAttribute("sections", sections);
+        model.addAttribute("url", "/");
+
+        return "main";
     }
 
     @GetMapping("/list")

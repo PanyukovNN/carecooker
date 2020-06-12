@@ -13,6 +13,7 @@ public class MvcConfig implements WebMvcConfigurer {
     private String uploadPath;
 
     public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("redirect:/section/all");
         registry.addViewController("/login").setViewName("login");
     }
 
