@@ -1,5 +1,6 @@
 package com.zylex.carecooker.controller;
 
+import com.zylex.carecooker.model.Dish;
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
 import com.zylex.carecooker.model.User;
@@ -25,11 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -70,7 +69,7 @@ public class RecipeController {
     @ResponseBody
     @GetMapping(value = "/all", produces = "application/json")
     public Page<RecipeCardDto> getRecipesPage(@RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
 
         return recipeRepository.findAllByToPublicationIsTrue(pageable).map(RecipeCardDto::new);
     }
@@ -92,11 +91,40 @@ public class RecipeController {
     public Page<RecipeCardDto> getSectionRecipesPage(
             @PathVariable long id,
             @RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
         Section section = sectionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
         return recipeRepository.findBySectionsContainingAndToPublicationIsTrue(section, pageable).map(RecipeCardDto::new);
     }
+
+    @GetMapping(value = "/section/{sectionId}/dish/{dishId}", produces = "text/html")
+    public String getSectionDishRecipes(
+            @PathVariable long sectionId,
+            @PathVariable long dishId,
+            Model model) {
+        Section section = sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new);
+        Dish dish = dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new);
+
+        model.addAttribute("section", section);
+        model.addAttribute("dish", dish);
+        model.addAttribute("greetingDto", new GreetingDto(section.getName() + " ~ " + dish.getName(), null));
+
+        return "section";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/section/{sectionId}/dish/{dishId}", produces = "application/json")
+    public Page<RecipeCardDto> getSectionDishRecipesPage(
+            @PathVariable long sectionId,
+            @PathVariable long dishId,
+            @RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
+        Section section = sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new);
+        Dish dish = dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new);
+
+        return recipeRepository.findBySectionsContainingAndDishesContainingAndToPublicationIsTrue(section, dish, pageable).map(RecipeCardDto::new);
+    }
+
 
     @GetMapping(value = "/no-section-list", produces = "text/html")
     public String getNoSectionRecipes(Model model) {
@@ -109,7 +137,7 @@ public class RecipeController {
     @ResponseBody
     @GetMapping(value = "/no-section-list", produces = "application/json")
     public Page<RecipeCardDto> getNoSectionRecipesPage(@RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
 
         return recipeRepository.findBySectionsIsNull(pageable).map(RecipeCardDto::new);
     }
@@ -125,12 +153,12 @@ public class RecipeController {
     @ResponseBody
     @GetMapping(value = "/to-publication", produces = "application/json")
     public Page<RecipeCardDto> getToPublicationRecipesPage(@RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
 
         return recipeRepository.findByToPublicationIsFalse(pageable).map(RecipeCardDto::new);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "text/html")
     public String getRecipe(@PathVariable long id,
                             Model model) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
@@ -157,6 +185,12 @@ public class RecipeController {
         return "recipe";
     }
 
+    @ResponseBody
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public Recipe getRecipeJson(@PathVariable long id) {
+        return recipeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
+
     @GetMapping("/add")
     public String getSaveRecipe(Model model) {
         model.addAttribute("allSections", sectionRepository.findAll());
@@ -171,10 +205,11 @@ public class RecipeController {
             @RequestParam String cookTime,
             @RequestParam String serving,
             @RequestParam String complexity,
-//            @RequestParam String dish,
+            @RequestParam long dish,
             @RequestParam String ingredients,
             @RequestParam String method,
-            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
+//            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
+            @RequestParam long section,
             @RequestParam String toPublication) throws IOException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -191,12 +226,17 @@ public class RecipeController {
                 complexity,
                 splitByNewLine(ingredients),
                 method,
-                null, //dishEntry,
-                sectionNameList != null
-                        ? sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList())
-                        : Collections.emptyList(),
+                Arrays.asList(dishRepository.findById(dish).orElseThrow(IllegalArgumentException::new)),
+//                sectionNameList != null
+//                        ? sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList())
+//                        : Collections.emptyList(),
+                Arrays.asList(sectionRepository.findById(section).orElseThrow(IllegalArgumentException::new)),
                 user,
                 !toPublication.isEmpty());
+
+        if (newRecipe.isToPublication()) {
+            newRecipe.setPublicationDateTime(LocalDateTime.now());
+        }
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
@@ -228,16 +268,12 @@ public class RecipeController {
             @RequestParam("cookTime") String cookTimeStr,
             @RequestParam String serving,
             @RequestParam String complexity,
-//            @RequestParam String dish,
+            @RequestParam long dish,
             @RequestParam String ingredients,
             @RequestParam String method,
-            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
+//            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
+            @RequestParam long section,
             @RequestParam String toPublication) throws IOException {
-
-
-        if (complexity.equals("Сложность")) {
-            complexity = null;
-        }
         Recipe editedRecipe = recipeRepository.findById(id).orElse(new Recipe());
         editedRecipe.setName(name);
         editedRecipe.setDescription(description);
@@ -250,21 +286,29 @@ public class RecipeController {
             editedRecipe.setServing(Integer.parseInt(serving));
         }
         editedRecipe.setMethod(method);
-        if (sectionNameList != null) {
-            editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
-        } else {
-            editedRecipe.setSections(Collections.emptyList());
-        }
+//        if (sectionNameList != null) {
+//            editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
+//        } else {
+//            editedRecipe.setSections(Collections.emptyList());
+//        }
+        editedRecipe.getSections().clear();
+        editedRecipe.getSections().add(sectionRepository.findById(section).orElseThrow(IllegalArgumentException::new));
         editedRecipe.setComplexity(complexity);
 
         editedRecipe.setIngredients(splitByNewLine(ingredients));
-        editedRecipe.setToPublication(!toPublication.isEmpty());
+        boolean toPublicationBool = !toPublication.isEmpty();
+        if (toPublicationBool) {
+            editedRecipe.setPublicationDateTime(LocalDateTime.now());
+        }
+        editedRecipe.setToPublication(toPublicationBool);
+        editedRecipe.getDishes().clear();
+        editedRecipe.getDishes().add(dishRepository.findById(dish).orElseThrow(IllegalArgumentException::new));
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
             editedRecipe.setMainImage(resultFileName);
         }
-
+//        editedRecipe.setPublicationDateTime(LocalDateTime.now());
         recipeRepository.save(editedRecipe);
 
         return "redirect:/recipe/" + id;
@@ -278,6 +322,29 @@ public class RecipeController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/publish")
+    public String getPublishRecipe(@RequestParam long id) {
+        Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
+        if (recipe.getName() != null) {
+            recipe.setToPublication(true);
+            recipe.setPublicationDateTime(LocalDateTime.now());
+            recipeRepository.save(recipe);
+        }
+
+        return "redirect:/recipe/all";
+    }
+
+    @GetMapping("/unpublish")
+    public String getUnpublishRecipe(@RequestParam long id) {
+        Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
+        if (recipe.getName() != null) {
+            recipe.setToPublication(false);
+            recipeRepository.save(recipe);
+        }
+
+        return "redirect:/recipe/all";
     }
 
     private String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {

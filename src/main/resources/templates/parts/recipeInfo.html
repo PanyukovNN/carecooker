@@ -5,14 +5,18 @@
 
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <div class="recipe-admin-button-block">
-            <a th:href="@{/recipe/edit(id=${recipe.id})}">
-                <button type="button" class="btn btn-outline-primary">Редактировать</button>
-            </a>
+            <div class="edit-and-publish-admin-buttons">
+                <a th:href="@{/recipe/edit(id=${recipe.id})}">
+                    <button type="button" class="btn btn-outline-primary">Редактировать</button>
+                </a>
+            </div>
 
-            <a th:href="@{/recipe/delete(id=${recipe.id})}"
-               onclick="return confirm('Вы действительно хотите удалить рецепт?');">
-                <button type="button" class="btn btn-outline-danger">Удалить</button>
-            </a>
+            <div class="unpublish-and-delete-admin-buttons">
+                <a th:href="@{/recipe/unpublish(id=${recipe.id})}"
+                   onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">
+                    <button type="button" class="btn btn-outline-danger">Снять с публикации</button>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -61,14 +65,12 @@
             <div class="recipe-main-image" th:unless="${recipe.mainImage}"></div>
 
             <div class="recipe__author">
-<!--                th:text="${recipe.author.username}"-->
                 <p class="author-header">Автор рецепта</p>
                 <div class="author-name" >
                     <span th:text="${recipe.author.username}">Автор рецепта</span>
                     <br>
                     <span th:text="${authorRecipesNumber} + @{' рецептов'}">Автор рецепта</span>
                 </div>
-<!--                <div class="author-recipes-number" th:text="${authorRecipesNumber} + @{' рецептов'}"></div>-->
             </div>
 
             <div class="recipe-description-text" th:text="${recipe.description}"></div>
@@ -92,25 +94,65 @@
             </div>
         </div>
 
-        <div sec:authorize="hasRole('ROLE_ADMIN')"
-             class="mt-4">
-            <div class="recipe-button-block">
-                <a th:href="@{/recipe/edit(id=${recipe.id})}">
-                    <button type="button" class="btn btn-outline-primary">Редактировать</button>
-                </a>
-
-                <a th:href="@{/recipe/delete(id=${recipe.id})}"
-                   onclick="return confirm('Вы действительно хотите удалить рецепт?');">
-                    <button type="button" class="btn btn-outline-danger">Удалить</button>
-                </a>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4">
+            <div class="recipe-admin-dish-list">
+                <!-- Fills by js -->
             </div>
         </div>
 
-        <div class="recipe-similar-recipes-wrap" th:if="${similarRecipes}">
-            <div class="recipe-similar-recipes__heading">ПОХОЖИЕ РЕЦЕПТЫ</div>
-            <div th:replace="parts/recipeSimilarList.html :: recipeSimilarList"></div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4">
+            <div class="recipe-admin-button-block">
+                <div class="edit-and-publish-admin-buttons">
+                    <a th:href="@{/recipe/edit(id=${recipe.id})}">
+                        <button type="button" class="btn btn-outline-primary">Редактировать</button>
+                    </a>
+                </div>
+
+                <div class="unpublish-and-delete-admin-buttons">
+                    <a th:href="@{/recipe/unpublish(id=${recipe.id})}"
+                       onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">
+                        <button type="button" class="btn btn-outline-danger">Снять с публикации</button>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="recipe-similar-recipes-wrap" th:if="${similarRecipes}">
+        <div class="recipe-similar-recipes__heading">ПОХОЖИЕ РЕЦЕПТЫ</div>
+        <div th:replace="parts/recipeSimilarList.html :: recipeSimilarList"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var link = window.location.pathname;
+
+            $.get(link, function(recipe, status) {
+                if (recipe.toPublication === false) {
+                    $(".edit-and-publish-admin-buttons").append(
+                        "<a href='/recipe/publish?id=" + recipe.id + "'>" +
+                            "<button type='button' class='btn btn-outline-primary'>Опубликовать</button>" +
+                        "</a>"
+                    );
+
+                    var unpublishAndDeleteAdminButtons = $(".unpublish-and-delete-admin-buttons");
+                    unpublishAndDeleteAdminButtons.empty();
+                    unpublishAndDeleteAdminButtons.append(
+                        "<a href='/recipe/delete?id=" + recipe.id + "' " +
+                            "onclick='return confirm(\"Вы действительно хотите удалить рецепт?\");'>" +
+                            "<button type='button' class='btn btn-outline-danger'>Удалить</button>" +
+                        "</a>"
+                    );
+
+                    $.each(recipe.dishes, function (i, dish) {
+                        $(".recipe-admin-dish-list").append(
+                            "<span>" + dish.name + "</span>"
+                        );
+                    })
+                }
+            });
+        })
+    </script>
 
 </div>
 

@@ -3,6 +3,7 @@ package com.zylex.carecooker.model;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -38,10 +39,12 @@ public class Recipe {
     @ManyToOne
     private User author;
 
-    @ManyToOne
-    private Dish dish;
+    @ManyToMany
+    private List<Dish> dishes;
 
     private boolean toPublication;
+
+    private LocalDateTime publicationDateTime;
 
     private int views;
 
@@ -55,7 +58,7 @@ public class Recipe {
                   String complexity,
                   List<String> ingredients,
                   String method,
-                  Dish dish,
+                  List<Dish> dishes,
                   List<Section> sections,
                   User author,
                   boolean toPublication
@@ -67,7 +70,7 @@ public class Recipe {
         this.complexity = complexity;
         this.ingredients = ingredients;
         this.method = method;
-        this.dish = dish;
+        this.dishes = dishes;
         this.sections = sections;
         this.author = author;
         this.toPublication = toPublication;
@@ -171,12 +174,12 @@ public class Recipe {
         this.author = author;
     }
 
-    public Dish getDish() {
-        return dish;
+    public List<Dish> getDishes() {
+        return dishes;
     }
 
-    public void setDish(Dish dish) {
-        this.dish = dish;
+    public void setDishes(List<Dish> dishes) {
+        this.dishes = dishes;
     }
 
     public boolean isToPublication() {
@@ -185,6 +188,14 @@ public class Recipe {
 
     public void setToPublication(boolean toPublication) {
         this.toPublication = toPublication;
+    }
+
+    public LocalDateTime getPublicationDateTime() {
+        return publicationDateTime;
+    }
+
+    public void setPublicationDateTime(LocalDateTime publicationDateTime) {
+        this.publicationDateTime = publicationDateTime;
     }
 
     public int getViews() {
@@ -229,8 +240,9 @@ public class Recipe {
                 ", method='" + method + '\'' +
                 ", sections=" + sections +
                 ", author=" + author +
-                ", dish=" + dish +
+                ", dishes=" + dishes +
                 ", toPublication=" + toPublication +
+                ", publicationDateTime=" + publicationDateTime +
                 ", views=" + views +
                 '}';
     }

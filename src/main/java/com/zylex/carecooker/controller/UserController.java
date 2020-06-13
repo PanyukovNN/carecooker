@@ -67,7 +67,6 @@ public class UserController {
 
     @PostMapping("/user/registration")
     public String postUserRegistration(User user, Model model) {
-        System.out.println(user);
         if (!userService.saveUser(user)) {
             model.addAttribute("userExists", "");
             return "registration";

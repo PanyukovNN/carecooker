@@ -77,8 +77,9 @@ public class DishController {
     }
 
     @ResponseBody
-    @PostMapping("/json/section")
-    public List<Dish> getJsonDishesBySection(@RequestParam Section section) {
+    @GetMapping(value = "/json/section/{id}", produces = "application/json")
+    public List<Dish> getJsonDishesBySection(@PathVariable(name = "id") long sectionId) {
+        Section section = sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new);
         return dishRepository.findBySection(section);
     }
 
@@ -86,7 +87,6 @@ public class DishController {
     public ModelAndView postUpdateDish(
             Dish dish,
             ModelMap model) {
-
         model.addAttribute("currentSection", dish.getSection());
         if (dish.getId() == 0) {
             Dish dishFromDb = dishRepository.findByName(dish.getName());
@@ -117,9 +117,9 @@ public class DishController {
     public String getDeleteSection(@RequestParam long id) {
         Dish dish = dishRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
-        List<Recipe> recipes = recipeRepository.findByDish(dish);
+        List<Recipe> recipes = recipeRepository.findByDishesContaining(dish);
         for (Recipe recipe : recipes) {
-            recipe.setDish(null);
+            recipe.getDishes().remove(dish);
             recipeRepository.save(recipe);
         }
 

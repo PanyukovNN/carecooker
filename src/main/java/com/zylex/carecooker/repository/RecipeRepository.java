@@ -24,9 +24,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findBySectionsContainingAndToPublicationIsTrue(Section section, Pageable pageable);
 
+    Page<Recipe> findBySectionsContainingAndDishesContainingAndToPublicationIsTrue(Section section, Dish dish, Pageable pageable);
+
     List<Recipe> findBySectionsContaining(Section section);
 
-    List<Recipe> findByDish(Dish dish);
+    List<Recipe> findByDishesContaining(Dish dish);
 
     List<Recipe> findTop7BySectionsContaining(Section section);
 

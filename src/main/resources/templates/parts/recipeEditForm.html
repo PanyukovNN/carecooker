@@ -75,12 +75,6 @@
         </div>
     </div>
 
-<!--    <div class="form-group">-->
-<!--        <label>Тип блюда</label>-->
-<!--        <input type="text" class="form-control" name="dish" placeholder="Тип блюда"-->
-<!--               th:value="${recipe} and ${recipe.dish} ? ${recipe.dish.name} : ''">-->
-<!--    </div>-->
-
     <div class="form-group">
         <label>Ингредиенты</label>
         <textarea class="form-control" name="ingredients" rows="7" placeholder="Ингредиенты"><th:block th:if="${recipe}">
@@ -94,14 +88,20 @@
             th:text="${recipe} ? ${recipe.method} : ''"></textarea>
     </div>
 
-    <div class="form-group">
-        <label for="section-select">Разделы</label>
-        <select id="section-select" class="form-control" name="sections" size="10" multiple="multiple">
+    <label>Выберите раздел</label>
+    <div class="input-group mb-3">
+        <select id="sectionSelect" class="custom-select select-section" name="section">
             <option th:each="section : ${allSections}"
-                    th:value="${{section.name}}"
-                    th:text="${section.name}"
-                    th:selected="${section} and ${recipe} and ${recipe.sections} ? ${#lists.contains(recipe.sections, section)}">
+                    th:value="${{section.id}}"
+                    th:text="${section.name}">
             </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Тип блюда</label>
+        <select id="selectDish" class="custom-select" name="dish">
+            <!-- Fills by js -->
         </select>
     </div>
 
@@ -118,6 +118,42 @@
     <div class="form-group">
         <button type="submit" class="btn btn-outline-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>
     </div>
+
+    <script>
+        var sectionSelect = $("#sectionSelect");
+
+        $(document).ready(function () {
+            fullDishes();
+        });
+
+        sectionSelect.on("change", function (event) {
+            event.preventDefault();
+
+            fullDishes();
+
+            // var currentSectionValue = $(".select-section option:selected").val();
+            // $(".select-section-modal").val(currentSectionValue);
+        });
+
+        function fullDishes() {
+            var sectionId = sectionSelect.val();
+            var link = '/dish/json/section/' + sectionId;
+
+            if (sectionSelect.val() === "") {
+                return;
+            }
+
+            $("#selectDish").empty();
+            $.get(link, function(dishes, status) {
+                console.log("fuck you");
+                $.each(dishes, function(i, dish) {
+                    $("#selectDish").append(
+                        "<option value='" + dish.id + "'>" + dish.name + "</option>"
+                    );
+                });
+            });
+        }
+    </script>
 </form>
 
 </html>
