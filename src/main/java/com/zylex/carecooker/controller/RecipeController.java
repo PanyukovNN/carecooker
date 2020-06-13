@@ -252,6 +252,8 @@ public class RecipeController {
         editedRecipe.setMethod(method);
         if (sectionNameList != null) {
             editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
+        } else {
+            editedRecipe.setSections(Collections.emptyList());
         }
         editedRecipe.setComplexity(complexity);
 

@@ -2,7 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <div class="recipe-container" th:fragment="recipeInfo">
-<!--    <span th:text="${recipe.author.username}"></span>-->
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="recipe-admin-button-block">
+            <a th:href="@{/recipe/edit(id=${recipe.id})}">
+                <button type="button" class="btn btn-outline-primary">Редактировать</button>
+            </a>
+
+            <a th:href="@{/recipe/delete(id=${recipe.id})}"
+               onclick="return confirm('Вы действительно хотите удалить рецепт?');">
+                <button type="button" class="btn btn-outline-danger">Удалить</button>
+            </a>
+        </div>
+    </div>
+
     <div class="recipe-title">
         <div class="recipe-title-section-name-link-block">
             <span class="recipe-title-section-name"
@@ -83,12 +96,12 @@
              class="mt-4">
             <div class="recipe-button-block">
                 <a th:href="@{/recipe/edit(id=${recipe.id})}">
-                    <button type="button" class="btn btn-primary">Редактировать</button>
+                    <button type="button" class="btn btn-outline-primary">Редактировать</button>
                 </a>
 
                 <a th:href="@{/recipe/delete(id=${recipe.id})}"
                    onclick="return confirm('Вы действительно хотите удалить рецепт?');">
-                    <button type="button" class="btn btn-danger">Удалить</button>
+                    <button type="button" class="btn btn-outline-danger">Удалить</button>
                 </a>
             </div>
         </div>

@@ -62,7 +62,7 @@
         <div class="form-group col-md-4">
             <label>Количество порций</label>
             <input type="number" class="form-control" name="serving" placeholder="Количество порций"
-                   min="1" max="100"
+                   min="0" max="100"
                    th:value="${recipe} ? ${recipe.serving} : ''">
         </div>
         <div class="form-group col-md-4">
@@ -116,7 +116,7 @@
     <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>
+        <button type="submit" class="btn btn-outline-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>
     </div>
 </form>
 
