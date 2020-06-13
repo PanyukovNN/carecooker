@@ -19,12 +19,8 @@
                             <input id="nameInput" type="text" class="form-control" name="name" placeholder="Название"/>
                         </div>
 
-                        <select class="custom-select form-control" name="section">
-                            <option th:each="section : ${sections}"
-                                    th:value="${{section.id}}"
-                                    th:text="${section.name}"
-                                    th:selected="${section == currentSection}">
-                            </option>
+                        <select class="select-section-modal custom-select form-control" name="section">
+                            <!-- Fills by js -->
                         </select>
 
                         <div class="form-group">
@@ -61,12 +57,8 @@
                             <input id="nameInputUpdate" type="text" class="form-control" name="name" placeholder="Название"/>
                         </div>
 
-                        <select class="custom-select form-control" name="section">
-                            <option th:each="section : ${sections}"
-                                    th:value="${{section.id}}"
-                                    th:text="${section.name}"
-                                    th:selected="${section == currentSection}">
-                            </option>
+                        <select class="select-section-modal custom-select form-control" name="section">
+                            <!-- Fills by js -->
                         </select>
 
                         <div class="form-group">
@@ -86,6 +78,17 @@
     </div>
 
     <script>
+        $(document).ready(function () {
+            var link = "/section/all";
+
+            $.get(link, function(sections, status) {
+                $.each(sections, function (i, section) {
+                    $(".select-section-modal").append(
+                        "<option value='" + section.id + "'>" + section.name + "</option>"
+                    );
+                })
+            });
+        })
         $(document).on("click", '.edit-dish-btn-link', function(event) {
             event.preventDefault();
 
