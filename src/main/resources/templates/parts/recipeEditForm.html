@@ -145,7 +145,6 @@
 
             $("#selectDish").empty();
             $.get(link, function(dishes, status) {
-                console.log("fuck you");
                 $.each(dishes, function(i, dish) {
                     $("#selectDish").append(
                         "<option value='" + dish.id + "'>" + dish.name + "</option>"

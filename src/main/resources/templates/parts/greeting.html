@@ -4,9 +4,9 @@
     <div class="greeting-block__title">
         <h1 class="greeting-header" th:text="${greetingDto} ? ${greetingDto.title}"></h1>
     </div>
-    <div class="greeting-block__description" th:if="${greetingDto} and ${greetingDto.description}" th:text="${greetingDto} ? ${greetingDto.description}">
+    <div class="greeting-block__description" th:if="${greetingDto} and ${greetingDto.description} and ${greetingDto.description != ''}" th:text="${greetingDto} ? ${greetingDto.description}">
     </div>
-    <div class="greeting-block__description" th:unless="${greetingDto} and ${greetingDto.description}">
+    <div class="greeting-block__description" th:unless="${greetingDto} and ${greetingDto.description} and ${greetingDto.description != ''}">
         Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название и сайт подберет соответствующий.
     </div>
 </div>

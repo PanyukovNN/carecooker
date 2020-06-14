@@ -6,12 +6,12 @@
         <div class="search-bar-form-wrap">
             <form id="search-bar-form" method="get">
                 <div class="input-group">
-                    <select class="search-bar-select custom-select" id="sectionSelect">
+                    <select class="search-bar-select custom-select" id="searchBarSectionSelect">
                         <option value="all">Любой раздел</option>
                         <!-- Fills by js -->
                     </select>
-                    <select class="search-bar-select custom-select ml-4" id="inputGroupSelect2" disabled>
-                        <option value="">Любое блюдо</option>
+                    <select class="search-bar-select custom-select ml-4" id="searchBarDishSelect">
+                        <option value="all">Любое блюдо</option>
                         <!-- Fills by js -->
                     </select>
                     <div class="input-group-append ml-4">
@@ -25,10 +25,19 @@
     <script th:inline="javascript">
         $(document).ready(function() {
             var link = "/section/all";
+            var sectionSelectValue = "/recipe/all";
+            var dishSelectValue = "";
+            var searchBarSectionSelect = $("#searchBarSectionSelect");
+            var searchBarDishSelect = $("#searchBarDishSelect");
+
+            /*<![CDATA[*/
+            var dishId = /*[[${dish} ? ${dish.id} : '']]*/ 'default';
+            /*]]>*/
+
 
             $.get(link, function(sections, status) {
                 $.each(sections, function(i, section) {
-                    $("#sectionSelect").append(
+                    searchBarSectionSelect.append(
                         "<option value='" + section.id + "'>" + section.name + "</option>"
                     );
                 });
@@ -36,20 +45,59 @@
                 /*<![CDATA[*/
                 var sectionId = /*[[${section} ? ${section.id} : '']]*/ 'default';
                 if (sectionId !== '') {
-                    $("#sectionSelect").val(sectionId);
+                    searchBarSectionSelect.val(sectionId);
+                    sectionSelectValue = "/recipe/section/" + sectionId;
                 }
                 /*]]>*/
+
+                fillDishSelect();
             });
 
-            $("#sectionSelect").on("change", function (event) {
-                var selectValue = $("#sectionSelect option:selected").val();
-                if (selectValue === 'all') {
-                    $("#search-bar-form").attr("action", "/recipe/all");
-                    console.log("yeah")
+            searchBarSectionSelect.on("change", function (event) {
+                dishId = "";
+                var selectedSectionId = $("#searchBarSectionSelect option:selected").val();
+                if (selectedSectionId === 'all') {
+                    sectionSelectValue = "/recipe/all";
+                    searchBarDishSelect.prop("disabled", true);
                 } else {
-                    $("#search-bar-form").attr("action", "/recipe/section/" + selectValue);
+                    sectionSelectValue = "/recipe/section/" + selectedSectionId;
+                    searchBarDishSelect.prop("disabled", false);
+                    fillDishSelect();
                 }
+                $("#search-bar-form").attr("action", sectionSelectValue + dishSelectValue);
             });
+
+            searchBarDishSelect.on("change", function (event) {
+                var selectedDishId = $("#searchBarDishSelect option:selected").val();
+                if (selectedDishId === 'all') {
+                    dishSelectValue = "";
+                } else {
+                    dishSelectValue = "/dish/" + selectedDishId;
+                }
+                $("#search-bar-form").attr("action", sectionSelectValue + dishSelectValue);
+            });
+
+            function fillDishSelect() {
+                var link = '/dish/json/section/' + searchBarSectionSelect.val();
+
+                searchBarDishSelect.empty();
+                searchBarDishSelect.append(
+                    "<option value='all'>Любое блюдо</option>"
+                );
+                $.get(link, function(dishes, status) {
+                    $.each(dishes, function(i, dish) {
+                        searchBarDishSelect.append(
+                            "<option value='" + dish.id + "'>" + dish.name + "</option>"
+                        );
+                    });
+
+                    if (dishId !== "") {
+                        searchBarDishSelect.val(dishId);
+                    } else {
+                        searchBarDishSelect.val('all');
+                    }
+                });
+            }
         });
     </script>
 </div>

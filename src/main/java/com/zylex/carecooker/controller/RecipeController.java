@@ -107,7 +107,10 @@ public class RecipeController {
 
         model.addAttribute("section", section);
         model.addAttribute("dish", dish);
-        model.addAttribute("greetingDto", new GreetingDto(section.getName() + " ~ " + dish.getName(), null));
+        model.addAttribute("greetingDto",
+                new GreetingDto(section.getName() + " • " + dish.getName(),
+                        dish.getTitleDescription()));
+//      ""
 
         return "section";
     }
