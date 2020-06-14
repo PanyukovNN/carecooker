@@ -7,11 +7,11 @@
             <form id="search-bar-form" method="get">
                 <div class="input-group">
                     <select class="search-bar-select custom-select" id="searchBarSectionSelect">
-                        <option value="all">Любой раздел</option>
+                        <option value="0">Любой раздел</option>
                         <!-- Fills by js -->
                     </select>
                     <select class="search-bar-select custom-select ml-4" id="searchBarDishSelect">
-                        <option value="all">Любое блюдо</option>
+                        <option value="0">Любое блюдо</option>
                         <!-- Fills by js -->
                     </select>
                     <div class="input-group-append ml-4">
@@ -24,7 +24,6 @@
 
     <script th:inline="javascript">
         $(document).ready(function() {
-            var link = "/section/all";
             var sectionSelectValue = "/recipe/all";
             var dishSelectValue = "";
             var searchBarSectionSelect = $("#searchBarSectionSelect");
@@ -35,7 +34,7 @@
             /*]]>*/
 
 
-            $.get(link, function(sections, status) {
+            $.get("/section/all", function(sections, status) {
                 $.each(sections, function(i, section) {
                     searchBarSectionSelect.append(
                         "<option value='" + section.id + "'>" + section.name + "</option>"
@@ -56,7 +55,7 @@
             searchBarSectionSelect.on("change", function (event) {
                 dishId = "";
                 var selectedSectionId = $("#searchBarSectionSelect option:selected").val();
-                if (selectedSectionId === 'all') {
+                if (selectedSectionId === '0') {
                     sectionSelectValue = "/recipe/all";
                     searchBarDishSelect.prop("disabled", true);
                 } else {
@@ -64,17 +63,16 @@
                     searchBarDishSelect.prop("disabled", false);
                     fillDishSelect();
                 }
-                $("#search-bar-form").attr("action", sectionSelectValue + dishSelectValue);
+                $("#search-bar-form").attr("action", sectionSelectValue);
             });
 
             searchBarDishSelect.on("change", function (event) {
                 var selectedDishId = $("#searchBarDishSelect option:selected").val();
-                if (selectedDishId === 'all') {
-                    dishSelectValue = "";
+                if (selectedDishId === '0') {
+                    $("#search-bar-form").attr("action", sectionSelectValue);
                 } else {
-                    dishSelectValue = "/dish/" + selectedDishId;
+                    $("#search-bar-form").attr("action", "/recipe/dish/" + selectedDishId);
                 }
-                $("#search-bar-form").attr("action", sectionSelectValue + dishSelectValue);
             });
 
             function fillDishSelect() {
@@ -82,8 +80,13 @@
 
                 searchBarDishSelect.empty();
                 searchBarDishSelect.append(
-                    "<option value='all'>Любое блюдо</option>"
+                    "<option value='0'>Любое блюдо</option>"
                 );
+
+                if (searchBarSectionSelect.val() === '0') {
+                    return;
+                }
+
                 $.get(link, function(dishes, status) {
                     $.each(dishes, function(i, dish) {
                         searchBarDishSelect.append(
@@ -94,7 +97,7 @@
                     if (dishId !== "") {
                         searchBarDishSelect.val(dishId);
                     } else {
-                        searchBarDishSelect.val('all');
+                        searchBarDishSelect.val('0');
                     }
                 });
             }

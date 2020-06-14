@@ -6,16 +6,12 @@
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <div class="recipe-admin-button-block">
             <div class="edit-and-publish-admin-buttons">
-                <a th:href="@{/recipe/edit(id=${recipe.id})}">
-                    <button type="button" class="btn btn-outline-primary">Редактировать</button>
-                </a>
+                <a class="btn btn-outline-primary" th:href="@{/recipe/edit(id=${recipe.id})}" role="button">Редактировать</a>
             </div>
 
             <div class="unpublish-and-delete-admin-buttons">
-                <a th:href="@{/recipe/unpublish(id=${recipe.id})}"
-                   onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">
-                    <button type="button" class="btn btn-outline-danger">Снять с публикации</button>
-                </a>
+                <a class="btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
+                   onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
             </div>
         </div>
     </div>
@@ -28,6 +24,14 @@
                 <a th:class="${iter.index != iter.size-1} ? 'recipe-title-section-name-link dot-delimiter' : 'recipe-title-section-name-link'"
                    th:href="@{/recipe/section/} + ${section.id}"
                    th:text="${#strings.toUpperCase(section.name)}"></a></span>
+            <span class="recipe-title-section-name"
+                  th:if="${recipe} and ${recipe.dishes}"
+                  th:each="dish, iter : ${recipe.dishes}">
+                <span class="dot-delimiter"></span>
+                <a th:class="${iter.index != iter.size-1} ? 'recipe-title-section-name-link dot-delimiter' : 'recipe-title-section-name-link'"
+                   th:href="@{/recipe/dish/} + ${dish.id}"
+                   th:text="${#strings.toUpperCase(dish.name)}"></a></span>
+
         </div>
         <h1 class="recipe-title-header" th:text="${recipe.name}"></h1>
     </div>
@@ -100,19 +104,15 @@
             </div>
         </div>
 
-        <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4">
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4 mb-5">
             <div class="recipe-admin-button-block">
                 <div class="edit-and-publish-admin-buttons">
-                    <a th:href="@{/recipe/edit(id=${recipe.id})}">
-                        <button type="button" class="btn btn-outline-primary">Редактировать</button>
-                    </a>
+                    <a class="btn btn-outline-primary" th:href="@{/recipe/edit(id=${recipe.id})}" role="button">Редактировать</a>
                 </div>
 
                 <div class="unpublish-and-delete-admin-buttons">
-                    <a th:href="@{/recipe/unpublish(id=${recipe.id})}"
-                       onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">
-                        <button type="button" class="btn btn-outline-danger">Снять с публикации</button>
-                    </a>
+                    <a class="btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
+                       onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
                 </div>
             </div>
         </div>

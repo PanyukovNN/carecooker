@@ -91,16 +91,15 @@
     <label>Выберите раздел</label>
     <div class="input-group mb-3">
         <select id="sectionSelect" class="custom-select select-section" name="section">
-            <option th:each="section : ${allSections}"
-                    th:value="${{section.id}}"
-                    th:text="${section.name}">
-            </option>
+            <option value="0">Любой раздел</option>
+            <!-- Fills by js -->
         </select>
     </div>
 
     <div class="form-group">
         <label>Тип блюда</label>
         <select id="selectDish" class="custom-select" name="dish">
+            <option value="0">Любое блюдо</option>
             <!-- Fills by js -->
         </select>
     </div>
@@ -119,38 +118,77 @@
         <button type="submit" class="btn btn-outline-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         var sectionSelect = $("#sectionSelect");
+        var dishSelect = $("#selectDish");
+        /*<![CDATA[*/
+        var dishId = /*[[${recipe} and ${recipe.dish} ? ${recipe.dish.id} : '']]*/ 'default';
+        /*]]>*/
 
         $(document).ready(function () {
-            fullDishes();
+            fillSections();
         });
 
         sectionSelect.on("change", function (event) {
             event.preventDefault();
+            dishId = "";
 
-            fullDishes();
-
-            // var currentSectionValue = $(".select-section option:selected").val();
-            // $(".select-section-modal").val(currentSectionValue);
+            fillDishes();
         });
 
-        function fullDishes() {
+        function fillSections() {
+            var link = "/section/all";
+
+            $.get(link, function(sections, status) {
+                $.each(sections, function(i, section) {
+                    sectionSelect.append(
+                        "<option value='" + section.id + "'>" + section.name + "</option>"
+                    );
+                });
+
+                /*<![CDATA[*/
+                var sectionId = /*[[${recipe} and ${recipe.section} ? ${recipe.section.id} : '']]*/ 'default';
+                if (sectionId !== '') {
+                    sectionSelect.val(sectionId);
+                }
+                /*]]>*/
+
+                fillDishes();
+            });
+        }
+
+        function fillDishes() {
             var sectionId = sectionSelect.val();
             var link = '/dish/json/section/' + sectionId;
 
-            if (sectionSelect.val() === "") {
+            dishSelect.empty();
+            dishSelect.append(
+                "<option value='0'>Любое блюдо</option>"
+            );
+
+            if (sectionSelect.val() === "0") {
+                dishSelect.prop("disabled", true);
+            } else {
+                dishSelect.prop("disabled", false);
+            }
+
+            if (sectionId === "0") {
                 return;
             }
 
-            $("#selectDish").empty();
             $.get(link, function(dishes, status) {
                 $.each(dishes, function(i, dish) {
-                    $("#selectDish").append(
+                    dishSelect.append(
                         "<option value='" + dish.id + "'>" + dish.name + "</option>"
                     );
                 });
             });
+
+            if (dishId !== '') {
+                dishSelect.val(dishId);
+            } else {
+                dishSelect.val("");
+            }
         }
     </script>
 </form>
