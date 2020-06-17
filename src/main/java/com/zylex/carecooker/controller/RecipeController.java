@@ -24,6 +24,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -159,6 +161,7 @@ public class RecipeController {
 
     @GetMapping(value = "/{id}", produces = "text/html")
     public String getRecipe(@PathVariable long id,
+                            HttpServletRequest request,
                             Model model) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
         if (!recipe.getSections().isEmpty()) {
@@ -180,6 +183,8 @@ public class RecipeController {
 
         User user = (User) recipe.getAuthor();
         model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthor(user));
+
+        request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
 
         return "recipe";
     }
@@ -322,10 +327,20 @@ public class RecipeController {
     }
 
     @GetMapping("/delete")
-    public String getDeleteRecipe(@RequestParam long id) {
+    public String getDeleteRecipe(@RequestParam long id,
+                                  HttpServletRequest request) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
         if (recipe.getName() != null) {
             recipeRepository.delete(recipe);
+        }
+
+        HttpSession session = request.getSession();
+        if (session != null) {
+            String redirectUrl = (String) session.getAttribute("url_prior_login");
+            if (redirectUrl != null) {
+                session.removeAttribute("url_prior_login");
+                return "redirect:" + redirectUrl;
+            }
         }
 
         return "redirect:/";
