@@ -43,13 +43,14 @@
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold" href="/recipe/all">Рецепты</a>
                 </li>
+                <li class="nav-item">
+                    <form class="nav-total-search-form form-inline" method="get" action="/recipe/search">
+                        <input class="nav-total-search-form-input form-control" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search">
+                        <button class="nav-total-search-form-btn btn btn-outline-secondary" type="submit">Поиск</button>
+                    </form>
+                </li>
             </ul>
         </div>
-<!--        <form class="form-inline my-2 my-lg-0 mr-3" method="post" action="/filter">-->
-<!--&lt;!&ndash;            <input class="form-control mr-sm-1" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search"&ndash;&gt;-->
-<!--&lt;!&ndash;                   th:value="${filter}">&ndash;&gt;-->
-<!--            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Поиск рецептов</button>-->
-<!--        </form>-->
         <div sec:authorize="isAnonymous()" class="mr-3">
             <div class="collapse navbar-collapse order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav">

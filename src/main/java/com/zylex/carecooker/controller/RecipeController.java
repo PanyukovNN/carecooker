@@ -116,7 +116,7 @@ public class RecipeController {
 
     @ResponseBody
     @GetMapping(value = "/dish/{dishId}", produces = "application/json")
-    public Page<RecipeCardDto> getSectionDishRecipesPageByDish(
+    public Page<RecipeCardDto> getSectionDishRecipesPageByDishJson(
             @PathVariable long dishId,
             @RequestParam int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
@@ -125,7 +125,23 @@ public class RecipeController {
         return recipeRepository.findBySectionsContainingAndDishesContainingAndToPublicationIsTrue(dish.getSection(), dish, pageable).map(RecipeCardDto::new);
     }
 
+    @GetMapping(value = "/search", produces = "text/html")
+    public String getSearchedRecipes(Model model,
+                                     @RequestParam String filter) {
+        model.addAttribute("greetingDto", new GreetingDto("«" + filter + "»", " "));
 
+        return "recipesAll";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/search", produces = "application/json")
+    public Page<RecipeCardDto> getSearchedRecipesJson(
+            @RequestParam String filter,
+            @RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
+
+        return recipeRepository.findByNameContainingIgnoreCase(filter, pageable).map(RecipeCardDto::new);
+    }
 
     @GetMapping(value = "/no-section-list", produces = "text/html")
     public String getNoSectionRecipes(Model model) {

@@ -33,6 +33,18 @@
     font: 14px/2 PT Serif,Georgia,serif !important;
 }
 
+.nav-total-search-form {
+    margin-top: 0.4rem !important;
+}
+
+.nav-total-search-form-input,
+.nav-total-search-form-btn {
+    height: 2rem !important;
+    margin-left: 0.3rem !important;
+
+    line-height: 1 !important;
+}
+
 .search-bar {
     display: flex;
     margin-left: auto;

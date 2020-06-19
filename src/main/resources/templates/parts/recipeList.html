@@ -32,7 +32,12 @@
         });
 
         function getPage() {
-            var link = window.location.pathname + "?page=" + pageNumber;
+            var link = window.location.pathname;
+            if (window.location.search !== "") {
+                link += window.location.search + "&page=" + pageNumber;
+            } else {
+                link += "?page=" + pageNumber;
+            }
             pageNumber++;
 
             $.get(link, function(page, status) {
