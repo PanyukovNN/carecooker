@@ -225,15 +225,22 @@ public class RecipeController {
             @RequestParam String cookTime,
             @RequestParam String serving,
             @RequestParam String complexity,
-            @RequestParam(required = false) Long dish,
-            @RequestParam String ingredients,
-            @RequestParam String method,
+            @RequestParam List<String> ingredients,
+            @RequestParam List<String> method,
 //            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
             @RequestParam Long section,
+            @RequestParam(required = false) Long dish,
             @RequestParam String toPublication) throws IOException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.loadUserByUsername(authentication.getName());
+
+        while (ingredients.contains("")) {
+            ingredients.remove("");
+        }
+        while (method.contains("")) {
+            method.remove("");
+        }
 
         Recipe newRecipe = new Recipe(name,
                 description,
@@ -244,7 +251,7 @@ public class RecipeController {
                         ? 0
                         : Integer.parseInt(serving),
                 complexity,
-                splitByNewLine(ingredients),
+                ingredients,
                 method,
                 dish != null && dish != 0
                         ? Arrays.asList(dishRepository.findById(dish).orElseThrow(IllegalArgumentException::new))
@@ -292,11 +299,11 @@ public class RecipeController {
             @RequestParam("cookTime") String cookTimeStr,
             @RequestParam String serving,
             @RequestParam String complexity,
-            @RequestParam(required = false) Long dish,
-            @RequestParam String ingredients,
-            @RequestParam String method,
+            @RequestParam List<String> ingredients,
+            @RequestParam List<String> method,
 //            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
             @RequestParam Long section,
+            @RequestParam(required = false) Long dish,
             @RequestParam String toPublication) throws IOException {
         Recipe editedRecipe = recipeRepository.findById(id).orElse(new Recipe());
         editedRecipe.setName(name);
@@ -308,6 +315,9 @@ public class RecipeController {
             editedRecipe.setServing(0);
         } else {
             editedRecipe.setServing(Integer.parseInt(serving));
+        }
+        while (method.contains("")) {
+            method.remove("");
         }
         editedRecipe.setMethod(method);
 //        if (sectionNameList != null) {
@@ -321,7 +331,11 @@ public class RecipeController {
         }
         editedRecipe.setComplexity(complexity);
 
-        editedRecipe.setIngredients(splitByNewLine(ingredients));
+        while (ingredients.contains("")) {
+            ingredients.remove("");
+        }
+        editedRecipe.setIngredients(ingredients);
+
         boolean toPublicationBool = !toPublication.isEmpty();
         if (toPublicationBool) {
             editedRecipe.setPublicationDateTime(LocalDateTime.now());
@@ -371,7 +385,7 @@ public class RecipeController {
             recipeRepository.save(recipe);
         }
 
-        return "redirect:/recipe/all";
+        return "redirect:/recipe/" + id;
     }
 
     @GetMapping("/unpublish")
@@ -382,7 +396,7 @@ public class RecipeController {
             recipeRepository.save(recipe);
         }
 
-        return "redirect:/recipe/all";
+        return "redirect:/recipe/" + id;
     }
 
     private String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {

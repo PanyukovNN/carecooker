@@ -91,7 +91,7 @@
         <div class="recipe-method-wrap border-bottom">
             <div class="recipe-method__heading">СПОСОБ ПРИГОТОВЛЕНИЯ</div>
             <div class="recipe-method__list">
-                <div class="recipe-method__list-item-text" th:each="step, iter : ${recipe.methodSteps}">
+                <div class="recipe-method__list-item-text" th:each="step, iter : ${recipe.method}">
                     <span style="font-weight: bold;" th:text="${iter.index + 1} + @{.}"></span>
                     <span th:text="${step}"></span>
                 </div>

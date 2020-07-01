@@ -47,27 +47,21 @@
         </script>
     </div>
 
-    <div class="form-group">
-        <label>Описание</label>
-        <textarea class="form-control" name="description" rows="7" placeholder="Описание"
-                  th:text="${recipe} ? ${recipe.description} : ''"></textarea>
-    </div>
-
     <div class="form-row">
         <div class="form-group col-md-4">
             <label>Время приготовления</label>
-            <input type="time" class="form-control" name="cookTime"
+            <input type="time" class="form-control input" name="cookTime"
                    th:value="${recipe} ? ${recipe.cookTime} : ''">
         </div>
         <div class="form-group col-md-4">
             <label>Количество порций</label>
-            <input type="number" class="form-control" name="serving" placeholder="Количество порций"
+            <input type="number" class="form-control input" name="serving" placeholder="Количество порций"
                    min="0" max="100"
                    th:value="${recipe} ? ${recipe.serving} : ''">
         </div>
         <div class="form-group col-md-4">
             <label>Сложность</label>
-            <select class="form-control" name="complexity">
+            <select class="form-control custom-select select" name="complexity">
                 <option value="легко" th:selected="${recipe} ? ${recipe.complexity == 'легко'}">Легко</option>
                 <option value="средне" th:selected="${recipe} ? ${recipe.complexity == 'средне'}">Средне</option>
                 <option value="сложно" th:selected="${recipe} ? ${recipe.complexity == 'сложно'}">Сложно</option>
@@ -76,29 +70,36 @@
     </div>
 
     <div class="form-group">
+        <label>Описание</label>
+        <textarea class="form-control textarea" name="description" rows="7" placeholder="Описание"
+                  th:text="${recipe} ? ${recipe.description} : ''"></textarea>
+    </div>
+
+    <div class="form-group" id="ingredientsBlockId">
         <label>Ингредиенты</label>
-        <textarea class="form-control" name="ingredients" rows="7" placeholder="Ингредиенты"><th:block th:if="${recipe}">
-<p th:remove="tag" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}">
-</p></th:block></textarea>
+        <!-- Fills by js -->
+    </div>
+    <div class="d-flex" style="justify-content: right">
+        <button class="button btn btn-outline-secondary mb-3" id="addIngredientBtnId" type="button">Добавить</button>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="methodBlockId">
         <label>Способ приготовления</label>
-        <textarea class="form-control" name="method" rows="7" placeholder="Способ приготвления"
-            th:text="${recipe} ? ${recipe.method} : ''"></textarea>
+        <!-- Fills by js -->
+<!--        <textarea class="form-control textarea" name="method" rows="7" placeholder="Способ приготвления"-->
+<!--            th:text="${recipe} ? ${recipe.method} : ''"></textarea>-->
+    </div>
+    <div class="d-flex" style="justify-content: right">
+        <button class="button btn btn-outline-secondary" id="addMethodBtnId" type="button">Добавить</button>
     </div>
 
-    <label>Выберите раздел</label>
-    <div class="input-group mb-3">
-        <select id="sectionSelect" class="custom-select select-section" name="section">
+    <label>Выберите раздел и тип блюда</label>
+    <div class="from-inline input-group mb-3">
+        <select id="sectionSelect" class="custom-select select" name="section">
             <option value="0">Любой раздел</option>
             <!-- Fills by js -->
         </select>
-    </div>
-
-    <div class="form-group">
-        <label>Тип блюда</label>
-        <select id="selectDish" class="custom-select" name="dish">
+        <select id="selectDish" class="custom-select select" name="dish">
             <option value="0">Любое блюдо</option>
             <!-- Fills by js -->
         </select>
@@ -115,23 +116,25 @@
     <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 
     <div class="form-group">
-        <button type="submit" class="btn btn-outline-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>
+        <button type="submit" class="primary-btn btn btn-outline-primary" th:text="${recipe} ? 'Обновить рецепт' : 'Сохранить рецепт'"></button>
     </div>
+
 
     <script th:inline="javascript">
         var sectionSelect = $("#sectionSelect");
         var dishSelect = $("#selectDish");
         /*<![CDATA[*/
-        var dishId = /*[[${recipe} and ${recipe.dish} ? ${recipe.dish.id} : '']]*/ 'default';
+        var recipeDishId = /*[[${recipe} and ${recipe.dish} ? ${recipe.dish.id} : '']]*/ 'default';
         /*]]>*/
 
         $(document).ready(function () {
             fillSections();
+            fillIngredients();
+            fillMethod();
         });
 
         sectionSelect.on("change", function (event) {
             event.preventDefault();
-            dishId = "";
 
             fillDishes();
         });
@@ -139,8 +142,8 @@
         function fillSections() {
             var link = "/section/all";
 
-            $.get(link, function(sections, status) {
-                $.each(sections, function(i, section) {
+            $.get(link, function (sections, status) {
+                $.each(sections, function (i, section) {
                     sectionSelect.append(
                         "<option value='" + section.id + "'>" + section.name + "</option>"
                     );
@@ -156,7 +159,6 @@
                 fillDishes();
             });
         }
-
         function fillDishes() {
             var sectionId = sectionSelect.val();
             var link = '/dish/json/section/' + sectionId;
@@ -181,15 +183,70 @@
                     dishSelect.append(
                         "<option value='" + dish.id + "'>" + dish.name + "</option>"
                     );
+                    if (dish.id === recipeDishId) {
+                        dishSelect.val(recipeDishId);
+                    }
                 });
             });
+        }
 
-            if (dishId !== '') {
-                dishSelect.val(dishId);
+
+        $("#addIngredientBtnId").on("click", function (event) {
+            event.preventDefault();
+
+            addIngredient("");
+        });
+        function fillIngredients() {
+            /*<![CDATA[*/
+            var ingredients = /*[[${recipe} and ${recipe.ingredients} ? ${recipe.ingredients} : '']]*/ 'default';
+            /*]]>*/
+            if (ingredients !== '' && ingredients.length > 0) {
+                $.each(ingredients, function (i, ingredient) {
+                    addIngredient(ingredient);
+                });
             } else {
-                dishSelect.val("");
+                for (let i = 0; i < 3; i++) {
+                    addIngredient("");
+                }
             }
         }
+        var ingredientBlock = "<div class='form-inline input-group mt-1'>" +
+            "<input type='text' class='input form-control' name='ingredients' value='${ingredient}' placeholder='Ингредиент'>" +
+            "<button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
+            "</div>";
+        function addIngredient(ingredient) {
+            $("#ingredientsBlockId").append(ingredientBlock.replace("${ingredient}", ingredient));
+        }
+
+
+        $("#addMethodBtnId").on("click", function (event) {
+            event.preventDefault();
+
+            addMethod("");
+        });
+        function fillMethod() {
+            /*<![CDATA[*/
+            var methodSteps = /*[[${recipe} and ${recipe.method} ? ${recipe.method} : '']]*/ 'default';
+            /*]]>*/
+            if (methodSteps !== '' && methodSteps.length > 0) {
+                $.each(methodSteps, function (i, methodStep) {
+                    addMethod(methodStep);
+                });
+            } else {
+                addMethod("");
+            }
+        }
+        var methodBlock = "<div class='form-inline input-group mt-1'>" +
+            "<textarea class='textarea form-control' name='method' rows='3' placeholder='Способ приготвления'>${methodStep}</textarea>" +
+            "<button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
+            "</div>";
+        function addMethod(methodStep) {
+            $("#methodBlockId").append(methodBlock.replace("${methodStep}", methodStep));
+        }
+        $(document).on('click', '.removeDivBtn', function(e) {
+            e.preventDefault();
+            $(this).closest('div').remove();
+        })
     </script>
 </form>
 

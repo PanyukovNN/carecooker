@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,7 +30,8 @@ public class Recipe {
     @ElementCollection
     private List<String> ingredients;
 
-    private String method;
+    @ElementCollection
+    private List<String> method;
 
     @ManyToMany
     private List<Section> sections;
@@ -57,7 +57,7 @@ public class Recipe {
                   int serving,
                   String complexity,
                   List<String> ingredients,
-                  String method,
+                  List<String> method,
                   List<Dish> dishes,
                   List<Section> sections,
                   User author,
@@ -146,15 +146,15 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public String getMethod() {
+    public List<String> getMethod() {
         return method;
     }
 
-    public List<String> getMethodSteps() {
-        return Arrays.asList(method.split("\n"));
-    }
+//    public List<String> getMethodSteps() {
+//        return Arrays.asList(method.split("\n"));
+//    }
 
-    public void setMethod(String method) {
+    public void setMethod(List<String> method) {
         this.method = method;
     }
 
