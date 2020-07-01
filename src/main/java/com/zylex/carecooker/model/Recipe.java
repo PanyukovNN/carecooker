@@ -58,8 +58,8 @@ public class Recipe {
                   String complexity,
                   List<String> ingredients,
                   List<String> method,
-                  List<Dish> dishes,
                   List<Section> sections,
+                  List<Dish> dishes,
                   User author,
                   boolean toPublication
     ) {
@@ -70,8 +70,8 @@ public class Recipe {
         this.complexity = complexity;
         this.ingredients = ingredients;
         this.method = method;
-        this.dishes = dishes;
         this.sections = sections;
+        this.dishes = dishes;
         this.author = author;
         this.toPublication = toPublication;
     }
@@ -150,9 +150,6 @@ public class Recipe {
         return method;
     }
 
-//    public List<String> getMethodSteps() {
-//        return Arrays.asList(method.split("\n"));
-//    }
 
     public void setMethod(List<String> method) {
         this.method = method;

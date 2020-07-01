@@ -6,11 +6,11 @@
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <div class="recipe-admin-button-block">
             <div class="edit-and-publish-admin-buttons">
-                <a class="btn btn-outline-primary" th:href="@{/recipe/edit(id=${recipe.id})}" role="button">Редактировать</a>
+                <a class="primary-btn btn btn-outline-primary" th:href="@{/recipe/update(id=${recipe.id})}" role="button">Редактировать</a>
             </div>
 
             <div class="unpublish-and-delete-admin-buttons">
-                <a class="btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
+                <a class="remove-btn btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
                    onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
             </div>
         </div>
@@ -107,11 +107,11 @@
         <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4 mb-5">
             <div class="recipe-admin-button-block">
                 <div class="edit-and-publish-admin-buttons">
-                    <a class="btn btn-outline-primary" th:href="@{/recipe/edit(id=${recipe.id})}" role="button">Редактировать</a>
+                    <a class="primary-btn btn btn-outline-primary" th:href="@{/recipe/update(id=${recipe.id})}" role="button">Редактировать</a>
                 </div>
 
                 <div class="unpublish-and-delete-admin-buttons">
-                    <a class="btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
+                    <a class="remove-btn btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
                        onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                 if (recipe.toPublication === false) {
                     $(".edit-and-publish-admin-buttons").append(
                         "<a href='/recipe/publish?id=" + recipe.id + "'>" +
-                            "<button type='button' class='btn btn-outline-primary'>Опубликовать</button>" +
+                            "<button type='button' class='primary-btn btn btn-outline-primary'>Опубликовать</button>" +
                         "</a>"
                     );
 
@@ -140,7 +140,7 @@
                     unpublishAndDeleteAdminButtons.append(
                         "<a href='/recipe/delete?id=" + recipe.id + "' " +
                             "onclick='return confirm(\"Вы действительно хотите удалить рецепт?\");'>" +
-                            "<button type='button' class='btn btn-outline-danger'>Удалить</button>" +
+                            "<button type='button' class='remove-btn btn btn-outline-danger'>Удалить</button>" +
                         "</a>"
                     );
 

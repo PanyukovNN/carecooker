@@ -6,7 +6,7 @@
     <input type="hidden" name="id" th:value="${recipe} ? ${recipe.id} : ''" />
 
     <div class="recipe-edit-from-title">
-        <textarea class="recipe-edit-from-title-input" name="name" placeholder="Название блюда"
+        <textarea class="recipe-edit-from-title-input" name="name" placeholder="Введите название"
                   onfocus="this.placeholder = ''"
                   th:text="${recipe} ? ${recipe.name} : ''"></textarea>
     </div>
@@ -26,7 +26,7 @@
                     <div class="choose-photo">Нажмите для выбора фото</div>
                 </div>
             </label>
-            <input type="file" name="file" id="customFile" th:value="${recipe} ? recipe.mainImage : ''"/>
+            <input type="file" name="file" id="customFile" th:value="${recipe} and ${recipe.mainImage} ? ${recipe.mainImage} : ''"/>
         </div>
 
         <script>

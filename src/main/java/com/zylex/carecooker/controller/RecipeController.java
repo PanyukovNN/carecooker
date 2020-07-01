@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/recipe")
@@ -211,26 +210,37 @@ public class RecipeController {
         return recipeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
-    @GetMapping("/add")
-    public String getSaveRecipe(Model model) {
+    @GetMapping("/update")
+    public String getUpdateRecipe(
+            @RequestParam(required = false) Long id,
+            Model model) {
+        if (id != null) {
+            Recipe recipe = recipeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+            model.addAttribute("recipe", recipe);
+        }
         model.addAttribute("allSections", sectionRepository.findAll());
+
         return "recipeSaveUpdate";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/update")
     public String postSaveRecipe(
+            @RequestParam(required = false) Long id,
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam("file") MultipartFile file,
-            @RequestParam String cookTime,
-            @RequestParam String serving,
+            @RequestParam("cookTime") String cookTimeStr,
+            @RequestParam("serving") String servingStr,
             @RequestParam String complexity,
             @RequestParam List<String> ingredients,
             @RequestParam List<String> method,
-//            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
-            @RequestParam Long section,
-            @RequestParam(required = false) Long dish,
-            @RequestParam String toPublication) throws IOException {
+            @RequestParam("section") Long sectionId,
+            @RequestParam(name = "dish", required = false) Long dishId,
+            @RequestParam("toPublication") String toPublicationStr) throws IOException {
+        Recipe recipe = new Recipe();
+        if (id != null && id != 0) {
+            recipe = recipeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.loadUserByUsername(authentication.getName());
@@ -242,118 +252,42 @@ public class RecipeController {
             method.remove("");
         }
 
-        Recipe newRecipe = new Recipe(name,
-                description,
-                cookTime == null || cookTime.isEmpty()
-                        ? LocalTime.of(0, 0)
-                        : LocalTime.parse(cookTime),
-                serving == null || serving.isEmpty()
-                        ? 0
-                        : Integer.parseInt(serving),
-                complexity,
-                ingredients,
-                method,
-                dish != null && dish != 0
-                        ? Arrays.asList(dishRepository.findById(dish).orElseThrow(IllegalArgumentException::new))
-                        : Collections.emptyList(),
-//                sectionNameList != null
-//                        ? sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList())
-//                        : Collections.emptyList(),
-                section != null && section != 0
-                        ? Arrays.asList(sectionRepository.findById(section).orElseThrow(IllegalArgumentException::new))
-                        : Collections.emptyList(),
-                user,
-                !toPublication.isEmpty());
+        boolean toPublication = !toPublicationStr.isEmpty();
 
-        if (newRecipe.isToPublication()) {
-            newRecipe.setPublicationDateTime(LocalDateTime.now());
-        }
-
-        if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
-            String resultFileName = uploadFile(file);
-            newRecipe.setMainImage(resultFileName);
-        }
-
-        recipeRepository.save(newRecipe);
-
-        return "redirect:/recipe/" + newRecipe.getId();
-    }
-
-    @GetMapping("/edit")
-    public String getUpdateRecipe(
-            @RequestParam long id,
-            Model model) {
-        Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
-        model.addAttribute("recipe", recipe);
-        model.addAttribute("allSections", sectionRepository.findAll());
-
-        return "recipeSaveUpdate";
-    }
-
-    @PostMapping("/edit")
-    public String postUpdateRecipe(
-            @RequestParam long id,
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("cookTime") String cookTimeStr,
-            @RequestParam String serving,
-            @RequestParam String complexity,
-            @RequestParam List<String> ingredients,
-            @RequestParam List<String> method,
-//            @RequestParam(required = false, name = "sections") List<String> sectionNameList,
-            @RequestParam Long section,
-            @RequestParam(required = false) Long dish,
-            @RequestParam String toPublication) throws IOException {
-        Recipe editedRecipe = recipeRepository.findById(id).orElse(new Recipe());
-        editedRecipe.setName(name);
-        editedRecipe.setDescription(description);
-        editedRecipe.setCookTime(cookTimeStr == null || cookTimeStr.isEmpty()
+        recipe.setName(name);
+        recipe.setDescription(description);
+        recipe.setCookTime(cookTimeStr == null || cookTimeStr.isEmpty()
                 ? LocalTime.of(0, 0)
                 : LocalTime.parse(cookTimeStr));
-        if (serving == null || serving.isEmpty()) {
-            editedRecipe.setServing(0);
-        } else {
-            editedRecipe.setServing(Integer.parseInt(serving));
+        recipe.setServing(servingStr == null || servingStr.isEmpty()
+                ? 0
+                : Integer.parseInt(servingStr));
+        recipe.setComplexity(complexity);
+        recipe.setIngredients(ingredients);
+        recipe.setMethod(method);
+        recipe.getSections().clear();
+        if (sectionId != null && sectionId != 0) {
+            recipe.getSections().add(sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new));
         }
-        while (method.contains("")) {
-            method.remove("");
+        recipe.getDishes().clear();
+        if (dishId != null && dishId != 0) {
+            recipe.getDishes().add(dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new));
         }
-        editedRecipe.setMethod(method);
-//        if (sectionNameList != null) {
-//            editedRecipe.setSections(sectionNameList.stream().map(sectionRepository::findByName).collect(Collectors.toList()));
-//        } else {
-//            editedRecipe.setSections(Collections.emptyList());
-//        }
-        editedRecipe.getSections().clear();
-        if (section != null && section != 0) {
-            editedRecipe.getSections().add(sectionRepository.findById(section).orElseThrow(IllegalArgumentException::new));
-        }
-        editedRecipe.setComplexity(complexity);
+        recipe.setAuthor(user);
+        recipe.setToPublication(toPublication);
 
-        while (ingredients.contains("")) {
-            ingredients.remove("");
-        }
-        editedRecipe.setIngredients(ingredients);
-
-        boolean toPublicationBool = !toPublication.isEmpty();
-        if (toPublicationBool) {
-            editedRecipe.setPublicationDateTime(LocalDateTime.now());
-        }
-        editedRecipe.setToPublication(toPublicationBool);
-        editedRecipe.getDishes().clear();
-        if (dish != null && dish != 0) {
-            editedRecipe.getDishes().add(dishRepository.findById(dish).orElseThrow(IllegalArgumentException::new));
+        if (toPublication) {
+            recipe.setPublicationDateTime(LocalDateTime.now());
         }
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = uploadFile(file);
-            editedRecipe.setMainImage(resultFileName);
+            recipe.setMainImage(resultFileName);
         }
-//        editedRecipe.setPublicationDateTime(LocalDateTime.now());
-        recipeRepository.save(editedRecipe);
 
-        return "redirect:/recipe/" + id;
+        recipeRepository.save(recipe);
+
+        return "redirect:/recipe/" + recipe.getId();
     }
 
     @GetMapping("/delete")
@@ -409,11 +343,5 @@ public class RecipeController {
         String resultFileName = uidFile + "." + file.getOriginalFilename();
         file.transferTo(new File(uploadPath + "/" + resultFileName));
         return resultFileName;
-    }
-
-    private List<String> splitByNewLine(@RequestParam String ingredients) {
-        return Arrays.stream(ingredients.split("\n"))
-                .map(String::trim)
-                .collect(Collectors.toList());
     }
 }

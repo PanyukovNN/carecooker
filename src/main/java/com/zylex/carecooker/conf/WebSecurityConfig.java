@@ -32,8 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(
                             "/admin/**",
-                            "/recipe/edit/**",
-                            "/recipe/add/**",
+                            "/recipe/update/**",
                             "/section/add/**",
                             "/section/edit/**",
                             "/section/list",
