@@ -202,6 +202,7 @@
             /*]]>*/
             if (ingredients !== '' && ingredients.length > 0) {
                 $.each(ingredients, function (i, ingredient) {
+                    console.log("adding ingredients");
                     addIngredient(ingredient);
                 });
             } else {
@@ -211,13 +212,46 @@
             }
         }
         var ingredientBlock = "<div class='form-inline input-group mt-1'>" +
-            "<input type='text' class='input form-control' name='ingredients' value='${ingredient}' placeholder='Ингредиент'>" +
+            "<input type='text' class='input form-control' name='ingredientName' value='${ingredientName}' placeholder='Название'>" +
+            "<input type='number' min='0' class='input form-control' name='ingredientAmount' value='${ingredientAmount}' placeholder='Количество'>" +
+            "<select class=\"form-control custom-select select\" name=\"ingredientUnits\">\n" +
+                "<option value=\"GRAM\" ${selectedGram}>гр.</option>\n" +
+                "<option value=\"MILLILITER\" ${selectedMilliliter}>мл.</option>\n" +
+                "<option value=\"PIECES\" ${selectedPieces}>шт.</option>\n" +
+            "</select>" +
             "<button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
             "</div>";
         function addIngredient(ingredient) {
-            $("#ingredientsBlockId").append(ingredientBlock.replace("${ingredient}", ingredient));
+            if (ingredient !== "") {
+                console.log("I am here!!");
+                var ingredientFormattedBlock = ingredientBlock
+                    .replace("${ingredientName}", ingredient.name)
+                    .replace("${ingredientAmount}", ingredient.amount);
+                if (ingredient.units === 'GRAM') {
+                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedGram}", "selected");
+                }
+                if (ingredient.units === 'MILLILITER') {
+                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedMilliliter}", "selected");
+                }
+                if (ingredient.units === 'PIECES') {
+                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedPieces}", "selected");
+                }
+                ingredientFormattedBlock = ingredientFormattedBlock
+                    .replace("${selectedGram}", "")
+                    .replace("${selectedMilliliter}", "")
+                    .replace("${selectedPieces}", "");
+                $("#ingredientsBlockId").append(ingredientFormattedBlock);
+            } else {
+                console.log("i am here")
+                var ingredientFormattedBlock = ingredientBlock
+                    .replace("${ingredientName}", "")
+                    .replace("${ingredientAmount}", "")
+                    .replace("${selectedGram}", "")
+                    .replace("${selectedMilliliter}", "")
+                    .replace("${selectedPieces}", "");
+                $("#ingredientsBlockId").append(ingredientFormattedBlock);
+            }
         }
-
 
         $("#addMethodBtnId").on("click", function (event) {
             event.preventDefault();

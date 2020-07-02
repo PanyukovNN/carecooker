@@ -82,11 +82,18 @@
             <div class="recipe-ingredient-list-wrap">
                 <div class="recipe-ingredients__heading">ИНГРЕДИЕНТЫ</div>
                 <ul class="recipe-ingredients__list">
-                    <li class="recipe-ingredients__list-item" th:each="ingredient : ${recipe.ingredients}" th:utext="${ingredient}"></li>
+                    <li class="recipe-ingredients__list-item" th:each="ingredient : ${recipe.ingredients}">
+                        <div class="ingredient_item_div" style="justify-content: space-between; display: flex">
+                            <span class="ingredient_item_name" th:text="${ingredient.name}"></span>
+                            <span class="ingredient_item_amount" th:text="${ingredient.amount} + ' ' + ${ingredient.units.unitName}"></span>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
+<!--    th:utext="${ingredient}-->
+
     <div class="recipe-method-block">
         <div class="recipe-method-wrap border-bottom">
             <div class="recipe-method__heading">СПОСОБ ПРИГОТОВЛЕНИЯ</div>

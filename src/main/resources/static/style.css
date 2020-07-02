@@ -620,6 +620,28 @@ body {
     padding-left: 0;
     margin-bottom: 0;
 }
+.ingredient_item_div {
+    position: relative;
+}
+.ingredient_item_div::before {
+    display: table;
+    position: absolute;
+    bottom: 12px;
+    width: 100%;
+    content: "";
+    border-bottom: 1px solid #b8b8b8;
+}
+.ingredient_item_name {
+    padding-right: 0.5rem;
+}
+.ingredient_item_amount {
+    padding-left: 0.5rem;
+}
+.ingredient_item_name,
+.ingredient_item_amount{
+    background: white;
+    z-index: 1;
+}
 .recipe-method__list {
     text-align: justify;
 }

@@ -1,9 +1,6 @@
 package com.zylex.carecooker.controller;
 
-import com.zylex.carecooker.model.Dish;
-import com.zylex.carecooker.model.Recipe;
-import com.zylex.carecooker.model.Section;
-import com.zylex.carecooker.model.User;
+import com.zylex.carecooker.model.*;
 import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.model.dto.RecipeCardDto;
 import com.zylex.carecooker.repository.DishRepository;
@@ -232,7 +229,9 @@ public class RecipeController {
             @RequestParam("cookTime") String cookTimeStr,
             @RequestParam("serving") String servingStr,
             @RequestParam String complexity,
-            @RequestParam List<String> ingredients,
+            @RequestParam List<String> ingredientName,
+            @RequestParam List<String> ingredientAmount,
+            @RequestParam List<String> ingredientUnits,
             @RequestParam List<String> method,
             @RequestParam("section") Long sectionId,
             @RequestParam(name = "dish", required = false) Long dishId,
@@ -245,9 +244,15 @@ public class RecipeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.loadUserByUsername(authentication.getName());
 
-        while (ingredients.contains("")) {
-            ingredients.remove("");
-        }
+//        while (ingredientName.contains("")) {
+//            ingredientName.remove("");
+//        }
+//        while (ingredientAmount.contains("")) {
+//            ingredientAmount.remove("");
+//        }
+//        while (ingredientUnits.contains("")) {
+//            ingredientUnits.remove("");
+//        }
         while (method.contains("")) {
             method.remove("");
         }
@@ -263,7 +268,20 @@ public class RecipeController {
                 ? 0
                 : Integer.parseInt(servingStr));
         recipe.setComplexity(complexity);
+
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (int i = 0; i < ingredientName.size(); i++) {
+            ingredients.add(
+                    new Ingredient(
+                            ingredientName.get(i),
+                            Integer.parseInt(ingredientAmount.get(i)),
+                            Units.valueOf(ingredientUnits.get(i))
+                    )
+            );
+        }
         recipe.setIngredients(ingredients);
+
+
         recipe.setMethod(method);
         recipe.getSections().clear();
         if (sectionId != null && sectionId != 0) {

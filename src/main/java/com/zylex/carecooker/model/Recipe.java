@@ -27,8 +27,8 @@ public class Recipe {
 
     private String complexity;
 
-    @ElementCollection
-    private List<String> ingredients;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Ingredient> ingredients;
 
     @ElementCollection
     private List<String> method;
@@ -56,7 +56,7 @@ public class Recipe {
                   LocalTime cookTime,
                   int serving,
                   String complexity,
-                  List<String> ingredients,
+                  List<Ingredient> ingredients,
                   List<String> method,
                   List<Section> sections,
                   List<Dish> dishes,
@@ -138,18 +138,17 @@ public class Recipe {
         this.complexity = complexity;
     }
 
-    public List<String> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
     public List<String> getMethod() {
         return method;
     }
-
 
     public void setMethod(List<String> method) {
         this.method = method;
