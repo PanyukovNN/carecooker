@@ -126,8 +126,26 @@
         /*<![CDATA[*/
         var recipeDishId = /*[[${recipe} and ${recipe.dish} ? ${recipe.dish.id} : '']]*/ 'default';
         /*]]>*/
+        var sectionDishMapGlobal = {};
 
         $(document).ready(function () {
+            var link = "/dish/json/section-dish-map";
+
+            $.get(link, function (sectionDishMap, status) {
+                // console.log(sectionDishMap);
+                console.log(Object.entries(sectionDishMap));
+                for (var key in sectionDishMap) {
+
+                    var value = sectionDishMap[key];
+                    $.each(value, function (i, dish) {
+                        // console.log(dish.section.name);
+                    });
+                    // for (var value in sectionDishMap[key]) {
+                    //     console.log(value);
+                    // }
+                }
+            });
+
             fillSections();
             fillIngredients();
             fillMethod();
@@ -202,7 +220,6 @@
             /*]]>*/
             if (ingredients !== '' && ingredients.length > 0) {
                 $.each(ingredients, function (i, ingredient) {
-                    console.log("adding ingredients");
                     addIngredient(ingredient);
                 });
             } else {
@@ -223,7 +240,6 @@
             "</div>";
         function addIngredient(ingredient) {
             if (ingredient !== "") {
-                console.log("I am here!!");
                 var ingredientFormattedBlock = ingredientBlock
                     .replace("${ingredientName}", ingredient.name)
                     .replace("${ingredientAmount}", ingredient.amount);
@@ -242,7 +258,6 @@
                     .replace("${selectedPieces}", "");
                 $("#ingredientsBlockId").append(ingredientFormattedBlock);
             } else {
-                console.log("i am here")
                 var ingredientFormattedBlock = ingredientBlock
                     .replace("${ingredientName}", "")
                     .replace("${ingredientAmount}", "")

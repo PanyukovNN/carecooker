@@ -7,6 +7,7 @@ import com.zylex.carecooker.repository.DishRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import com.zylex.carecooker.service.UserService;
+import org.hibernate.internal.util.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -241,26 +242,8 @@ public class RecipeController {
             recipe = recipeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) userService.loadUserByUsername(authentication.getName());
-
-//        while (ingredientName.contains("")) {
-//            ingredientName.remove("");
-//        }
-//        while (ingredientAmount.contains("")) {
-//            ingredientAmount.remove("");
-//        }
-//        while (ingredientUnits.contains("")) {
-//            ingredientUnits.remove("");
-//        }
-        while (method.contains("")) {
-            method.remove("");
-        }
-
-        boolean toPublication = !toPublicationStr.isEmpty();
-
-        recipe.setName(name);
-        recipe.setDescription(description);
+        recipe.setName(name.trim());
+        recipe.setDescription(description.trim());
         recipe.setCookTime(cookTimeStr == null || cookTimeStr.isEmpty()
                 ? LocalTime.of(0, 0)
                 : LocalTime.parse(cookTimeStr));
@@ -271,27 +254,52 @@ public class RecipeController {
 
         List<Ingredient> ingredients = new ArrayList<>();
         for (int i = 0; i < ingredientName.size(); i++) {
+            if (ingredientName.get(i) != null) {
+                ingredientName.set(i, ingredientName.get(i).trim());
+            }
+            if (StringHelper.isEmpty(ingredientName.get(i))) {
+                continue;
+            }
+            int amount = StringHelper.isEmpty(ingredientAmount.get(i))
+                    ? 0
+                    : Integer.parseInt(ingredientAmount.get(i));
+
             ingredients.add(
                     new Ingredient(
                             ingredientName.get(i),
-                            Integer.parseInt(ingredientAmount.get(i)),
+                            amount,
                             Units.valueOf(ingredientUnits.get(i))
                     )
             );
         }
         recipe.setIngredients(ingredients);
 
-
+        for (int i = 0; i < method.size(); i++) {
+            if (method.get(i) != null) {
+                method.set(i, method.get(i).trim());
+            }
+        }
+        while (method.contains("")) {
+            method.remove("");
+        }
         recipe.setMethod(method);
+
         recipe.getSections().clear();
         if (sectionId != null && sectionId != 0) {
             recipe.getSections().add(sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new));
         }
+
         recipe.getDishes().clear();
         if (dishId != null && dishId != 0) {
             recipe.getDishes().add(dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new));
         }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) userService.loadUserByUsername(authentication.getName());
+
         recipe.setAuthor(user);
+
+        boolean toPublication = !toPublicationStr.isEmpty();
         recipe.setToPublication(toPublication);
 
         if (toPublication) {

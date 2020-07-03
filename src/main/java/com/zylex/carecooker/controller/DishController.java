@@ -13,9 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/dish")
@@ -80,7 +78,21 @@ public class DishController {
     @GetMapping(value = "/json/section/{id}", produces = "application/json")
     public List<Dish> getJsonDishesBySection(@PathVariable(name = "id") long sectionId) {
         Section section = sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new);
+
         return dishRepository.findBySection(section);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/json/section-dish-map", produces = "application/json")
+    public Map<Section, List<Dish>> getJsonSectionDishMap() {
+        Map<Section, List<Dish>> sectionDishMap = new LinkedHashMap<>();
+        List<Section> allSections = sectionRepository.findAll();
+
+        for (Section section : allSections) {
+            sectionDishMap.put(section, dishRepository.findBySection(section));
+        }
+
+        return sectionDishMap;
     }
 
     @PostMapping("/update")
