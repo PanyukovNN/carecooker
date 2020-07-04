@@ -5,7 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -154,15 +156,6 @@ public class Recipe {
         this.method = method;
     }
 
-    //TODO do not forget to remove
-    public Section getSection() {
-        if (sections != null && !sections.isEmpty()) {
-            return sections.get(0);
-        } else {
-            return null;
-        }
-    }
-
     public List<Section> getSections() {
         return sections;
     }
@@ -177,15 +170,6 @@ public class Recipe {
 
     public void setAuthor(User author) {
         this.author = author;
-    }
-
-    //TODO do not forget to remove
-    public Dish getDish() {
-        if (dishes != null && !dishes.isEmpty()) {
-            return dishes.get(0);
-        } else {
-            return null;
-        }
     }
 
     public List<Dish> getDishes() {

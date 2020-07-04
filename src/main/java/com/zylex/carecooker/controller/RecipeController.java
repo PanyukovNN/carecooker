@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/recipe")
@@ -234,8 +235,8 @@ public class RecipeController {
             @RequestParam List<String> ingredientAmount,
             @RequestParam List<String> ingredientUnits,
             @RequestParam List<String> method,
-            @RequestParam("section") Long sectionId,
-            @RequestParam(name = "dish", required = false) Long dishId,
+            @RequestParam("sections") Set<Long> sectionIds,
+            @RequestParam("dishes") Set<Long> dishIds,
             @RequestParam("toPublication") String toPublicationStr) throws IOException {
         Recipe recipe = new Recipe();
         if (id != null && id != 0) {
@@ -284,15 +285,21 @@ public class RecipeController {
         }
         recipe.setMethod(method);
 
-        recipe.getSections().clear();
-        if (sectionId != null && sectionId != 0) {
-            recipe.getSections().add(sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new));
+        List<Section> sections = new ArrayList<>();
+        for (Long sectionId : sectionIds.stream().sorted(Long::compareTo).collect(Collectors.toList())) {
+            if (sectionId != null && sectionId != 0) {
+                sections.add(sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new));
+            }
         }
+        recipe.setSections(new ArrayList<>(sections));
 
-        recipe.getDishes().clear();
-        if (dishId != null && dishId != 0) {
-            recipe.getDishes().add(dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new));
+        List<Dish> dishes = new ArrayList<>();
+        for (Long dishId : dishIds.stream().sorted(Long::compareTo).collect(Collectors.toList())) {
+            if (dishId != null && dishId != 0) {
+                dishes.add(dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new));
+            }
         }
+        recipe.setDishes(new ArrayList<>(dishes));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.loadUserByUsername(authentication.getName());

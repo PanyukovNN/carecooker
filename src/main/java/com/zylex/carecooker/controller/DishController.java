@@ -83,16 +83,21 @@ public class DishController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/json/section-dish-map", produces = "application/json")
-    public Map<Section, List<Dish>> getJsonSectionDishMap() {
-        Map<Section, List<Dish>> sectionDishMap = new LinkedHashMap<>();
-        List<Section> allSections = sectionRepository.findAll();
+    @GetMapping(value = "/json/sections", produces = "application/json")
+    public List<Section> getJsonSections() {
+        List<Section> sections = sectionRepository.findAll();
+        sections.sort(Comparator.comparing(Section::getId));
 
-        for (Section section : allSections) {
-            sectionDishMap.put(section, dishRepository.findBySection(section));
-        }
+        return sections;
+    }
 
-        return sectionDishMap;
+    @ResponseBody
+    @GetMapping(value = "/json/dishes", produces = "application/json")
+    public List<Dish> getJsonDishes() {
+        List<Dish> dishes = dishRepository.findAll();
+        dishes.sort(Comparator.comparing(Dish::getId));
+
+        return dishes;
     }
 
     @PostMapping("/update")

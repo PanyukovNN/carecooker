@@ -86,23 +86,17 @@
     <div class="form-group" id="methodBlockId">
         <label>Способ приготовления</label>
         <!-- Fills by js -->
-<!--        <textarea class="form-control textarea" name="method" rows="7" placeholder="Способ приготвления"-->
-<!--            th:text="${recipe} ? ${recipe.method} : ''"></textarea>-->
     </div>
     <div class="d-flex" style="justify-content: right">
         <button class="button btn btn-outline-secondary" id="addMethodBtnId" type="button">Добавить</button>
     </div>
 
-    <label>Выберите раздел и тип блюда</label>
-    <div class="from-inline input-group mb-3">
-        <select id="sectionSelect" class="custom-select select" name="section">
-            <option value="0">Любой раздел</option>
-            <!-- Fills by js -->
-        </select>
-        <select id="selectDish" class="custom-select select" name="dish">
-            <option value="0">Любое блюдо</option>
-            <!-- Fills by js -->
-        </select>
+    <div class="form-group" id="sectionDishBlockId">
+        <label>Выберите раздел и тип блюда</label>
+        <!-- Fills by js -->
+    </div>
+    <div class="d-flex" style="justify-content: right">
+        <button class="button btn btn-outline-secondary" id="addSectionDishBtnId" type="button">Добавить</button>
     </div>
 
     <div class="form-check my-3">
@@ -121,65 +115,106 @@
 
 
     <script th:inline="javascript">
-        var sectionSelect = $("#sectionSelect");
-        var dishSelect = $("#selectDish");
-        /*<![CDATA[*/
-        var recipeDishId = /*[[${recipe} and ${recipe.dish} ? ${recipe.dish.id} : '']]*/ 'default';
-        /*]]>*/
-        var sectionDishMapGlobal = {};
+        var sections;
+        var dishes;
 
         $(document).ready(function () {
-            var link = "/dish/json/section-dish-map";
-
-            $.get(link, function (sectionDishMap, status) {
-                // console.log(sectionDishMap);
-                console.log(Object.entries(sectionDishMap));
-                for (var key in sectionDishMap) {
-
-                    var value = sectionDishMap[key];
-                    $.each(value, function (i, dish) {
-                        // console.log(dish.section.name);
-                    });
-                    // for (var value in sectionDishMap[key]) {
-                    //     console.log(value);
-                    // }
-                }
-            });
-
-            fillSections();
+            fillSectionDishes();
             fillIngredients();
             fillMethod();
         });
 
-        sectionSelect.on("change", function (event) {
-            event.preventDefault();
+        function fillSectionDishes() {
+            var dishesLink = "/dish/json/dishes";
+            $.get(dishesLink, function (dishList, status) {
+                dishes = dishList;
 
-            fillDishes();
-        });
+                var sectionsLink = "/dish/json/sections";
+                $.get(sectionsLink, function (sectionList, status) {
+                    sections = sectionList;
 
-        function fillSections() {
-            var link = "/section/all";
+                    /*<![CDATA[*/
+                    var recipeSections = /*[[${recipe} and ${recipe.sections} ? ${recipe.sections} : '']]*/ 'default';
+                    var recipeDishes = /*[[${recipe} and ${recipe.dishes} ? ${recipe.dishes} : '']]*/ 'default';
+                    /*]]>*/
 
-            $.get(link, function (sections, status) {
-                $.each(sections, function (i, section) {
-                    sectionSelect.append(
-                        "<option value='" + section.id + "'>" + section.name + "</option>"
-                    );
+                    if (recipeSections !== '' && recipeSections.length > 0) {
+                        var usedSectionIds = [];
+                        if (recipeDishes !== '' && recipeDishes.length > 0) {
+                            $.each(recipeDishes, function (i, recipeDish) {
+                                usedSectionIds.push(recipeDish.section.id);
+                                addSectionDish(recipeDish.section.id, recipeDish.id);
+                            });
+                        }
+
+                        for (let i = 0; i < recipeSections.length; i++) {
+                            if (!usedSectionIds.includes(recipeSections[i].id)) {
+                                addSectionDish(recipeSections[i].id, "");
+                            }
+                        }
+                    } else {
+                        addSectionDish("", "");
+                    }
                 });
-
-                /*<![CDATA[*/
-                var sectionId = /*[[${recipe} and ${recipe.section} ? ${recipe.section.id} : '']]*/ 'default';
-                if (sectionId !== '') {
-                    sectionSelect.val(sectionId);
-                }
-                /*]]>*/
-
-                fillDishes();
             });
         }
-        function fillDishes() {
-            var sectionId = sectionSelect.val();
-            var link = '/dish/json/section/' + sectionId;
+        var sectionDishId = 0;
+        var sectionDishBlock = "" +
+            "<div class=\"from-inline input-group mt-1\">" +
+            "        <select id=\"${sectionSelectId}\" class=\"custom-select select\" name=\"sections\">\n" +
+            "            <option value=\"0\">Любой раздел</option>\n" +
+            "        </select>\n" +
+            "        <select id=\"${selectDishId}\" class=\"custom-select select\" name=\"dishes\" disabled>\n" +
+            "            <option value=\"0\">Любое блюдо</option>\n" +
+            "        </select>" +
+            "        <button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
+            "</div>";
+        $("#addSectionDishBtnId").on("click", function (event) {
+            event.preventDefault();
+
+            addSectionDish("", "");
+        });
+
+        function addSectionDish(recipeSectionId, recipeDishId) {
+            $("#sectionDishBlockId").append(sectionDishBlock
+                .replace("${sectionSelectId}", "sectionSelectId" + sectionDishId)
+                .replace("${selectDishId}", "selectDishId" + sectionDishId));
+
+            var sectionSelect = $("#sectionSelectId" + sectionDishId);
+            var dishSelect = $("#selectDishId" + sectionDishId);
+
+            $.each(sections, function (i, section) {
+                sectionSelect.append(
+                    "<option value='" + section.id + "'>" + section.name + "</option>"
+                );
+            });
+
+            if (recipeSectionId !== '') {
+                sectionSelect.val(recipeSectionId);
+            }
+
+            fillDishes(dishSelect, sectionSelect, recipeDishId);
+
+            sectionSelect.on("change", function (event) {
+                event.preventDefault();
+
+                fillDishes(dishSelect, sectionSelect, recipeDishId);
+            });
+
+            sectionDishId++;
+        }
+
+        function fillDishes(dishSelect, sectionSelect, recipeDishId) {
+            var sectionId = parseInt(sectionSelect.val());
+
+            var sectionDishes = [];
+            if (sectionId !== 0) {
+                $.each(dishes, function (i, dish) {
+                    if (dish.section.id === sectionId) {
+                        sectionDishes.push(dish);
+                    }
+                });
+            }
 
             dishSelect.empty();
             dishSelect.append(
@@ -188,24 +223,20 @@
 
             if (sectionSelect.val() === "0") {
                 dishSelect.prop("disabled", true);
+                return;
             } else {
                 dishSelect.prop("disabled", false);
             }
 
-            if (sectionId === "0") {
-                return;
-            }
-
-            $.get(link, function(dishes, status) {
-                $.each(dishes, function(i, dish) {
-                    dishSelect.append(
-                        "<option value='" + dish.id + "'>" + dish.name + "</option>"
-                    );
-                    if (dish.id === recipeDishId) {
-                        dishSelect.val(recipeDishId);
-                    }
-                });
+            $.each(sectionDishes, function (i, dish) {
+                dishSelect.append(
+                    "<option value='" + dish.id + "'>" + dish.name + "</option>"
+                );
             });
+
+            if (recipeDishId !== '') {
+                dishSelect.val(recipeDishId);
+            }
         }
 
 
@@ -229,15 +260,15 @@
             }
         }
         var ingredientBlock = "<div class='form-inline input-group mt-1'>" +
-            "<input type='text' class='input form-control' name='ingredientName' value='${ingredientName}' placeholder='Название'>" +
-            "<input type='number' min='0' class='input form-control' name='ingredientAmount' value='${ingredientAmount}' placeholder='Количество'>" +
-            "<select class=\"form-control custom-select select\" name=\"ingredientUnits\">\n" +
-                "<option value=\"GRAM\" ${selectedGram}>гр.</option>\n" +
-                "<option value=\"MILLILITER\" ${selectedMilliliter}>мл.</option>\n" +
-                "<option value=\"PIECES\" ${selectedPieces}>шт.</option>\n" +
-            "</select>" +
-            "<button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
-            "</div>";
+        "    <input type='text' class='input form-control' name='ingredientName' value='${ingredientName}' placeholder='Название'>" +
+        "    <input type='number' min='0' class='input form-control' name='ingredientAmount' value='${ingredientAmount}' placeholder='Количество'>" +
+        "    <select class=\"form-control custom-select select\" name=\"ingredientUnits\">\n" +
+        "        <option value=\"GRAM\" ${selectedGram}>гр.</option>\n" +
+        "        <option value=\"MILLILITER\" ${selectedMilliliter}>мл.</option>\n" +
+        "        <option value=\"PIECES\" ${selectedPieces}>шт.</option>\n" +
+        "    </select>" +
+        "    <button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
+        "</div>";
         function addIngredient(ingredient) {
             if (ingredient !== "") {
                 var ingredientFormattedBlock = ingredientBlock
@@ -268,6 +299,7 @@
             }
         }
 
+
         $("#addMethodBtnId").on("click", function (event) {
             event.preventDefault();
 
@@ -286,16 +318,19 @@
             }
         }
         var methodBlock = "<div class='form-inline input-group mt-1'>" +
-            "<textarea class='textarea form-control' name='method' rows='3' placeholder='Способ приготвления'>${methodStep}</textarea>" +
-            "<button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
-            "</div>";
+        "    <textarea class='textarea form-control' name='method' rows='3' placeholder='Способ приготвления'>${methodStep}</textarea>" +
+        "    <button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
+        "</div>";
         function addMethod(methodStep) {
             $("#methodBlockId").append(methodBlock.replace("${methodStep}", methodStep));
         }
+
+
         $(document).on('click', '.removeDivBtn', function(e) {
             e.preventDefault();
             $(this).closest('div').remove();
-        })
+            sectionDishId--;
+        });
     </script>
 </form>
 
