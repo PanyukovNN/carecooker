@@ -99,6 +99,12 @@
         <button class="button btn btn-outline-secondary" id="addSectionDishBtnId" type="button">Добавить</button>
     </div>
 
+    <div class="form-group">
+        <label>Источник</label>
+        <input class="input w-100" name="source" placeholder="Введите ссылку на источник"
+                  th:text="${recipe} and ${recipe.source} ? ${recipe.source} : ''"/>
+    </div>
+
     <div class="form-check my-3">
         <input class="form-check-input" name="toPublication" type="checkbox" th:checked="${recipe} ? ${recipe.toPublication}" id="readyToPublication">
         <input name="toPublication" type="hidden" value="" />
@@ -329,7 +335,6 @@
         $(document).on('click', '.removeDivBtn', function(e) {
             e.preventDefault();
             $(this).closest('div').remove();
-            sectionDishId--;
         });
     </script>
 </form>

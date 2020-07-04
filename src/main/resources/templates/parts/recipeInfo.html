@@ -24,10 +24,10 @@
                 <a th:class="${iter.index != iter.size-1} ? 'recipe-title-section-name-link dot-delimiter' : 'recipe-title-section-name-link'"
                    th:href="@{/recipe/section/} + ${section.id}"
                    th:text="${#strings.toUpperCase(section.name)}"></a></span>
+            <span class="dot-delimiter"></span>
             <span class="recipe-title-section-name"
                   th:if="${recipe} and ${recipe.dishes}"
                   th:each="dish, iter : ${recipe.dishes}">
-                <span class="dot-delimiter"></span>
                 <a th:class="${iter.index != iter.size-1} ? 'recipe-title-section-name-link dot-delimiter' : 'recipe-title-section-name-link'"
                    th:href="@{/recipe/dish/} + ${dish.id}"
                    th:text="${#strings.toUpperCase(dish.name)}"></a></span>

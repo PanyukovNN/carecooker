@@ -5,10 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Recipe {
@@ -50,6 +47,8 @@ public class Recipe {
 
     private int views;
 
+    private String source;
+
     public Recipe() {
     }
 
@@ -63,7 +62,8 @@ public class Recipe {
                   List<Section> sections,
                   List<Dish> dishes,
                   User author,
-                  boolean toPublication
+                  boolean toPublication,
+                  String source
     ) {
         this.name = name;
         this.description = description;
@@ -76,6 +76,7 @@ public class Recipe {
         this.dishes = dishes;
         this.author = author;
         this.toPublication = toPublication;
+        this.source = source;
     }
 
     public long getId() {
@@ -157,6 +158,9 @@ public class Recipe {
     }
 
     public List<Section> getSections() {
+        if (sections != null) {
+            sections.sort(Comparator.comparing(Section::getId));
+        }
         return sections;
     }
 
@@ -173,6 +177,9 @@ public class Recipe {
     }
 
     public List<Dish> getDishes() {
+        if (dishes != null) {
+            dishes.sort(Comparator.comparing(Dish::getId));
+        }
         return dishes;
     }
 
@@ -206,6 +213,14 @@ public class Recipe {
 
     public void incrementViews() {
         this.views++;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     @Override

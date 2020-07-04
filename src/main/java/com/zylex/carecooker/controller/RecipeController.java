@@ -178,7 +178,11 @@ public class RecipeController {
                             HttpServletRequest request,
                             Model model) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
-        if (!recipe.getSections().isEmpty()) {
+        if (recipe.getId() == 0) {
+            return "redirect:/recipe/all";
+        }
+
+        if (recipe.getSections() != null && !recipe.getSections().isEmpty()) {
             Section section = recipe.getSections().get(0);
             if (section != null) {
                 List<Recipe> similarRecipes = recipeRepository.findTop7BySectionsContaining(section);
@@ -198,7 +202,9 @@ public class RecipeController {
         User user = (User) recipe.getAuthor();
         model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthor(user));
 
-        request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
+        if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
+            request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
+        }
 
         return "recipe";
     }
@@ -236,8 +242,9 @@ public class RecipeController {
             @RequestParam List<String> ingredientUnits,
             @RequestParam List<String> method,
             @RequestParam("sections") Set<Long> sectionIds,
-            @RequestParam("dishes") Set<Long> dishIds,
-            @RequestParam("toPublication") String toPublicationStr) throws IOException {
+            @RequestParam(name = "dishes", required = false) Set<Long> dishIds,
+            @RequestParam("toPublication") String toPublicationStr,
+            @RequestParam String source) throws IOException {
         Recipe recipe = new Recipe();
         if (id != null && id != 0) {
             recipe = recipeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -294,9 +301,11 @@ public class RecipeController {
         recipe.setSections(new ArrayList<>(sections));
 
         List<Dish> dishes = new ArrayList<>();
-        for (Long dishId : dishIds.stream().sorted(Long::compareTo).collect(Collectors.toList())) {
-            if (dishId != null && dishId != 0) {
-                dishes.add(dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new));
+        if (dishIds != null) {
+            for (Long dishId : dishIds.stream().sorted(Long::compareTo).collect(Collectors.toList())) {
+                if (dishId != null && dishId != 0) {
+                    dishes.add(dishRepository.findById(dishId).orElseThrow(IllegalArgumentException::new));
+                }
             }
         }
         recipe.setDishes(new ArrayList<>(dishes));
@@ -308,6 +317,10 @@ public class RecipeController {
 
         boolean toPublication = !toPublicationStr.isEmpty();
         recipe.setToPublication(toPublication);
+
+        recipe.setSource(StringHelper.isNotEmpty(source)
+                ? source
+                : "");
 
         if (toPublication) {
             recipe.setPublicationDateTime(LocalDateTime.now());
@@ -334,13 +347,13 @@ public class RecipeController {
         HttpSession session = request.getSession();
         if (session != null) {
             String redirectUrl = (String) session.getAttribute("url_prior_login");
-            if (redirectUrl != null) {
+            if (StringHelper.isNotEmpty(redirectUrl)) {
                 session.removeAttribute("url_prior_login");
                 return "redirect:" + redirectUrl;
             }
         }
 
-        return "redirect:/";
+        return "redirect:/recipe/all";
     }
 
     @GetMapping("/publish")
@@ -362,6 +375,9 @@ public class RecipeController {
             recipe.setToPublication(false);
             recipeRepository.save(recipe);
         }
+
+//        request.getAttribute()
+//        request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
 
         return "redirect:/recipe/" + id;
     }
