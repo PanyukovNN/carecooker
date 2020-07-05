@@ -3,7 +3,7 @@
 <div class="main-list-block" th:fragment="sectionMainList">
     <div th:replace="parts/greeting.html :: greeting"></div>
 
-    <div style="display: flex;" class="d-flex row row-cols-2">
+    <div style="display: flex;" class="row row-cols-1 row-cols-md-2">
         <div class="col" th:each="section : ${sections}">
             <a th:href="@{/recipe/section/} + ${section.id}">
                 <div class="section-header-parent">

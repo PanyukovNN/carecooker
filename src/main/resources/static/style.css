@@ -153,14 +153,26 @@ body {
     justify-content: space-between;
 }
 
-.container-fluid {
-    max-width: 65%;
+.main-container {
     margin-top: 60px;
-    padding: 2rem 2rem 2rem 2rem !important;
+    margin-left: auto;
+    margin-right: auto;
 
     background-color: #fff;
 
     border-radius: 5px;
+}
+@media screen and (min-width: 1000px) {
+    .main-container {
+        width: 1000px;
+        padding: 2rem !important;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .main-container {
+        width: 100%;
+        padding: 1rem !important;
+    }
 }
 
 .main-list-block {
@@ -179,9 +191,19 @@ body {
 .greeting-block__title {
     padding: 5rem 0 0;
 }
+@media screen and (min-width: 43rem) {
+    .greeting-block__description {
+        width: 41rem;
+    }
+}
+@media screen and (max-width: 43rem) {
+    .greeting-block__description {
+        width: 90%;
+    }
+}
 .greeting-block__description {
     margin: 15px auto 58px;
-    padding: 0 8rem;
+
 
     font: 15px/36px PT Serif,Georgia,serif;
 
@@ -457,8 +479,17 @@ body {
 .recipe-content {
     display: flex;
 }
+@media screen and (min-width: 700px) {
+    .recipe-info-block {
+        width: 70%;
+    }
+}
+@media screen and (max-width: 700px) {
+    .recipe-info-block {
+        width: 100%;
+    }
+}
 .recipe-info-block {
-    width: 70%;
     line-height: 33px;
 }
 .recipe-method-block {
@@ -478,8 +509,7 @@ body {
     text-align: center;
 }
 .recipe-title-section-name-link-block {
-    display: flex;
-    justify-content: center;
+    text-align: center;
     margin-bottom: 20px;
 }
 .recipe-title-section-name-link {
@@ -496,7 +526,7 @@ body {
     font-weight: 700;
 
     color: #fd9334;
-    margin: 2px 5px 0 5px;
+    margin: 9px 0 0 5px;
     vertical-align: top;
 }
 .recipe-title-header {
@@ -652,8 +682,15 @@ body {
     display: flex;
     justify-content: space-between;
 }
-.recipe-similar-recipes-wrap {
-    width: 66.6%;
+@media screen and (min-width: 700px) {
+    .recipe-similar-recipes-wrap {
+        width: 66.6%;
+    }
+}
+@media screen and (max-width: 700px) {
+    .recipe-similar-recipes-wrap {
+        width: 100%;
+    }
 }
 .recipe-admin-button-block {
     position: absolute;
@@ -751,9 +788,18 @@ body {
 }
 
 /* Footer */
+@media screen and (min-width: 1000px) {
+    .footer {
+        width: 1000px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .footer {
+        width: 100%;
+    }
+}
 .footer {
     position: relative;
-    width: 65%;
     padding-top: 2.1rem;
     margin: 0 auto 0 auto;
 
@@ -766,6 +812,10 @@ body {
     background-color: white;
 }
 .footer-text {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
     opacity: 0.6;
     font: 13px/1 PT Serif,Georgia,serif;
     text-transform: uppercase;
