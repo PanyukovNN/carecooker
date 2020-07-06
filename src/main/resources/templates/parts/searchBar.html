@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <div th:fragment="search-bar">
-    <nav class="navbar-collapse navbar navbar-expand-lg static-top navbar-light border-bottom py-1">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#searchBar" aria-controls="searchBar" aria-expanded="false" aria-label="Toggle searchbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse search-bar border-bottom"
+<!--    <nav class="navbar-collapse navbar navbar-expand-lg static-top navbar-light border-bottom py-1">-->
+<!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#searchBar" aria-controls="searchBar" aria-expanded="false" aria-label="Toggle searchbar">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
+<!--    collapse navbar-collapse-->
+        <div class="search-bar border-bottom"
             id="searchBar">
             <div class="search-bar-form-wrap">
                 <form id="search-bar-form" method="get">
@@ -26,7 +27,7 @@
                 </form>
             </div>
         </div>
-    </nav>
+<!--    </nav>-->
 
     <script th:inline="javascript">
         $(document).ready(function() {
