@@ -2,25 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <div th:fragment="search-bar">
-    <div class="search-bar border-bottom" >
-        <div class="search-bar-form-wrap">
-            <form id="search-bar-form" method="get">
-                <div class="input-group">
-                    <select class="search-bar-select custom-select" id="searchBarSectionSelect">
-                        <option value="0">Любой раздел</option>
-                        <!-- Fills by js -->
-                    </select>
-                    <select class="search-bar-select custom-select ml-4" id="searchBarDishSelect">
-                        <option value="0">Любое блюдо</option>
-                        <!-- Fills by js -->
-                    </select>
-                    <div class="input-group-append ml-4">
-                        <button class="btn btn-light search-bar-btn" type="submit">Подобрать рецепты</button>
+    <nav class="navbar-collapse navbar navbar-expand-lg static-top navbar-light border-bottom py-1">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#searchBar" aria-controls="searchBar" aria-expanded="false" aria-label="Toggle searchbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse search-bar border-bottom"
+            id="searchBar">
+            <div class="search-bar-form-wrap">
+                <form id="search-bar-form" method="get">
+                    <div class="input-group">
+                        <select class="search-bar-select custom-select" id="searchBarSectionSelect">
+                            <option value="0">Любой раздел</option>
+                            <!-- Fills by js -->
+                        </select>
+                        <select class="search-bar-select custom-select ml-4" id="searchBarDishSelect">
+                            <option value="0">Любое блюдо</option>
+                            <!-- Fills by js -->
+                        </select>
+                        <div class="input-group-append ml-4">
+                            <button class="btn btn-light search-bar-btn" type="submit">Подобрать рецепты</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
+    </nav>
 
     <script th:inline="javascript">
         $(document).ready(function() {
