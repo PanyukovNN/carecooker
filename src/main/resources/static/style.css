@@ -30,13 +30,25 @@
 }
 
 .navbar {
-    background-color: white;
-    height: 50px;
+    background-color: white !important;
     font: 14px/2 PT Serif,Georgia,serif !important;
 }
+@media (min-width: 1000px) {
+    .navbar {
+        height: 50px;
+    }
+    .nav-total-search-form {
+        margin-top: 0.4rem !important;
+    }
+}
+@media (max-width: 1000px) {
+    .nav-total-search-form {
+        margin-top: 0 !important;
+    }
+}
 
-.nav-total-search-form {
-    margin-top: 0.4rem !important;
+.nav-total-search-form-input {
+    width: 12rem !important;
 }
 .nav-total-search-form-input,
 .nav-total-search-form-btn {
@@ -45,11 +57,22 @@
 
     height: 2rem !important;
     font: 14px/40px PT Sans,Helvetica,sans-serif !important;
-    padding: 2px 0.75rem 0 0.75rem !important;
-    margin: 0 0 0 0.3rem !important;
+    /*padding: 2px 0.75rem 0 0.75rem !important;*/
+    margin: 0 0 0 0 !important;
 
     line-height: 1 !important;
 }
+@media (max-width: 1000px) {
+    .nav-total-search-form-screen {
+        display: none !important;
+    }
+}
+@media (min-width: 1000px) {
+    .nav-total-search-form-mobile {
+        display: none !important;
+    }
+}
+
 
 .input {
     border: 1px solid #d9d9d9 !important;
@@ -92,9 +115,18 @@
     padding: 0.1rem 0.75rem 0 0.75rem !important;
 }
 
+@media (max-width: 700px) {
+    .search-bar {
+        display: none;
+    }
+}
+@media (min-width: 700px) {
+    .search-bar {
+        display: flex;
+    }
+}
 
 .search-bar {
-    display: flex;
     margin-left: auto;
     margin-right: auto;
 
@@ -120,7 +152,7 @@
     background-color: #f8f9fa !important;
 }
 .search-bar-form-wrap {
-    width: 65%;
+    width: 800px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -155,8 +187,13 @@ body {
     justify-content: space-between;
 }
 
+@media (min-width: 700px) {
+    .main-container {
+        margin-top: 60px;
+    }
+}
+
 .main-container {
-    margin-top: 60px;
     margin-left: auto;
     margin-right: auto;
 
@@ -173,12 +210,11 @@ body {
 @media screen and (max-width: 1000px) {
     .main-container {
         width: 100%;
-        padding: 1rem !important;
+        padding: 0.5rem !important;
     }
 }
 
 .main-list-block {
-    /*width: 66.6%;*/
     width: 100%;
 }
 .main-section-list {
@@ -201,6 +237,9 @@ body {
     .greeting-header {
         margin-bottom: 3rem;
     }
+    .greeting-block:after {
+        margin: 0 auto 3rem;
+    }
 }
 @media screen and (max-width: 43rem) {
     .greeting-block__description {
@@ -212,6 +251,9 @@ body {
     }
     .greeting-header {
         margin-bottom: 1.5rem;
+    }
+    .greeting-block:after {
+        margin: 0 auto 1.5rem;
     }
 }
 .greeting-block__description {
@@ -226,11 +268,11 @@ body {
     display: block;
     width: 80px;
     height: 5px;
+
     overflow: hidden;
     border-bottom: 3px double #000;
     border-top: 1px solid #000;
     font: 0/0 a;
-    margin: 0 auto 3rem;
 }
 .greeting-header {
     font-family: Roboto, sans-serif;
@@ -324,8 +366,19 @@ body {
 .total-elements-lable {
     font: 700 13px/14px PT Serif,Georgia,serif;
 }
-@media (min-width: 36rem) {  .no-recipes-block {height: 18em;}  }
-@media (max-width: 36rem) {  .no-recipes-block {height: 14em;}  }
+@media (min-width: 36rem) {
+    .no-recipes-block {
+        height: 18em;
+    }
+}
+@media (max-width: 36rem) {
+    .no-recipes-block {
+        height: 14em;
+    }
+    .total-elements-lable {
+        margin-left: 0.5rem;
+    }
+}
 
 .no-recipes-block {
     width: 100%;
@@ -490,10 +543,16 @@ body {
     .recipe-info-block {
         width: 70%;
     }
+    .recipe-title {
+        padding: 3rem 1rem;
+    }
 }
 @media screen and (max-width: 700px) {
     .recipe-info-block {
         width: 100%;
+    }
+    .recipe-title {
+        padding: 0.5rem 0;
     }
 }
 .recipe-info-block {
@@ -503,9 +562,7 @@ body {
     width: 100%;
     line-height: 33px;
 }
-.recipe-title {
-    padding: 3rem 1rem;
-}
+
 .recipe-title-section-name {
     padding-bottom: 0.7rem;
     font: 10px/1 Roboto,sans-serif;
@@ -536,8 +593,17 @@ body {
     margin: 9px 3px 0 0;
     vertical-align: top;
 }
+@media (min-width: 30rem) {
+    .recipe-title-header {
+        font: 50px/50px Roboto,sans-serif;
+    }
+}
+@media (max-width: 30rem) {
+    .recipe-title-header {
+        font: 40px/40px Roboto,sans-serif;
+    }
+}
 .recipe-title-header {
-    font: 50px/50px Roboto,sans-serif;
     font-weight: 900;
 
     line-height: 1.2;
