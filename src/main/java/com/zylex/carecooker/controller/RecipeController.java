@@ -56,8 +56,8 @@ public class RecipeController {
         this.dishRepository = dishRepository;
     }
 
-    @Value("${upload.path}")
-    private String uploadPath;
+//    @Value("${upload.path}")
+    private String uploadPath = "/";
 
     @GetMapping(value = "/all", produces = "text/html")
     public String getAllRecipes(Model model) {

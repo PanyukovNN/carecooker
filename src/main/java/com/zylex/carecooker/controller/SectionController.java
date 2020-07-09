@@ -30,8 +30,8 @@ public class SectionController {
 
     private final RecipeRepository recipeRepository;
 
-    @Value("${upload.path}")
-    private String uploadPath;
+//    @Value("${upload.path}")
+    private String uploadPath = "/";
 
     @Autowired
     public SectionController(SectionRepository sectionRepository,
