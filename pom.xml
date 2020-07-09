@@ -18,7 +18,30 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>11</java.version>
+        <jsoup.version>1.10.2</jsoup.version>
+        <junit-jupiter.version>5.4.2</junit-jupiter.version>
+        <selenium.version>3.141.59</selenium.version>
+        <maven-dependency-plugin.version>2.4</maven-dependency-plugin.version>
+        <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
+        <main-class-path>com.zylex.betbot.RestService</main-class-path>
+        <slf4j.version>1.7.5</slf4j.version>
+        <webdrivermanager.version>3.7.1</webdrivermanager.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+        <postgresql.version>42.2.8.jre7</postgresql.version>
+        <jstl.version>1.2</jstl.version>
+        <hibernate.version>5.4.10.Final</hibernate.version>
+        <spring.version>5.2.3.RELEASE</spring.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
+
+        <servlet-api.version>2.5</servlet-api.version>
+        <spring-data-jpa.version>2.2.7.RELEASE</spring-data-jpa.version>
     </properties>
+
+
+
 
     <dependencies>
 <!--        <dependency>-->
@@ -87,6 +110,16 @@
     </dependencies>
 
     <build>
+        <finalName>Carecooker</finalName>
+        <defaultGoal>package</defaultGoal>
+
+        <resources>
+            <resource>
+                <directory>./resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -96,7 +129,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>com.zylex.carbot.CarbotApplication</mainClass>
+                            <mainClass>com.zylex.carecooker.CarecookerApplication</mainClass>
                             <name>Carecooker</name>
                         </program>
                     </programs>
