@@ -14,7 +14,7 @@
     <groupId>com.zylex</groupId>
     <artifactId>cakecooker</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>cakecooker</name>
 
     <properties>
@@ -115,8 +115,18 @@
 
         <resources>
             <resource>
-                <directory>./resources</directory>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.xml</exclude>
+                </excludes>
             </resource>
         </resources>
 
