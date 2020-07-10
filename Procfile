@@ -1,1 +1,1 @@
-web: sh target/bin/Carecooker.bat
+web: sh target/bin/Carecooker
