@@ -133,24 +133,40 @@
 
 
         <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>appassembler-maven-plugin</artifactId>-->
+<!--                <version>1.1.1</version>-->
+<!--                <configuration>-->
+<!--                    <assembleDirectory>target</assembleDirectory>-->
+<!--                    <programs>-->
+<!--                        <program>-->
+<!--                            <mainClass>com.zylex.carecooker.CarecookerApplication</mainClass>-->
+<!--                            <name>Carecooker</name>-->
+<!--                        </program>-->
+<!--                    </programs>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>assemble</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <assembleDirectory>target</assembleDirectory>
-                    <programs>
-                        <program>
-                            <mainClass>com.zylex.carecooker.CarecookerApplication</mainClass>
-                            <name>Carecooker</name>
-                        </program>
-                    </programs>
+                    <mainClass>com.zylex.carecooker.CarecookerApplication</mainClass>
+                    <layout>ZIP</layout>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
                         <goals>
-                            <goal>assemble</goal>
+                            <goal>repackage</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -164,11 +180,6 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
