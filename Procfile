@@ -1,1 +1,1 @@
-web: sh target/bin/Carecooker --server.port=$PORT
+web: sh target/bin/Carecooker
