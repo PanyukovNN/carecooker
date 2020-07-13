@@ -62,7 +62,7 @@
     <div class="recipe-content mt-3">
         <div class="recipe-info-block">
             <div class="recipe-main-image" th:if="${recipe.mainImage}"
-                 th:style="|background-image: url('/img/${recipe.mainImage}');|">
+                 th:style="|background-image: url('${recipe.mainImage}');|">
                     <div style="padding-top: 75%;"></div>
             </div>
             <div class="recipe-main-image" th:unless="${recipe.mainImage}"></div>

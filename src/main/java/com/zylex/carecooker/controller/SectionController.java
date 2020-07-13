@@ -6,18 +6,14 @@ import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.model.dto.SectionDto;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
+import com.zylex.carecooker.service.S3Services;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,14 +26,15 @@ public class SectionController {
 
     private final RecipeRepository recipeRepository;
 
-//    @Value("${upload.path}")
-    private String uploadPath = "/";
+    private final S3Services s3Services;
 
     @Autowired
     public SectionController(SectionRepository sectionRepository,
-                             RecipeRepository recipeRepository) {
+                             RecipeRepository recipeRepository,
+                             S3Services s3Services) {
         this.sectionRepository = sectionRepository;
         this.recipeRepository = recipeRepository;
+        this.s3Services = s3Services;
     }
 
     @GetMapping(value = "/all", produces = "text/html")
@@ -74,7 +71,7 @@ public class SectionController {
     }
 
     @GetMapping("/add")
-    public String getSaveSection(Model model) {
+    public String getSaveSection() {
         return "sectionEdit";
     }
 
@@ -86,7 +83,7 @@ public class SectionController {
         Section section = new Section(name, position);
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
-            String resultFileName = uploadFile(file);
+            String resultFileName = s3Services.uploadFile(file);
             section.setImage(resultFileName);
         }
 
@@ -119,7 +116,7 @@ public class SectionController {
         section.setPosition(position);
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
-            String resultFileName = uploadFile(file);
+            String resultFileName = s3Services.uploadFile(file);
             section.setImage(resultFileName);
         }
 
@@ -142,17 +139,5 @@ public class SectionController {
         sectionRepository.delete(section);
 
         return "redirect:/section/list";
-    }
-
-    private String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            uploadDir.mkdir();
-        }
-        String uidFile = UUID.randomUUID().toString();
-        String resultFileName = uidFile + "." + file.getOriginalFilename();
-        file.transferTo(new File(uploadPath + "/" + resultFileName));
-        return resultFileName;
     }
 }

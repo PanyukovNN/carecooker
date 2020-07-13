@@ -16,7 +16,7 @@
             <label for="customFile">
                 <div class="recipe-main-image" id="recipe-main-image"
                      th:if="${recipe} and ${recipe.mainImage}"
-                     th:style="|background-image:url('/img/${recipe.mainImage}');|">
+                     th:style="|background-image:url('${recipe.mainImage}');|">
                     <div style="padding-top: 52%;"></div>
                 </div>
                 <div class="recipe-main-image" id="recipe-main-image"

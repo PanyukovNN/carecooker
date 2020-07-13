@@ -8,7 +8,7 @@
                 <div class="col">
                     <div class="recipe-card overlay">
                         <div class="recipe-card-image" th:if="${recipe.mainImage}"
-                             th:style="|background-image: url('@{/img/}${recipe.mainImage}');|">
+                             th:style="|background-image: url('${recipe.mainImage}');|">
                             <div class="section-overlay"></div>
                             <h4 class="card-title" th:text="${recipe.name}"></h4>
                             <div class="recipe-card-meta align-self-end">

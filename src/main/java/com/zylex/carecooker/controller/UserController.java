@@ -1,8 +1,6 @@
 package com.zylex.carecooker.controller;
 
-import com.zylex.carecooker.model.Role;
 import com.zylex.carecooker.model.User;
-import com.zylex.carecooker.repository.RoleRepository;
 import com.zylex.carecooker.repository.UserRepository;
 import com.zylex.carecooker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +20,11 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
     @Autowired
     public UserController(UserRepository userRepository,
-                          UserService userService,
-                          RoleRepository roleRepository) {
+                          UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;
-        this.roleRepository = roleRepository;
     }
 
     @GetMapping("/admin/registration")

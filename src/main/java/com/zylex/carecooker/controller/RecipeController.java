@@ -6,10 +6,10 @@ import com.zylex.carecooker.model.dto.RecipeCardDto;
 import com.zylex.carecooker.repository.DishRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
+import com.zylex.carecooker.service.S3Services;
 import com.zylex.carecooker.service.UserService;
 import org.hibernate.internal.util.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -45,19 +44,20 @@ public class RecipeController {
 
     private final DishRepository dishRepository;
 
+    private final S3Services s3Services;
+
     @Autowired
     public RecipeController(RecipeRepository recipeRepository,
                             SectionRepository sectionRepository,
                             UserService userService,
-                            DishRepository dishRepository) {
+                            DishRepository dishRepository,
+                            S3Services s3Services) {
         this.recipeRepository = recipeRepository;
         this.sectionRepository = sectionRepository;
         this.userService = userService;
         this.dishRepository = dishRepository;
+        this.s3Services = s3Services;
     }
-
-//    @Value("${upload.path}")
-    private String uploadPath = "/";
 
     @GetMapping(value = "/all", produces = "text/html")
     public String getAllRecipes(Model model) {
@@ -327,7 +327,8 @@ public class RecipeController {
         }
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
-            String resultFileName = uploadFile(file);
+            String resultFileName = s3Services.uploadFile(file);
+
             recipe.setMainImage(resultFileName);
         }
 
@@ -380,17 +381,5 @@ public class RecipeController {
 //        request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
 
         return "redirect:/recipe/" + id;
-    }
-
-    private String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            uploadDir.mkdir();
-        }
-        String uidFile = UUID.randomUUID().toString();
-        String resultFileName = uidFile + "." + file.getOriginalFilename();
-        file.transferTo(new File(uploadPath + "/" + resultFileName));
-        return resultFileName;
     }
 }

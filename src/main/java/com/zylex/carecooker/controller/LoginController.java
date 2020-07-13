@@ -12,6 +12,7 @@ public class LoginController {
     public String loginPage(HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
+
         return "login";
     }
 }
