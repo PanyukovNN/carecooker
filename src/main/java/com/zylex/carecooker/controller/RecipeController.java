@@ -4,6 +4,7 @@ import com.zylex.carecooker.model.*;
 import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.model.dto.RecipeCardDto;
 import com.zylex.carecooker.repository.DishRepository;
+import com.zylex.carecooker.repository.IngredientRepository;
 import com.zylex.carecooker.repository.RecipeRepository;
 import com.zylex.carecooker.repository.SectionRepository;
 import com.zylex.carecooker.service.S3Services;
@@ -45,6 +46,8 @@ public class RecipeController {
 
     private final DishRepository dishRepository;
 
+    private final IngredientRepository ingredientRepository;
+
     private final S3Services s3Services;
 
     @Autowired
@@ -52,11 +55,13 @@ public class RecipeController {
                             SectionRepository sectionRepository,
                             UserService userService,
                             DishRepository dishRepository,
+                            IngredientRepository ingredientRepository,
                             S3Services s3Services) {
         this.recipeRepository = recipeRepository;
         this.sectionRepository = sectionRepository;
         this.userService = userService;
         this.dishRepository = dishRepository;
+        this.ingredientRepository = ingredientRepository;
         this.s3Services = s3Services;
     }
 
@@ -261,7 +266,7 @@ public class RecipeController {
                 : Integer.parseInt(servingStr));
         recipe.setComplexity(complexity);
 
-        List<Ingredient> ingredients = new ArrayList<>();
+        List<IngredientAmount> ingredientAmounts = new ArrayList<>();
         for (int i = 0; i < ingredientName.size(); i++) {
             if (ingredientName.get(i) != null) {
                 ingredientName.set(i, ingredientName.get(i).trim());
@@ -273,15 +278,20 @@ public class RecipeController {
                     ? 0
                     : Integer.parseInt(ingredientAmount.get(i));
 
-            ingredients.add(
-                    new Ingredient(
-                            ingredientName.get(i),
+            Ingredient ingredientFromDb = ingredientRepository.findByName(ingredientName.get(i));
+            Ingredient ingredient = ingredientFromDb == null
+                    ? ingredientRepository.save(new Ingredient(ingredientName.get(i)))
+                    : ingredientFromDb;
+
+            ingredientAmounts.add(
+                    new IngredientAmount(
+                            ingredient,
                             amount,
                             Units.valueOf(ingredientUnits.get(i))
-                    )
-            );
+                    ))
+            ;
         }
-        recipe.setIngredients(ingredients);
+        recipe.setIngredientAmounts(ingredientAmounts);
 
         for (int i = 0; i < method.size(); i++) {
             if (method.get(i) != null) {

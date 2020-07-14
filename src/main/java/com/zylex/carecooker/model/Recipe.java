@@ -27,7 +27,7 @@ public class Recipe {
     private String complexity;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<Ingredient> ingredients;
+    private List<IngredientAmount> ingredientAmounts;
 
     @ElementCollection
     private List<String> method;
@@ -57,7 +57,7 @@ public class Recipe {
                   LocalTime cookTime,
                   int serving,
                   String complexity,
-                  List<Ingredient> ingredients,
+                  List<IngredientAmount> ingredientAmounts,
                   List<String> method,
                   List<Section> sections,
                   List<Dish> dishes,
@@ -70,7 +70,7 @@ public class Recipe {
         this.cookTime = cookTime;
         this.serving = serving;
         this.complexity = complexity;
-        this.ingredients = ingredients;
+        this.ingredientAmounts = ingredientAmounts;
         this.method = method;
         this.sections = sections;
         this.dishes = dishes;
@@ -141,12 +141,12 @@ public class Recipe {
         this.complexity = complexity;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public List<IngredientAmount> getIngredientAmounts() {
+        return ingredientAmounts;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setIngredientAmounts(List<IngredientAmount> ingredientAmounts) {
+        this.ingredientAmounts = ingredientAmounts;
     }
 
     public List<String> getMethod() {
@@ -228,15 +228,12 @@ public class Recipe {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Recipe recipe = (Recipe) o;
-        return Objects.equals(name, recipe.name) &&
-                Objects.equals(description, recipe.description) &&
-                Objects.equals(ingredients, recipe.ingredients) &&
-                Objects.equals(method, recipe.method);
+        return id == recipe.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, ingredients, method);
+        return Objects.hash(id);
     }
 
     @Override
@@ -249,7 +246,7 @@ public class Recipe {
                 ", cookTime=" + cookTime +
                 ", serving=" + serving +
                 ", complexity='" + complexity + '\'' +
-                ", ingredients=" + ingredients +
+                ", ingredientAmounts=" + ingredientAmounts +
                 ", method='" + method + '\'' +
                 ", sections=" + sections +
                 ", author=" + author +

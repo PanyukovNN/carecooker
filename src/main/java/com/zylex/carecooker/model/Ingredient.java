@@ -12,25 +12,17 @@ public class Ingredient {
 
     private String name;
 
-    private int amount;
-
-    private Units units;
-
     private Double energyValue;
 
     public Ingredient() {
     }
 
-    public Ingredient(String name, int amount, Units units) {
+    public Ingredient(String name) {
         this.name = name;
-        this.amount = amount;
-        this.units = units;
     }
 
-    public Ingredient(String name, int amount, Units units, Double energyValue) {
+    public Ingredient(String name, Double energyValue) {
         this.name = name;
-        this.amount = amount;
-        this.units = units;
         this.energyValue = energyValue;
     }
 
@@ -48,22 +40,6 @@ public class Ingredient {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public Units getUnits() {
-        return units;
-    }
-
-    public void setUnits(Units units) {
-        this.units = units;
     }
 
     public Double getEnergyValue() {
@@ -92,8 +68,6 @@ public class Ingredient {
         return "Ingredient{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", amount=" + amount +
-                ", units=" + units +
                 ", energyValue=" + energyValue +
                 '}';
     }
