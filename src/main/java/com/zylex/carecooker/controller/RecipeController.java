@@ -9,6 +9,7 @@ import com.zylex.carecooker.repository.SectionRepository;
 import com.zylex.carecooker.service.S3Services;
 import com.zylex.carecooker.service.UserService;
 import org.hibernate.internal.util.StringHelper;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -340,11 +341,14 @@ public class RecipeController {
     @GetMapping("/delete")
     public String getDeleteRecipe(@RequestParam long id,
                                   HttpServletRequest request) {
+        LoggerFactory.getLogger(RecipeController.class).info("Начинаю удалять рецепт");
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
         if (recipe.getId() != 0) {
+            LoggerFactory.getLogger(RecipeController.class).info("Рецепт взят из базы");
             recipeRepository.delete(recipe);
-            System.out.println("Рецепт удалён");
+            LoggerFactory.getLogger(RecipeController.class).info("Рецепт удален");
         }
+        LoggerFactory.getLogger(RecipeController.class).info("Рецепт в базе отсутствует");
 
         HttpSession session = request.getSession();
         if (session != null) {
