@@ -341,8 +341,9 @@ public class RecipeController {
     public String getDeleteRecipe(@RequestParam long id,
                                   HttpServletRequest request) {
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
-        if (recipe.getName() != null) {
+        if (recipe.getId() != 0) {
             recipeRepository.delete(recipe);
+            System.out.println("Рецепт удалён");
         }
 
         HttpSession session = request.getSession();
