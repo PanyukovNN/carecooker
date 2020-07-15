@@ -586,6 +586,9 @@ body {
 .recipe-method-block {
     width: 100%;
     line-height: 33px;
+
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .recipe-title-section-name {
