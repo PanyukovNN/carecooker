@@ -263,7 +263,7 @@ public class RecipeController {
             @RequestParam List<String> ingredientName,
             @RequestParam List<String> ingredientAmount,
             @RequestParam List<String> ingredientUnits,
-            @RequestParam List<String> method,
+            @RequestParam List<Object> method,
             @RequestParam("sections") Set<Long> sectionIds,
             @RequestParam(name = "dishes", required = false) Set<Long> dishIds,
             @RequestParam("toPublication") String toPublicationStr,
@@ -310,15 +310,18 @@ public class RecipeController {
         }
         recipe.setIngredientAmounts(ingredientAmounts);
 
-        for (int i = 0; i < method.size(); i++) {
-            if (method.get(i) != null) {
-                method.set(i, method.get(i).trim());
+        List<String> methodSteps = method.stream()
+                .map(String::valueOf)
+                .collect(Collectors.toList());
+        for (int i = 0; i < methodSteps.size(); i++) {
+            if (methodSteps.get(i) != null) {
+                methodSteps.set(i, methodSteps.get(i).trim());
             }
         }
-        while (method.contains("")) {
-            method.remove("");
+        while (methodSteps.contains("")) {
+            methodSteps.remove("");
         }
-        recipe.setMethod(method);
+        recipe.setMethod(methodSteps);
 
         List<Section> sections = new ArrayList<>();
         for (Long sectionId : sectionIds.stream().sorted(Long::compareTo).collect(Collectors.toList())) {
