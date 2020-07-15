@@ -140,6 +140,10 @@
             var link = window.location.pathname;
 
             $.get(link, function(recipe, status) {
+                if (recipe.description === "") {
+                    $(".recipe-description-text").css("display", "none");
+                }
+
                 if (recipe.toPublication === false) {
                     $(".edit-and-publish-admin-buttons").append(
                         "<a href='/recipe/publish?id=" + recipe.id + "'>" +
