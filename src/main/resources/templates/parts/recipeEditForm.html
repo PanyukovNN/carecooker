@@ -253,11 +253,11 @@
         });
         function fillIngredients() {
             /*<![CDATA[*/
-            var ingredients = /*[[${recipe} and ${recipe.ingredients} ? ${recipe.ingredients} : '']]*/ 'default';
+            var ingredientAmounts = /*[[${recipe} and ${recipe.ingredientAmounts} ? ${recipe.ingredientAmounts} : '']]*/ 'default';
             /*]]>*/
-            if (ingredients !== '' && ingredients.length > 0) {
-                $.each(ingredients, function (i, ingredient) {
-                    addIngredient(ingredient);
+            if (ingredientAmounts !== '' && ingredientAmounts.length > 0) {
+                $.each(ingredientAmounts, function (i, ingredientAmount) {
+                    addIngredient(ingredientAmount);
                 });
             } else {
                 for (let i = 0; i < 3; i++) {
@@ -275,18 +275,18 @@
         "    </select>" +
         "    <button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
         "</div>";
-        function addIngredient(ingredient) {
-            if (ingredient !== "") {
+        function addIngredient(ingredientAmount) {
+            if (ingredientAmount !== "") {
                 var ingredientFormattedBlock = ingredientBlock
-                    .replace("${ingredientName}", ingredient.name)
-                    .replace("${ingredientAmount}", ingredient.amount);
-                if (ingredient.units === 'GRAM') {
+                    .replace("${ingredientName}", ingredientAmount.ingredient.name)
+                    .replace("${ingredientAmount}", ingredientAmount.amount);
+                if (ingredientAmount.units === 'GRAM') {
                     ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedGram}", "selected");
                 }
-                if (ingredient.units === 'MILLILITER') {
+                if (ingredientAmount.units === 'MILLILITER') {
                     ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedMilliliter}", "selected");
                 }
-                if (ingredient.units === 'PIECES') {
+                if (ingredientAmount.units === 'PIECES') {
                     ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedPieces}", "selected");
                 }
                 ingredientFormattedBlock = ingredientFormattedBlock
