@@ -124,9 +124,15 @@
         </div>
     </div>
 
-    <div class="recipe-similar-recipes-wrap" th:if="${similarRecipes}">
+    <div class="recipe-similar-recipes-wrap"
+         th:if="${similarRecipes} and ${not #lists.isEmpty(similarRecipes)}">
         <div class="recipe-similar-recipes__heading">ПОХОЖИЕ РЕЦЕПТЫ</div>
         <div th:replace="parts/recipeSimilarList.html :: recipeSimilarList"></div>
+    </div>
+    <div class="recipe-similar-recipes-wrap"
+         th:unless="${similarRecipes} and ${not #lists.isEmpty(similarRecipes)}">
+        <div class="recipe-similar-recipes__heading">ПОХОЖИХ РЕЦЕПТОВ НЕ НАЙДЕНО</div>
+        <div class="no-recipes-block no-recipes-block-saucepan_svg"></div>
     </div>
 
     <script>

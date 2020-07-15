@@ -378,9 +378,15 @@ body {
     }
 }
 
-.no-recipes-block {
-    max-width: 100%;
+.no-recipes-block-no_food_svg {
     background: url("icons/no-food.svg") no-repeat;
+}
+.no-recipes-block-saucepan_svg {
+    background: url("icons/no-food.svg") no-repeat center;
+    opacity: 0.7;
+}
+.no-recipes-block {
+    width: 100%;
     background-size: contain;
     background-origin: content-box !important;
 }
@@ -760,7 +766,7 @@ body {
     .recipe-similar-recipes-wrap {
         width: 66.6%;
         padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
+        padding-bottom: 3.5rem;
     }
     .recipe-method__list-item-text {
         padding-bottom: 2rem;
@@ -783,7 +789,7 @@ body {
     }
     .recipe-similar-recipes-wrap {
         width: 100%;
-        padding-top: 0.7rem;
+        padding-top: 1rem;
         padding-bottom: 0;
     }
     .recipe-method__list-item-text {

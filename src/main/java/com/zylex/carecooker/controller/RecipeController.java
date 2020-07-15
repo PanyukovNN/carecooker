@@ -188,17 +188,8 @@ public class RecipeController {
             return "redirect:/recipe/all";
         }
 
-        if (recipe.getSections() != null && !recipe.getSections().isEmpty()) {
-            Section section = recipe.getSections().get(0);
-            if (section != null) {
-                List<Recipe> similarRecipes = recipeRepository.findTop7BySectionsContaining(section);
-                similarRecipes.remove(recipe);
-                if (similarRecipes.size() > 6) {
-                    similarRecipes.remove(6);
-                }
-                model.addAttribute("similarRecipes", similarRecipes);
-            }
-        }
+        model.addAttribute("similarRecipes", findSimilarRecipes(recipe));
+
         recipe.incrementViews();
         if (recipe.getId() != 0) {
             recipeRepository.save(recipe);
@@ -213,6 +204,32 @@ public class RecipeController {
         }
 
         return "recipe";
+    }
+
+    private List<Recipe> findSimilarRecipes(Recipe recipe) {
+        if (recipe.getSections() == null || recipe.getSections().isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<Section> sections = recipe.getSections();
+        List<Recipe> similarRecipes = new ArrayList<>();
+
+        for (Section section : sections) {
+            if (section != null) {
+                List<Recipe> recipesFromDb = recipeRepository.findTop7BySectionsContaining(section);
+                recipesFromDb.remove(recipe);
+                for (Recipe recipeFromDb : recipesFromDb) {
+                    if (!similarRecipes.contains(recipeFromDb)) {
+                        similarRecipes.add(recipeFromDb);
+                        if (similarRecipes.size() > 5) {
+                            return similarRecipes;
+                        }
+                    }
+                }
+            }
+        }
+
+        return similarRecipes;
     }
 
     @ResponseBody
