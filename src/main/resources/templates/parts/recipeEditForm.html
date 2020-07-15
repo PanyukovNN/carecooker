@@ -102,7 +102,7 @@
     <div class="form-group">
         <label>Источник</label>
         <input class="input w-100" name="source" placeholder="Введите ссылку на источник"
-                  th:text="${recipe} and ${recipe.source} ? ${recipe.source} : ''"/>
+                  th:value="${recipe} and ${recipe.source} ? ${recipe.source} : ''"/>
     </div>
 
     <div class="form-check my-3">
