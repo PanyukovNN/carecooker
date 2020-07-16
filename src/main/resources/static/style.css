@@ -216,6 +216,7 @@ body {
 
 .main-list-block {
     width: 100%;
+    /*display: flex;*/
 }
 .main-section-list {
     display: flex;
@@ -394,7 +395,8 @@ body {
     .no-recipes-block {
         margin-top: 1rem;
     }
-    .showmore-block {
+    .show-more,
+    .spinner-show-more {
         margin-top: 2rem;
     }
 }
@@ -406,7 +408,8 @@ body {
     .total-elements-lable {
         margin-left: 1rem;
     }
-    .showmore-block {
+    .show-more,
+    .spinner-show-more {
         margin-top: 0.5rem;
     }
 }
