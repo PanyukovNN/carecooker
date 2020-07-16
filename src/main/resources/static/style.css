@@ -183,6 +183,7 @@ body {
 }
 
 .search-bar {
+    position: absolute;
     display: flex;
 
     margin-left: auto;
@@ -190,9 +191,8 @@ body {
 
     background-color: white;
     height: 3rem;
-    padding-top: 0.5rem;
+    padding-top: 0.45rem;
 
-    position: absolute;
     z-index: 1;
     width: 100%;
 }
@@ -202,8 +202,12 @@ body {
 
     height: 2rem !important;
     font: 14px/32px PT Sans,Helvetica,sans-serif !important;
+}
+.search-bar-select {
+    padding: 0 2rem 0 0.75rem !important;
+}
+.search-bar-btn {
     padding: 0 0.75rem !important;
-    /*margin: 0 !important;*/
 }
 .search-bar-select:disabled {
     background-color: #f8f9fa !important;
@@ -294,10 +298,11 @@ body {
 @media screen and (min-width: 43rem) {
     .greeting-block__description {
         width: 41rem;
+        margin-top: 15px;
         margin-bottom: 58px;
     }
     .greeting-block__title {
-        padding: 4rem 0 0;
+        padding: 4rem 0 0 0;
     }
     .greeting-header {
         margin-bottom: 3rem;
@@ -309,10 +314,11 @@ body {
 @media screen and (max-width: 43rem) {
     .greeting-block__description {
         width: 90%;
+        margin-top: 2rem;
         margin-bottom: 40px;
     }
     .greeting-block__title {
-        padding: 2rem 0 0;
+        padding: 1.7rem 0 0;
     }
     .greeting-header {
         margin-bottom: 1.5rem;
@@ -322,7 +328,6 @@ body {
     }
 }
 .greeting-block__description {
-    margin-top: 15px;
     margin-left: auto;
     margin-right: auto;
     font: 15px/36px PT Serif,Georgia,serif;
