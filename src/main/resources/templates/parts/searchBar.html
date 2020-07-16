@@ -11,7 +11,7 @@
                         <option value="0">Любой раздел</option>
                         <!-- Fills by js -->
                     </select>
-                    <select class="search-bar-select custom-select" id="searchBarDishSelect">
+                    <select class="search-bar-select custom-select" id="searchBarDishSelect" disabled>
                         <option value="0">Любое блюдо</option>
                         <!-- Fills by js -->
                     </select>
@@ -34,7 +34,6 @@
             var dishId = /*[[${dish} ? ${dish.id} : '']]*/ 'default';
             /*]]>*/
 
-
             $.get("/section/all", function(sections, status) {
                 $.each(sections, function(i, section) {
                     searchBarSectionSelect.append(
@@ -47,6 +46,7 @@
                 if (sectionId !== '') {
                     searchBarSectionSelect.val(sectionId);
                     sectionSelectValue = "/recipe/section/" + sectionId;
+                    searchBarDishSelect.prop("disabled", false);
                 }
                 /*]]>*/
 
