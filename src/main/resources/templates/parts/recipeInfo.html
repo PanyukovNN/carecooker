@@ -137,6 +137,27 @@
 
     <script th:inline="javascript">
         $(document).ready(function () {
+            /*<![CDATA[*/
+            var authorRecipesNumber = /*[[${authorRecipesNumber} ? ${authorRecipesNumber} : '']]*/ 'default';
+            console.log(authorRecipesNumber)
+            /*]]>*/
+            if (authorRecipesNumber !== 'default') {
+                var lastTwoDigits = authorRecipesNumber % 100;
+                console.log(lastTwoDigits);
+                if (authorRecipesNumber === 0) {
+                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
+                } else if (lastTwoDigits === 1) {
+                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецепт");
+                } else if (lastTwoDigits >= 2 && lastTwoDigits <= 4) {
+                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецепта");
+                } else {
+                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
+                }
+            } else {
+                $("#span-author-recipes-number").text("---");
+            }
+
+
             var link = window.location.pathname;
 
             $.get(link, function(recipe, status) {
@@ -167,25 +188,6 @@
                     })
                 }
             });
-
-            /*<![CDATA[*/
-            var authorRecipesNumber = /*[[${authorRecipesNumber} ? ${authorRecipesNumber} : '']]*/ 'default';
-            /*]]>*/
-            if (authorRecipesNumber !== 'default') {
-                var lastTwoDigits = authorRecipesNumber % 100;
-                if (authorRecipesNumber === 0) {
-                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
-                } else if (lastTwoDigits === 1) {
-                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецепт");
-                } else if (lastTwoDigits >= 2 && lastTwoDigits <= 4) {
-                    $("#span-author-recipes-numbers").text(authorRecipesNumber + " рецепта");
-                } else {
-                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
-                }
-            } else {
-                $("#span-author-recipes-number").text("---");
-            }
-
         })
     </script>
 

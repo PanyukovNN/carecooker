@@ -467,6 +467,7 @@ body {
     .show-more,
     .spinner-show-more {
         margin-top: 2rem;
+        margin-bottom: 1rem;
     }
 }
 @media (max-width: 1000px) {
