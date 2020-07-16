@@ -72,7 +72,7 @@
                 <div class="author-name" >
                     <span th:text="${recipe.author.username}">Автор рецепта</span>
                     <br>
-                    <span th:text="${authorRecipesNumber} + @{' рецептов'}">Автор рецепта</span>
+                    <span id="span-author-recipes-number"></span>
                 </div>
             </div>
 
@@ -135,7 +135,7 @@
         <div class="no-recipes-block no-recipes-block-saucepan_svg"></div>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         $(document).ready(function () {
             var link = window.location.pathname;
 
@@ -167,6 +167,25 @@
                     })
                 }
             });
+
+            /*<![CDATA[*/
+            var authorRecipesNumber = /*[[${authorRecipesNumber} ? ${authorRecipesNumber} : '']]*/ 'default';
+            /*]]>*/
+            if (authorRecipesNumber !== 'default') {
+                var lastTwoDigits = authorRecipesNumber % 100;
+                if (authorRecipesNumber === 0) {
+                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
+                } else if (lastTwoDigits === 1) {
+                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецепт");
+                } else if (lastTwoDigits >= 2 && lastTwoDigits <= 4) {
+                    $("#span-author-recipes-numbers").text(authorRecipesNumber + " рецепта");
+                } else {
+                    $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
+                }
+            } else {
+                $("#span-author-recipes-number").text("---");
+            }
+
         })
     </script>
 
