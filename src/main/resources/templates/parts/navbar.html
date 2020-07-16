@@ -36,10 +36,21 @@
         </nav>
     </div>
 
+<!--    <div class="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></div>-->
+<!--    <nav>-->
+<!--        <ul>-->
+<!--            <li>-->
+
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+
     <nav class="navbar navbar-expand-lg navbar-light border-bottom py-1">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#commonNavbar" aria-controls="commonNavbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <!--            <span class="navbar-toggler-icon"></span>-->
+            <i class="fa fa-bars" aria-hidden="true"></i>
         </button>
+
         <div class="collapse navbar-collapse ml-3 mr-auto" id="commonNavbar">
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -50,7 +61,7 @@
                 </li>
                 <li class="nav-item">
                     <form class="nav-total-search-form-screen nav-total-search-form form-inline" method="get" action="/recipe/search">
-                        <input class="nav-total-search-form-input mr-2 form-control" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search">
+                        <input class="nav-total-search-form-input form-control" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search">
                         <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit">Поиск</button>
                     </form>
                 </li>
@@ -58,10 +69,13 @@
         </div>
         <div>
             <form class="nav-total-search-form-mobile nav-total-search-form form-inline" method="get" action="/recipe/search">
-                <input class="nav-total-search-form-input mr-2 form-control" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search">
-                <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit">Поиск</button>
+                <input class="nav-total-search-form-input form-control" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search">
+                <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit"><i class="fa fa-search"></i></button>
             </form>
         </div>
+
+
+
 <!--        <div sec:authorize="isAnonymous()" class="mr-3">-->
 <!--            <div class="collapse navbar-collapse order-1 order-md-0 dual-collapse2">-->
 <!--                <ul class="navbar-nav">-->
@@ -74,6 +88,8 @@
 <!--                </ul>-->
 <!--            </div>-->
 <!--        </div>-->
+
+
         <div sec:authorize="isAuthenticated()" class="mr-3">
             <div class="">
                 <ul class="navbar-nav">
