@@ -80,18 +80,8 @@
 
             <div class="recipe-ingredient-list-wrap">
                 <div class="recipe-ingredients__heading">ИНГРЕДИЕНТЫ</div>
-                <ul class="recipe-ingredients__list">
-                    <li class="recipe-ingredients__list-item" th:each="ingredientAmount : ${recipe.ingredientAmounts}">
-                        <div class="ingredient_item_div" style="justify-content: space-between; display: flex">
-                            <span class="ingredient_item_name" th:text="${ingredientAmount.ingredient.name}"></span>
-                            <span class="ingredient_item_amount"
-                                  th:if="${ingredientAmount.units.unitName == 'по вкусу'}"
-                                  th:text="${ingredientAmount.units.unitName}"></span>
-                            <span class="ingredient_item_amount"
-                                  th:unless="${ingredientAmount.units.unitName == 'по вкусу'}"
-                                  th:text="${ingredientAmount.amount} + ' ' + ${ingredientAmount.units.unitName}"></span>
-                        </div>
-                    </li>
+                <ul class="recipe-ingredients__list" id="recipeIngredientsListId">
+                    <!-- Fills by js -->
                 </ul>
             </div>
         </div>
@@ -144,11 +134,9 @@
         $(document).ready(function () {
             /*<![CDATA[*/
             var authorRecipesNumber = /*[[${authorRecipesNumber} ? ${authorRecipesNumber} : '']]*/ 'default';
-            console.log(authorRecipesNumber)
             /*]]>*/
             if (authorRecipesNumber !== 'default') {
                 var lastTwoDigits = authorRecipesNumber % 100;
-                console.log(lastTwoDigits);
                 if (authorRecipesNumber === 0) {
                     $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
                 } else if (lastTwoDigits === 1) {
@@ -163,12 +151,42 @@
             }
 
 
+
+
             var link = window.location.pathname;
 
             $.get(link, function(recipe, status) {
                 if (recipe.description === "") {
                     $(".recipe-description-text").css("display", "none");
                 }
+
+                $.each(recipe.ingredientAmounts, function (i, ingredientAmount) {
+                    var amount = parseFloat(ingredientAmount.amount.toFixed(2));
+                    var amountText;
+
+                    if (ingredientAmount.units === "GRAM") {
+                        amountText = amount + " гр.";
+                    } else if (ingredientAmount.units === "MILLILITER") {
+                        amountText = amount + " мл.";
+                    } else if (ingredientAmount.units === "PIECES") {
+                        amountText = amount + " шт.";
+                    } else if (ingredientAmount.units === "TABLESPOON") {
+                        amountText = amount + " ст.л.";
+                    } else if (ingredientAmount.units === "TEASPOON") {
+                        amountText = amount + " ч.л.";
+                    } else if (ingredientAmount.units === "BY_TASTE") {
+                        amountText = "по вкусу";
+                    }
+
+                    $("#recipeIngredientsListId").append(
+                        "<li class='recipe-ingredients__list-item'>" +
+                        "    <div class='ingredient_item_div' style='justify-content: space-between; display: flex'>" +
+                        "       <span class='ingredient_item_name'>" + ingredientAmount.ingredient.name + "</span>" +
+                        "       <span class='ingredient_item_amount'>" + amountText + "</span>" +
+                        "    </div>" +
+                        "</li>"
+                    );
+                })
 
                 if (recipe.toPublication === false) {
                     $(".edit-and-publish-admin-buttons").append(
