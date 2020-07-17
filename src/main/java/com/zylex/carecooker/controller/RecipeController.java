@@ -313,7 +313,9 @@ public class RecipeController {
         }
         List<IngredientAmount> oldIngredientAmounts = recipe.getIngredientAmounts();
         recipe.setIngredientAmounts(ingredientAmounts);
-        oldIngredientAmounts.forEach(ingredientAmountRepository::delete);
+        if (oldIngredientAmounts != null) {
+            oldIngredientAmounts.forEach(ingredientAmountRepository::delete);
+        }
 
         List<String> methodSteps = method.stream()
                 .map(String::valueOf)
