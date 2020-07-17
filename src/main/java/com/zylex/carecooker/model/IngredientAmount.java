@@ -13,7 +13,7 @@ public class IngredientAmount {
     @OneToOne
     private Ingredient ingredient;
 
-    private int amount;
+    private float amount;
 
     private Units units;
 
@@ -22,7 +22,7 @@ public class IngredientAmount {
     public IngredientAmount() {
     }
 
-    public IngredientAmount(Ingredient ingredient, int amount, Units units, int position) {
+    public IngredientAmount(Ingredient ingredient, float amount, Units units, int position) {
         this.ingredient = ingredient;
         this.amount = amount;
         this.units = units;
@@ -45,11 +45,11 @@ public class IngredientAmount {
         this.ingredient = ingredient;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 

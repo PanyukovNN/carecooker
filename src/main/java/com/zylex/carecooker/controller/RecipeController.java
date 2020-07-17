@@ -293,9 +293,9 @@ public class RecipeController {
             if (StringHelper.isEmpty(ingredientName.get(i))) {
                 continue;
             }
-            int amount = StringHelper.isEmpty(ingredientAmount.get(i))
+            float amount = StringHelper.isEmpty(ingredientAmount.get(i))
                     ? 0
-                    : Integer.parseInt(ingredientAmount.get(i));
+                    : Float.parseFloat(ingredientAmount.get(i));
 
             Ingredient ingredientFromDb = ingredientRepository.findByName(ingredientName.get(i));
             Ingredient ingredient = ingredientFromDb == null
