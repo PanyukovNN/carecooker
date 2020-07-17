@@ -272,6 +272,9 @@
         "        <option value=\"GRAM\" ${selectedGram}>гр.</option>\n" +
         "        <option value=\"MILLILITER\" ${selectedMilliliter}>мл.</option>\n" +
         "        <option value=\"PIECES\" ${selectedPieces}>шт.</option>\n" +
+        "        <option value=\"TABLESPOON\" ${selectedTablespoon}>ст.л.</option>\n" +
+        "        <option value=\"TEASPOON\" ${selectedTeaSpoon}>ч.л.</option>\n" +
+        "        <option value=\"BY_TASTE\" ${selectedByTaste}>по вкусу</option>\n" +
         "    </select>" +
         "    <button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
         "</div>";
@@ -289,10 +292,22 @@
                 if (ingredientAmount.units === 'PIECES') {
                     ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedPieces}", "selected");
                 }
+                if (ingredientAmount.units === 'TABLESPOON') {
+                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedTablespoon}", "selected");
+                }
+                if (ingredientAmount.units === 'TEASPOON') {
+                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedTeaspoon}", "selected");
+                }
+                if (ingredientAmount.units === 'BY_TASTE') {
+                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedByTaste}", "selected");
+                }
                 ingredientFormattedBlock = ingredientFormattedBlock
                     .replace("${selectedGram}", "")
                     .replace("${selectedMilliliter}", "")
-                    .replace("${selectedPieces}", "");
+                    .replace("${selectedPieces}", "")
+                    .replace("${selectedTablespoon}", "")
+                    .replace("${selectedTeaspoon}", "")
+                    .replace("${selectedByTaste}", "");
                 $("#ingredientsBlockId").append(ingredientFormattedBlock);
             } else {
                 var ingredientFormattedBlock = ingredientBlock
@@ -300,7 +315,10 @@
                     .replace("${ingredientAmount}", "")
                     .replace("${selectedGram}", "")
                     .replace("${selectedMilliliter}", "")
-                    .replace("${selectedPieces}", "");
+                    .replace("${selectedPieces}", "")
+                    .replace("${selectedTablespoon}", "")
+                    .replace("${selectedTeaspoon}", "")
+                    .replace("${selectedByTaste}", "");
                 $("#ingredientsBlockId").append(ingredientFormattedBlock);
             }
         }
