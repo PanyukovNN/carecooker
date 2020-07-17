@@ -79,7 +79,10 @@ public class DishController {
     public List<Dish> getJsonDishesBySection(@PathVariable(name = "id") long sectionId) {
         Section section = sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new);
 
-        return dishRepository.findBySection(section);
+        List<Dish> sectionDishes = dishRepository.findBySection(section);
+        sectionDishes.sort(Comparator.comparing(Dish::getId));
+
+        return sectionDishes;
     }
 
     @ResponseBody

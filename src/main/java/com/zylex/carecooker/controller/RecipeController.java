@@ -3,10 +3,7 @@ package com.zylex.carecooker.controller;
 import com.zylex.carecooker.model.*;
 import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.model.dto.RecipeCardDto;
-import com.zylex.carecooker.repository.DishRepository;
-import com.zylex.carecooker.repository.IngredientRepository;
-import com.zylex.carecooker.repository.RecipeRepository;
-import com.zylex.carecooker.repository.SectionRepository;
+import com.zylex.carecooker.repository.*;
 import com.zylex.carecooker.service.S3Services;
 import com.zylex.carecooker.service.UserService;
 import org.hibernate.internal.util.StringHelper;
@@ -48,6 +45,8 @@ public class RecipeController {
 
     private final IngredientRepository ingredientRepository;
 
+    private final IngredientAmountRepository ingredientAmountRepository;
+
     private final S3Services s3Services;
 
     @Autowired
@@ -56,12 +55,14 @@ public class RecipeController {
                             UserService userService,
                             DishRepository dishRepository,
                             IngredientRepository ingredientRepository,
+                            IngredientAmountRepository ingredientAmountRepository,
                             S3Services s3Services) {
         this.recipeRepository = recipeRepository;
         this.sectionRepository = sectionRepository;
         this.userService = userService;
         this.dishRepository = dishRepository;
         this.ingredientRepository = ingredientRepository;
+        this.ingredientAmountRepository = ingredientAmountRepository;
         this.s3Services = s3Services;
     }
 
@@ -284,6 +285,7 @@ public class RecipeController {
         recipe.setComplexity(complexity);
 
         List<IngredientAmount> ingredientAmounts = new ArrayList<>();
+        int ingredientPosition = 0;
         for (int i = 0; i < ingredientName.size(); i++) {
             if (ingredientName.get(i) != null) {
                 ingredientName.set(i, ingredientName.get(i).trim());
@@ -304,11 +306,14 @@ public class RecipeController {
                     new IngredientAmount(
                             ingredient,
                             amount,
-                            Units.valueOf(ingredientUnits.get(i))
+                            Units.valueOf(ingredientUnits.get(i)),
+                            ingredientPosition++
                     ))
             ;
         }
+        List<IngredientAmount> oldIngredientAmounts = recipe.getIngredientAmounts();
         recipe.setIngredientAmounts(ingredientAmounts);
+        oldIngredientAmounts.forEach(ingredientAmountRepository::delete);
 
         List<String> methodSteps = method.stream()
                 .map(String::valueOf)

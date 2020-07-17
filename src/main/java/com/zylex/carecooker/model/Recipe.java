@@ -142,6 +142,9 @@ public class Recipe {
     }
 
     public List<IngredientAmount> getIngredientAmounts() {
+        if (ingredientAmounts != null) {
+            ingredientAmounts.sort(Comparator.comparing(IngredientAmount::getPosition));
+        }
         return ingredientAmounts;
     }
 
@@ -159,7 +162,7 @@ public class Recipe {
 
     public List<Section> getSections() {
         if (sections != null) {
-            sections.sort(Comparator.comparing(Section::getId));
+            sections.sort(Comparator.comparing(Section::getPosition));
         }
         return sections;
     }

@@ -17,13 +17,16 @@ public class IngredientAmount {
 
     private Units units;
 
+    private int position;
+
     public IngredientAmount() {
     }
 
-    public IngredientAmount(Ingredient ingredient, int amount, Units units) {
+    public IngredientAmount(Ingredient ingredient, int amount, Units units, int position) {
         this.ingredient = ingredient;
         this.amount = amount;
         this.units = units;
+        this.position = position;
     }
 
     public long getId() {
@@ -56,6 +59,14 @@ public class IngredientAmount {
 
     public void setUnits(Units units) {
         this.units = units;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int order) {
+        this.position = order;
     }
 
     @Override
