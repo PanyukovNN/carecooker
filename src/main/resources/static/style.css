@@ -105,11 +105,12 @@ body {
 .nav-total-search-form-input,
 .nav-total-search-form-btn {
     height: 2rem !important;
-    font: 14px/32px PT Sans,Helvetica,sans-serif !important;
+    font: 14px PT Sans,Helvetica,sans-serif !important;
+
+    line-height: 2rem !important;
+
     padding: 0 0.75rem 0 0.75rem !important;
     margin: 0 0 0 0 !important;
-
-    line-height: 1 !important;
 }
 @media (min-width: 700px) {
     .nav-total-search-form-mobile {
