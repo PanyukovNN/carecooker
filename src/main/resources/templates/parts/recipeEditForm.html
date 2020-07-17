@@ -267,7 +267,7 @@
         }
         var ingredientBlock = "<div class='form-inline input-group mt-1'>" +
         "    <input type='text' class='input form-control' name='ingredientName' value='${ingredientName}' placeholder='Название'>" +
-        "    <input type='number' min='0' class='input form-control' name='ingredientAmount' value='${ingredientAmount}' placeholder='Количество'>" +
+        "    <input type='number' min='0' step='.01' class='input form-control' name='ingredientAmount' value='${ingredientAmount}' placeholder='Количество'>" +
         "    <select class=\"form-control custom-select select\" name=\"ingredientUnits\">\n" +
         "        <option value=\"GRAM\" ${selectedGram}>гр.</option>\n" +
         "        <option value=\"MILLILITER\" ${selectedMilliliter}>мл.</option>\n" +
