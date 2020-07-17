@@ -11,3 +11,4 @@ src\main\resources
 **.properties
 /src/main/resources/rule_insert.sql
 /uploads/
+*.psd
