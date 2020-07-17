@@ -161,7 +161,7 @@
                 }
 
                 $.each(recipe.ingredientAmounts, function (i, ingredientAmount) {
-                    var amount = parseFloat(ingredientAmount.amount.toFixed(2));
+                    var amount = parseFloat(ingredientAmount.amount.toFixed(3));
                     var amountText;
 
                     if (ingredientAmount.units === "GRAM") {
