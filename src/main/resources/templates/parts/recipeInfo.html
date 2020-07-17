@@ -84,7 +84,12 @@
                     <li class="recipe-ingredients__list-item" th:each="ingredientAmount : ${recipe.ingredientAmounts}">
                         <div class="ingredient_item_div" style="justify-content: space-between; display: flex">
                             <span class="ingredient_item_name" th:text="${ingredientAmount.ingredient.name}"></span>
-                            <span class="ingredient_item_amount" th:text="${ingredientAmount.amount} + ' ' + ${ingredientAmount.units.unitName}"></span>
+                            <span class="ingredient_item_amount"
+                                  th:if="${ingredientAmount.units.unitName == 'по вкусу'}"
+                                  th:text="${ingredientAmount.units.unitName}"></span>
+                            <span class="ingredient_item_amount"
+                                  th:unless="${ingredientAmount.units.unitName == 'по вкусу'}"
+                                  th:text="${ingredientAmount.amount} + ' ' + ${ingredientAmount.units.unitName}"></span>
                         </div>
                     </li>
                 </ul>
