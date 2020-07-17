@@ -46,6 +46,9 @@ body {
     .navbar-nav {
         margin-left: 1rem;
     }
+    .nav-item-need-margin-right {
+        margin-right: 1rem;
+    }
     .nav-total-search-form {
         margin-top: 0.3rem !important;
     }
@@ -65,6 +68,9 @@ body {
         padding-left: 0.5rem !important;
         padding-right: 0.5rem !important;
     }
+    .nav-item-need-margin-right {
+        margin-right: 0.5rem;
+    }
     .nav-total-search-form {
         /*margin-top: 0 !important;*/
         position: relative;
@@ -74,7 +80,7 @@ body {
         position: relative;
         left: 5px;
 
-        width: 8rem !important;
+        width: 7.9rem !important;
         margin-right: 0 !important;
         border-top-left-radius: 1.5rem !important;
         border-bottom-left-radius: 1.5rem !important;
