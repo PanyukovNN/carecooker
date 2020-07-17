@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 body {
-    min-width: 400px;
+    min-width: 320px;
 }
 
 .site-header {
@@ -36,12 +36,13 @@ body {
     background-color: white !important;
     font: 14px/2 PT Serif,Georgia,serif !important;
     height: 3rem; !important;
-    min-width: 400px !important;
+
+    min-width: 320px !important;
 }
 .navbar-nav {
     flex-direction: inherit !important;
 }
-@media (min-width: 1000px) {
+@media (min-width: 700px) {
     .navbar-nav {
         margin-left: 1rem;
     }
@@ -59,7 +60,11 @@ body {
         border: 1px solid #d9d9d9 !important;
     }
 }
-@media (max-width: 1000px) {
+@media (max-width: 700px) {
+    .navbar {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
     .nav-total-search-form {
         /*margin-top: 0 !important;*/
         position: relative;
@@ -69,7 +74,7 @@ body {
         position: relative;
         left: 5px;
 
-        width: 10rem !important;
+        width: 8rem !important;
         margin-right: 0 !important;
         border-top-left-radius: 1.5rem !important;
         border-bottom-left-radius: 1.5rem !important;
@@ -213,11 +218,11 @@ body {
     background-color: #f8f9fa !important;
 }
 .search-bar-form-wrap {
-    min-width: 400px;
+    min-width: 320px;
     width: 800px;
 
-    padding-left: 14px;
-    padding-right: 16px;
+    padding-left: 6px;
+    padding-right: 8px;
 
     margin-right: auto;
     margin-left: auto;
