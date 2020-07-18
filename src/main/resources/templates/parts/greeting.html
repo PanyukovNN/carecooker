@@ -7,7 +7,7 @@
     <div class="greeting-block__description" th:if="${greetingDto} and ${greetingDto.description} and ${greetingDto.description != ''}" th:text="${greetingDto} ? ${greetingDto.description}">
     </div>
     <div class="greeting-block__description" th:unless="${greetingDto} and ${greetingDto.description} and ${greetingDto.description != ''}">
-        Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название и сайт подберет соответствующий.
+        Ищите рецепты, выбирая категорию блюда и его подкатегорию.
     </div>
 </div>
 </html>

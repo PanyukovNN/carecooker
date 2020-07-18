@@ -2,7 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head th:fragment="headerfiles">
     <meta charset="UTF-8">
-    <title>Care cooker</title>
+    <title th:if="${recipe}" th:text="${recipe.name}"></title>
+    <title th:if="${greetingDto}" th:text="${greetingDto.title}"></title>
+    <title th:unless="${recipe} and ${greetingDto}">
+        Care cooker
+    </title>
     <link rel="stylesheet" href="/static/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
