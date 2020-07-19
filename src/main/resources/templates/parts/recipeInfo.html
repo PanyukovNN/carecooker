@@ -161,7 +161,18 @@
 
                 $.each(recipe.ingredientAmounts, function (i, ingredientAmount) {
                     var amount = parseFloat(ingredientAmount.amount.toFixed(3));
+                    var amountLastTwoDigits = amount % 100;
                     var amountText;
+
+                    if (amount === 0.5) {
+                        amount = "1/2";
+                    } else if (amount === 0.25) {
+                        amount = "1/4";
+                    } else if (amount === 0.75) {
+                        amount = "3/4";
+                    } else if (amount === 0.125) {
+                        amount = "1/8";
+                    }
 
                     if (ingredientAmount.units === "GRAM") {
                         amountText = amount + " гр.";
@@ -169,12 +180,32 @@
                         amountText = amount + " мл.";
                     } else if (ingredientAmount.units === "PIECES") {
                         amountText = amount + " шт.";
+                    } else if (ingredientAmount.units === "GLASS") {
+                        amountText = amount + " ст.";
                     } else if (ingredientAmount.units === "TABLESPOON") {
                         amountText = amount + " ст.л.";
                     } else if (ingredientAmount.units === "TEASPOON") {
                         amountText = amount + " ч.л.";
                     } else if (ingredientAmount.units === "BY_TASTE") {
                         amountText = "по вкусу";
+                    } else if (ingredientAmount.units === "PINCH") {
+                        amountText = "щепотка";
+                    } else if (ingredientAmount.units === "PIECE") {
+                        if (amountLastTwoDigits === 1) {
+                            amountText = amount + " кусок";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " куска";
+                        } else {
+                            amountText = amount + " кусоков";
+                        }
+                    } else if (ingredientAmount.units === "JAR") {
+                        if (amountLastTwoDigits === 1) {
+                            amountText = amount + " банка";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " банки";
+                        } else {
+                            amountText = amount + " банок";
+                        }
                     }
 
                     $("#recipeIngredientsListId").append(

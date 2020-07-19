@@ -265,62 +265,52 @@
                 }
             }
         }
+
+        var unitDict = {
+            "GRAM": "гр.",
+            "MILLILITER": "мл.",
+            "PIECES": "шт.",
+            "GLASS": "ст.",
+            "TABLESPOON": "ст.л.",
+            "TEASPOON": "ч.л.",
+            "BY_TASTE": "по вкусу",
+            "PINCH": "щепотка",
+            "PIECE": "кусок",
+            "JAR": "банка"}
+
         var ingredientBlock = "<div class='form-inline input-group mt-1'>" +
-        "    <input type='text' class='input form-control' name='ingredientName' value='${ingredientName}' placeholder='Название'>" +
-        "    <input type='number' min='0' step='.001' class='input form-control' name='ingredientAmount' value='${ingredientAmount}' placeholder='Количество'>" +
-        "    <select class=\"form-control custom-select select\" name=\"ingredientUnits\">\n" +
-        "        <option value=\"GRAM\" ${selectedGram}>гр.</option>\n" +
-        "        <option value=\"MILLILITER\" ${selectedMilliliter}>мл.</option>\n" +
-        "        <option value=\"PIECES\" ${selectedPieces}>шт.</option>\n" +
-        "        <option value=\"TABLESPOON\" ${selectedTablespoon}>ст.л.</option>\n" +
-        "        <option value=\"TEASPOON\" ${selectedTeaspoon}>ч.л.</option>\n" +
-        "        <option value=\"BY_TASTE\" ${selectedByTaste}>по вкусу</option>\n" +
-        "    </select>" +
-        "    <button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
-        "</div>";
+            "    <input type='text' class='input form-control' name='ingredientName' value='${ingredientName}' placeholder='Название'>" +
+            "    <input type='number' min='0' step='.001' class='input form-control' name='ingredientAmount' value='${ingredientAmount}' placeholder='Количество'>" +
+            "    <select class=\"form-control custom-select select\" name=\"ingredientUnits\">\n" +
+            "        ${unitOptions}" +
+            "    </select>" +
+            "    <button class='remove-btn removeDivBtn btn btn-outline-danger' type='button'>-</button>" +
+            "</div>";
         function addIngredient(ingredientAmount) {
+            var unitOptions = "";
+            for(var unit in unitDict) {
+                unitOptions += "<option value=" + unit + " ${selected" + unit + "}>" + unitDict[unit] + "</option>\n";
+            }
+            ingredientBlock = ingredientBlock.replace("${unitOptions}", unitOptions);
+            console.log(ingredientBlock);
+
+            var ingredientFormattedBlock;
             if (ingredientAmount !== "") {
-                var ingredientFormattedBlock = ingredientBlock
+                ingredientFormattedBlock = ingredientBlock
                     .replace("${ingredientName}", ingredientAmount.ingredient.name)
                     .replace("${ingredientAmount}", ingredientAmount.amount);
-                if (ingredientAmount.units === 'GRAM') {
-                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedGram}", "selected");
-                }
-                if (ingredientAmount.units === 'MILLILITER') {
-                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedMilliliter}", "selected");
-                }
-                if (ingredientAmount.units === 'PIECES') {
-                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedPieces}", "selected");
-                }
-                if (ingredientAmount.units === 'TABLESPOON') {
-                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedTablespoon}", "selected");
-                }
-                if (ingredientAmount.units === 'TEASPOON') {
-                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedTeaspoon}", "selected");
-                }
-                if (ingredientAmount.units === 'BY_TASTE') {
-                    ingredientFormattedBlock = ingredientFormattedBlock.replace("${selectedByTaste}", "selected");
-                }
-                ingredientFormattedBlock = ingredientFormattedBlock
-                    .replace("${selectedGram}", "")
-                    .replace("${selectedMilliliter}", "")
-                    .replace("${selectedPieces}", "")
-                    .replace("${selectedTablespoon}", "")
-                    .replace("${selectedTeaspoon}", "")
-                    .replace("${selectedByTaste}", "");
-                $("#ingredientsBlockId").append(ingredientFormattedBlock);
+                ingredientFormattedBlock = ingredientFormattedBlock.replace("${selected" + ingredientAmount.units + "}", "selected");
             } else {
-                var ingredientFormattedBlock = ingredientBlock
+                ingredientFormattedBlock = ingredientBlock
                     .replace("${ingredientName}", "")
-                    .replace("${ingredientAmount}", "")
-                    .replace("${selectedGram}", "")
-                    .replace("${selectedMilliliter}", "")
-                    .replace("${selectedPieces}", "")
-                    .replace("${selectedTablespoon}", "")
-                    .replace("${selectedTeaspoon}", "")
-                    .replace("${selectedByTaste}", "");
-                $("#ingredientsBlockId").append(ingredientFormattedBlock);
+                    .replace("${ingredientAmount}", "");
             }
+
+            for(var unit in unitDict) {
+                ingredientFormattedBlock = ingredientFormattedBlock.replace("${selected" + unit + "}", "");
+            }
+
+            $("#ingredientsBlockId").append(ingredientFormattedBlock);
         }
 
 

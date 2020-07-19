@@ -303,7 +303,7 @@ body {
 @media screen and (max-width: 700px) {
     .main-container {
         width: 100%;
-        padding: 0.5rem 0 0.5rem 0 !important;
+        padding: 0.5rem 0 0 0 !important;
     }
 }
 
@@ -727,7 +727,7 @@ body {
     font-weight: 700;
 
     color: #fd9334;
-    margin: 9px 3px 0 0;
+    margin: 13px 3px 0 0;
     vertical-align: top;
 }
 @media (min-width: 30rem) {
@@ -930,6 +930,7 @@ body {
 }
 .ingredient_item_amount {
     padding-left: 0.5rem;
+    white-space: nowrap;
 }
 .ingredient_item_name,
 .ingredient_item_amount{
