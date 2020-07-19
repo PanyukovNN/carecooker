@@ -8,11 +8,11 @@
             <form id="search-bar-form" method="get">
                 <div class="input-group">
                     <select class="search-bar-select custom-select" id="searchBarSectionSelect">
-                        <option value="0">Выберите раздел</option>
+                        <option value="0">Любой раздел</option>
                         <!-- Fills by js -->
                     </select>
                     <select class="search-bar-select custom-select" id="searchBarDishSelect" disabled>
-                        <option value="0">Выберите блюдо</option>
+                        <option value="0">Любое блюдо</option>
                         <!-- Fills by js -->
                     </select>
 
@@ -59,20 +59,21 @@
                 if (selectedSectionId === '0') {
                     sectionSelectValue = "/recipe/all";
                     searchBarDishSelect.prop("disabled", true);
+                    searchBarDishSelect.val("0");
                 } else {
-                    var sectionHref = "/recipe/section/" + selectedSectionId;
-                    sectionSelectValue = sectionHref;
+                    sectionSelectValue = "/recipe/section/" + selectedSectionId;
                     searchBarDishSelect.prop("disabled", false);
                     fillDishSelect();
-                    window.location.href = sectionHref;
                 }
                 $("#search-bar-form").attr("action", sectionSelectValue);
+                window.location.href = sectionSelectValue;
             });
 
             searchBarDishSelect.on("change", function (event) {
                 var selectedDishId = $("#searchBarDishSelect option:selected").val();
                 if (selectedDishId === '0') {
                     $("#search-bar-form").attr("action", sectionSelectValue);
+                    window.location.href = sectionSelectValue;
                 } else {
                     var dishHref = "/recipe/dish/" + selectedDishId;
                     $("#search-bar-form").attr("action", dishHref);
