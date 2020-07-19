@@ -13,7 +13,7 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
 
     List<Dish> findBySection(Section section);
 
-    @Query(value = "SELECT * FROM dish " +
+    @Query(value = "SELECT DISTINCT * FROM dish " +
             "INNER JOIN recipe_dishes rd " +
             "ON dish.id = rd.dishes_id " +
             "WHERE dish.section_id = ?1",
