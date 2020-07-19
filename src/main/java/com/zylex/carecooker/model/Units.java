@@ -5,9 +5,9 @@ public enum Units {
     MILLILITER("мл."),
     PIECES("шт."),
     TABLESPOON("ст.л."),
-    GLASS("ст."),
     TEASPOON("ч.л."),
     BY_TASTE("по вкусу"),
+    GLASS("ст."),
     PINCH("щепотка"),
     PIECE("кусок"),
     JAR("банка");
