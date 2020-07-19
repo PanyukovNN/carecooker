@@ -191,7 +191,9 @@
                     } else if (ingredientAmount.units === "PINCH") {
                         amountText = "щепотка";
                     } else if (ingredientAmount.units === "PIECE") {
-                        if (amountLastTwoDigits === 1) {
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " куска";
+                        } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " кусок";
                         } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
                             amountText = amount + " куска";
@@ -199,7 +201,9 @@
                             amountText = amount + " кусоков";
                         }
                     } else if (ingredientAmount.units === "JAR") {
-                        if (amountLastTwoDigits === 1) {
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " банки";
+                        } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " банка";
                         } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
                             amountText = amount + " банки";
