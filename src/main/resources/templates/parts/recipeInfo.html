@@ -175,17 +175,49 @@
                     }
 
                     if (ingredientAmount.units === "GRAM") {
-                        amountText = amount + " гр.";
+                        amountText = amount + " г";
                     } else if (ingredientAmount.units === "MILLILITER") {
-                        amountText = amount + " мл.";
+                        amountText = amount + " мл";
                     } else if (ingredientAmount.units === "PIECES") {
-                        amountText = amount + " шт.";
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " штуки";
+                        } else if (amountLastTwoDigits === 1) {
+                            amountText = amount + " штука";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " штуки";
+                        } else {
+                            amountText = amount + " штук";
+                        }
                     } else if (ingredientAmount.units === "GLASS") {
-                        amountText = amount + " ст.";
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " стакана";
+                        } else if (amountLastTwoDigits === 1) {
+                            amountText = amount + " стакан";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " стакана";
+                        } else {
+                            amountText = amount + " стаканов";
+                        }
                     } else if (ingredientAmount.units === "TABLESPOON") {
-                        amountText = amount + " ст.л.";
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " столовой ложка";
+                        } else if (amountLastTwoDigits === 1) {
+                            amountText = amount + " столовая ложка";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " столовых ложки";
+                        } else {
+                            amountText = amount + " столовых ложек";
+                        }
                     } else if (ingredientAmount.units === "TEASPOON") {
-                        amountText = amount + " ч.л.";
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " чайной ложки";
+                        } else if (amountLastTwoDigits === 1) {
+                            amountText = amount + " чайная ложка";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " чаных ложки";
+                        } else {
+                            amountText = amount + " чайных ложек";
+                        }
                     } else if (ingredientAmount.units === "BY_TASTE") {
                         amountText = "по вкусу";
                     } else if (ingredientAmount.units === "PINCH") {
@@ -209,6 +241,26 @@
                             amountText = amount + " банки";
                         } else {
                             amountText = amount + " банок";
+                        }
+                    } else if (ingredientAmount.units === "KG") {
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " килограмма";
+                        } else if (amountLastTwoDigits === 1) {
+                            amountText = amount + " килограмм";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " килограмма";
+                        } else {
+                            amountText = amount + " киллограммов";
+                        }
+                    } else if (ingredientAmount.units === "LITER") {
+                        if (amountLastTwoDigits < 1) {
+                            amountText = amount + " литра";
+                        } else if (amountLastTwoDigits === 1) {
+                            amountText = amount + " литр";
+                        } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
+                            amountText = amount + " литра";
+                        } else {
+                            amountText = amount + " литров";
                         }
                     }
 

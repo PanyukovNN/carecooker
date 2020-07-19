@@ -1,16 +1,18 @@
 package com.zylex.carecooker.model;
 
 public enum Units {
-    GRAM("гр."),
-    MILLILITER("мл."),
-    PIECES("шт."),
-    TABLESPOON("ст.л."),
-    TEASPOON("ч.л."),
+    GRAM("г"),
+    MILLILITER("мл"),
+    PIECES("штука"),
+    TABLESPOON("столовая ложка"),
+    TEASPOON("чайная ложка"),
     BY_TASTE("по вкусу"),
-    GLASS("ст."),
+    GLASS("стакан"),
     PINCH("щепотка"),
     PIECE("кусок"),
-    JAR("банка");
+    JAR("банка"),
+    KG("кг"),
+    LITER("л");
 
     public String unitName;
 
