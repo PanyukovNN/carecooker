@@ -200,8 +200,10 @@ public class RecipeController {
         User user = (User) recipe.getAuthor();
         model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthor(user));
 
-        if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
-            request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
+        if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
+            if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
+                request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
+            }
         }
 
         return "recipe";
