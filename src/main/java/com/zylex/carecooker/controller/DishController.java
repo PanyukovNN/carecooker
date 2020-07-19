@@ -79,10 +79,19 @@ public class DishController {
     public List<Dish> getJsonDishesBySection(@PathVariable(name = "id") long sectionId) {
         Section section = sectionRepository.findById(sectionId).orElseThrow(IllegalArgumentException::new);
 
-        List<Dish> sectionDishes = dishRepository.findBySection(section);
-        sectionDishes.sort(Comparator.comparing(Dish::getId));
+        List<Dish> dishes = dishRepository.findBySection(section);
+        dishes.sort(Comparator.comparing(Dish::getId));
 
-        return sectionDishes;
+        return dishes;
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/json/section/{id}/existed-dishes", produces = "application/json")
+    public List<Dish> getJsonExistedDishesBySection(@PathVariable(name = "id") long sectionId) {
+        List<Dish> dishes = dishRepository.findWhereRecipesExists(sectionId);
+        dishes.sort(Comparator.comparing(Dish::getId));
+
+        return dishes;
     }
 
     @ResponseBody

@@ -58,12 +58,12 @@
                 var selectedSectionId = $("#searchBarSectionSelect option:selected").val();
                 if (selectedSectionId === '0') {
                     sectionSelectValue = "/recipe/all";
-                    searchBarDishSelect.prop("disabled", true);
-                    searchBarDishSelect.val("0");
+                    // searchBarDishSelect.prop("disabled", true);
+                    // searchBarDishSelect.val("0");
                 } else {
                     sectionSelectValue = "/recipe/section/" + selectedSectionId;
-                    searchBarDishSelect.prop("disabled", false);
-                    fillDishSelect();
+                    // searchBarDishSelect.prop("disabled", false);
+                    // fillDishSelect();
                 }
                 $("#search-bar-form").attr("action", sectionSelectValue);
                 window.location.href = sectionSelectValue;
@@ -82,7 +82,7 @@
             });
 
             function fillDishSelect() {
-                var link = '/dish/json/section/' + searchBarSectionSelect.val();
+                var link = '/dish/json/section/' + searchBarSectionSelect.val() + "/existed-dishes";
 
                 searchBarDishSelect.empty();
                 searchBarDishSelect.append(
@@ -94,16 +94,22 @@
                 }
 
                 $.get(link, function(dishes, status) {
-                    $.each(dishes, function(i, dish) {
-                        searchBarDishSelect.append(
-                            "<option value='" + dish.id + "'>" + dish.name + "</option>"
-                        );
-                    });
+                    if (Array.isArray(dishes) && dishes.length) {
+                        $.each(dishes, function(i, dish) {
+                            searchBarDishSelect.append(
+                                "<option value='" + dish.id + "'>" + dish.name + "</option>"
+                            );
+                        });
 
-                    if (dishId !== "") {
-                        searchBarDishSelect.val(dishId);
+                        if (dishId !== "") {
+                            searchBarDishSelect.val(dishId);
+                        } else {
+                            searchBarDishSelect.val('0');
+                        }
                     } else {
-                        searchBarDishSelect.val('0');
+                        // searchBarDishSelect.empty();
+                        // searchBarDishSelect.append("<option value='0'>Нет ни одного блюда</option>");
+                        searchBarDishSelect.prop("disabled", true);
                     }
                 });
             }
