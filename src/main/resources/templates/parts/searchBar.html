@@ -8,16 +8,16 @@
             <form id="search-bar-form" method="get">
                 <div class="input-group">
                     <select class="search-bar-select custom-select" id="searchBarSectionSelect">
-                        <option value="0">Любой раздел</option>
+                        <option value="0">Выберите раздел</option>
                         <!-- Fills by js -->
                     </select>
                     <select class="search-bar-select custom-select" id="searchBarDishSelect" disabled>
-                        <option value="0">Любое блюдо</option>
+                        <option value="0">Выберите блюдо</option>
                         <!-- Fills by js -->
                     </select>
 
-                    <button class="btn btn-light search-bar-btn search-bar-btn-wide" type="submit">Подобрать рецепты</button>
-                    <button class="btn btn-light search-bar-btn search-bar-btn-narrow" type="submit"><i class="fa fa-search"></i></button>
+<!--                    <button class="btn btn-light search-bar-btn search-bar-btn-wide" type="submit">Подобрать рецепты</button>-->
+<!--                    <button class="btn btn-light search-bar-btn search-bar-btn-narrow" type="submit"><i class="fa fa-search"></i></button>-->
                 </div>
             </form>
         </div>
@@ -60,9 +60,11 @@
                     sectionSelectValue = "/recipe/all";
                     searchBarDishSelect.prop("disabled", true);
                 } else {
-                    sectionSelectValue = "/recipe/section/" + selectedSectionId;
+                    var sectionHref = "/recipe/section/" + selectedSectionId;
+                    sectionSelectValue = sectionHref;
                     searchBarDishSelect.prop("disabled", false);
                     fillDishSelect();
+                    window.location.href = sectionHref;
                 }
                 $("#search-bar-form").attr("action", sectionSelectValue);
             });
@@ -72,7 +74,9 @@
                 if (selectedDishId === '0') {
                     $("#search-bar-form").attr("action", sectionSelectValue);
                 } else {
-                    $("#search-bar-form").attr("action", "/recipe/dish/" + selectedDishId);
+                    var dishHref = "/recipe/dish/" + selectedDishId;
+                    $("#search-bar-form").attr("action", dishHref);
+                    window.location.href = dishHref;
                 }
             });
 

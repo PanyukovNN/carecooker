@@ -199,6 +199,10 @@ input::-moz-placeholder {
         border-top-left-radius: 1.5rem !important;
         border-bottom-left-radius: 1.5rem !important;
     }
+    #searchBarDishSelect {
+        border-top-right-radius: 1.5rem !important;
+        border-bottom-right-radius: 1.5rem !important;
+    }
 
     .search-bar-btn-narrow {
         border-top-right-radius: 1.5rem !important;
