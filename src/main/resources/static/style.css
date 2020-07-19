@@ -1086,6 +1086,10 @@ body {
 }
 
 /* Effects */
+#searchBarSectionSelect {
+    transition: .3s ease;
+}
+
 .zoom {
     transition: .3s ease;
     opacity: 1;
