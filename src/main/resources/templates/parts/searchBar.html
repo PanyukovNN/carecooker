@@ -10,8 +10,8 @@
                     <select class="search-bar-select custom-select" id="searchBarSectionSelect">
                         <!-- Fills by js -->
                     </select>
-                    <select class="search-bar-select custom-select" id="searchBarDishSelect" disabled>
-                        <option value="0">Любое блюдо</option>
+                    <select class="search-bar-select custom-select" id="searchBarDishSelect">
+<!--                        <option value="0">Любое блюдо</option>-->
                         <!-- Fills by js -->
                     </select>
 
@@ -31,27 +31,42 @@
             /*<![CDATA[*/
             var dishId = /*[[${dish} ? ${dish.id} : '']]*/ 'default';
             /*]]>*/
+            /*<![CDATA[*/
+            var sectionId = /*[[${section} ? ${section.id} : '']]*/ 'default';
+            /*]]>*/
 
             $.get("/section/all", function(sections, status) {
-                searchBarDishSelect.append(
-                    "<option value='0'>Любой раздел</option>"
-                );
-                $.each(sections, function(i, section) {
-                    searchBarSectionSelect.append(
-                        "<option value='" + section.id + "'>" + section.name + "</option>"
-                    );
-                });
+                var link = '/dish/json/section/' + sectionId + "/existed-dishes";
 
-                /*<![CDATA[*/
-                var sectionId = /*[[${section} ? ${section.id} : '']]*/ 'default';
-                if (sectionId !== '') {
-                    searchBarSectionSelect.val(sectionId);
-                    sectionSelectValue = "/recipe/section/" + sectionId;
-                    searchBarDishSelect.prop("disabled", false);
+                searchBarDishSelect.empty();
+
+                if (sectionId === '0' || sectionId === '') {
+                    setSectionValue(sections);
+
+                    return;
                 }
-                /*]]>*/
 
-                fillDishSelect();
+                $.get(link, function(dishes, status) {
+                    setSectionValue(sections);
+
+                    if (Array.isArray(dishes) && dishes.length) {
+                        $.each(dishes, function(i, dish) {
+                            searchBarDishSelect.append(
+                                "<option value='" + dish.id + "'>" + dish.name + "</option>"
+                            );
+                        });
+
+                        if (dishId !== "") {
+                            searchBarDishSelect.val(dishId);
+                        } else {
+                            searchBarDishSelect.val('0');
+                        }
+                    } else {
+                        // searchBarDishSelect.empty();
+                        // searchBarDishSelect.append("<option value='0'>Нет ни одного блюда</option>");
+                        searchBarDishSelect.prop("disabled", true);
+                    }
+                });
             });
 
             searchBarSectionSelect.on("change", function (event) {
@@ -82,37 +97,30 @@
                 }
             });
 
-            function fillDishSelect() {
-                var link = '/dish/json/section/' + searchBarSectionSelect.val() + "/existed-dishes";
+            function setSectionValue(sections) {
+                searchBarSectionSelect.append(
+                    "<option value='0'>Любой раздел</option>"
+                );
 
-                searchBarDishSelect.empty();
-
-                if (searchBarSectionSelect.val() === '0') {
-                    return;
-                }
-
-                $.get(link, function(dishes, status) {
-                    searchBarDishSelect.append(
-                        "<option value='0'>Любое блюдо</option>"
+                $.each(sections, function (i, section) {
+                    searchBarSectionSelect.append(
+                        "<option value='" + section.id + "'>" + section.name + "</option>"
                     );
-                    if (Array.isArray(dishes) && dishes.length) {
-                        $.each(dishes, function(i, dish) {
-                            searchBarDishSelect.append(
-                                "<option value='" + dish.id + "'>" + dish.name + "</option>"
-                            );
-                        });
-
-                        if (dishId !== "") {
-                            searchBarDishSelect.val(dishId);
-                        } else {
-                            searchBarDishSelect.val('0');
-                        }
-                    } else {
-                        // searchBarDishSelect.empty();
-                        // searchBarDishSelect.append("<option value='0'>Нет ни одного блюда</option>");
-                        searchBarDishSelect.prop("disabled", true);
-                    }
                 });
+
+                searchBarDishSelect.append(
+                    "<option value='0'>Любое блюдо</option>"
+                );
+
+                if (sectionId !== '') {
+                    searchBarSectionSelect.val(sectionId);
+                    sectionSelectValue = "/recipe/section/" + sectionId;
+                    searchBarDishSelect.prop("disabled", false);
+                } else {
+                    searchBarSectionSelect.val('0');
+                    sectionSelectValue = "/recipe/all/";
+                    searchBarDishSelect.prop("disabled", true);
+                }
             }
         });
     </script>
