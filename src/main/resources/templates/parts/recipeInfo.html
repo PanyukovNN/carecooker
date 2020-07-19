@@ -3,109 +3,8 @@
 
 <div class="recipe-container" th:fragment="recipeInfo">
 
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <div class="recipe-admin-button-block">
-            <div class="edit-and-publish-admin-buttons">
-                <a class="primary-btn btn btn-outline-primary" th:href="@{/recipe/update(id=${recipe.id})}" role="button">Редактировать</a>
-            </div>
-
-            <div class="unpublish-and-delete-admin-buttons">
-                <a class="remove-btn btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
-                   onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="recipe-title">
-        <div class="recipe-title-section-name-link-block">
-            <span class="recipe-title-section-name"
-                 th:if="${recipe} and ${recipe.sections}"
-                 th:each="section, iter : ${recipe.sections}">
-                <a th:class="${iter.index != 0} ? 'recipe-title-section-name-link dot-delimiter' : 'recipe-title-section-name-link'"
-                   th:href="@{/recipe/section/} + ${section.id}"
-                   th:text="${#strings.toUpperCase(section.name)}"></a></span>
-            <span class="recipe-title-section-name"
-                  th:if="${recipe} and ${recipe.dishes}"
-                  th:each="dish, iter : ${recipe.dishes}">
-                <a class='recipe-title-section-name-link dot-delimiter'
-                   th:href="@{/recipe/dish/} + ${dish.id}"
-                   th:text="${#strings.toUpperCase(dish.name)}"></a></span>
-
-        </div>
-        <h1 class="recipe-title-header" th:text="${recipe.name}"></h1>
-    </div>
-
-    <div class="recipe-meta mt-3">
-        <div class="recipe-meta-wrap meta-delimiter">
-            <div class="svg clock-svg"></div>
-            <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
-        </div>
-        <div class="recipe-meta-wrap meta-delimiter">
-            <div class="svg serving-svg"></div>
-            <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
-        </div>
-        <div class="recipe-meta-wrap">
-            <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>
-        </div>
-<!--        <div class="d-flex" sec:authorize="isAuthenticated()">-->
-<!--            <div class="recipe-meta-wrap">-->
-<!--                <div class="svg like-svg"></div>-->
-<!--                <div class="recipe-meta_like">0</div>-->
-<!--            </div>-->
-<!--            <div class="recipe-meta-wrap">-->
-<!--                <div class="svg dislike-svg"></div>-->
-<!--                <div class="recipe-meta_dislike">0</div>-->
-<!--            </div>-->
-<!--        </div>-->
-    </div>
-
-    <div class="recipe-content mt-3">
-        <div class="recipe-info-block">
-            <div class="recipe-main-image" th:if="${recipe.mainImage}"
-                 th:style="|background-image: url('${recipe.mainImage}');|">
-                    <div style="padding-top: 75%;"></div>
-            </div>
-            <div class="recipe-main-image" th:unless="${recipe.mainImage}"></div>
-
-            <div class="recipe__author">
-                <p class="author-header">Автор рецепта</p>
-                <div class="author-name" >
-                    <span th:text="${recipe.author.username}">Автор рецепта</span>
-                    <br>
-                    <span id="span-author-recipes-number"></span>
-                </div>
-            </div>
-
-            <div class="recipe-description-text" th:text="${recipe.description}"></div>
-
-            <div class="recipe-ingredient-list-wrap">
-                <div class="recipe-ingredients__heading">ИНГРЕДИЕНТЫ</div>
-                <ul class="recipe-ingredients__list" id="recipeIngredientsListId">
-                    <!-- Fills by js -->
-                </ul>
-            </div>
-        </div>
-    </div>
-<!--    th:utext="${ingredient}-->
-
-    <div class="recipe-method-block">
-        <div class="recipe-method-wrap border-bottom">
-            <div class="recipe-method__heading">СПОСОБ ПРИГОТОВЛЕНИЯ</div>
-            <div class="recipe-method__list">
-                <div class="recipe-method__list-item-text" th:each="step, iter : ${recipe.method}">
-                    <span style="font-weight: bold;" th:text="${iter.index + 1} + @{.}"></span>
-                    <span th:text="${step}"></span>
-                </div>
-            </div>
-        </div>
-
-        <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4">
-            <div class="recipe-admin-dish-list">
-                <!-- Fills by js -->
-            </div>
-        </div>
-
-        <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4 mb-5">
+    <div class="recipe-info-wrap">
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="recipe-admin-button-block">
                 <div class="edit-and-publish-admin-buttons">
                     <a class="primary-btn btn btn-outline-primary" th:href="@{/recipe/update(id=${recipe.id})}" role="button">Редактировать</a>
@@ -114,6 +13,109 @@
                 <div class="unpublish-and-delete-admin-buttons">
                     <a class="remove-btn btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
                        onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-title">
+            <div class="recipe-title-section-name-link-block">
+                <span class="recipe-title-section-name"
+                     th:if="${recipe} and ${recipe.sections}"
+                     th:each="section, iter : ${recipe.sections}">
+                    <a th:class="${iter.index != 0} ? 'recipe-title-section-name-link dot-delimiter' : 'recipe-title-section-name-link'"
+                       th:href="@{/recipe/section/} + ${section.id}"
+                       th:text="${#strings.toUpperCase(section.name)}"></a></span>
+                <span class="recipe-title-section-name"
+                      th:if="${recipe} and ${recipe.dishes}"
+                      th:each="dish, iter : ${recipe.dishes}">
+                    <a class='recipe-title-section-name-link dot-delimiter'
+                       th:href="@{/recipe/dish/} + ${dish.id}"
+                       th:text="${#strings.toUpperCase(dish.name)}"></a></span>
+
+            </div>
+            <h1 class="recipe-title-header" th:text="${recipe.name}"></h1>
+        </div>
+
+        <div class="recipe-meta mt-3">
+            <div class="recipe-meta-wrap meta-delimiter">
+                <div class="svg clock-svg"></div>
+                <div class="recipe-meta_prep-time" th:text="${recipe.cookTime}"></div>
+            </div>
+            <div class="recipe-meta-wrap meta-delimiter">
+                <div class="svg serving-svg"></div>
+                <div class="recipe-meta_serving" th:text="${recipe.serving}"></div>
+            </div>
+            <div class="recipe-meta-wrap">
+                <div class="recipe-meta_complexity" th:text="${recipe.complexity}"></div>
+            </div>
+    <!--        <div class="d-flex" sec:authorize="isAuthenticated()">-->
+    <!--            <div class="recipe-meta-wrap">-->
+    <!--                <div class="svg like-svg"></div>-->
+    <!--                <div class="recipe-meta_like">0</div>-->
+    <!--            </div>-->
+    <!--            <div class="recipe-meta-wrap">-->
+    <!--                <div class="svg dislike-svg"></div>-->
+    <!--                <div class="recipe-meta_dislike">0</div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+        </div>
+
+        <div class="recipe-content mt-3">
+            <div class="recipe-info-block">
+                <div class="recipe-main-image" th:if="${recipe.mainImage}"
+                     th:style="|background-image: url('${recipe.mainImage}');|">
+                        <div style="padding-top: 75%;"></div>
+                </div>
+                <div class="recipe-main-image" th:unless="${recipe.mainImage}"></div>
+
+                <div class="recipe__author">
+                    <p class="author-header">Автор рецепта</p>
+                    <div class="author-name" >
+                        <span th:text="${recipe.author.username}">Автор рецепта</span>
+                        <br>
+                        <span id="span-author-recipes-number"></span>
+                    </div>
+                </div>
+
+                <div class="recipe-description-text" th:text="${recipe.description}"></div>
+
+                <div class="recipe-ingredient-list-wrap">
+                    <div class="recipe-ingredients__heading">ИНГРЕДИЕНТЫ</div>
+                    <ul class="recipe-ingredients__list" id="recipeIngredientsListId">
+                        <!-- Fills by js -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <!--    th:utext="${ingredient}-->
+
+        <div class="recipe-method-block">
+            <div class="recipe-method-wrap border-bottom">
+                <div class="recipe-method__heading">СПОСОБ ПРИГОТОВЛЕНИЯ</div>
+                <div class="recipe-method__list">
+                    <div class="recipe-method__list-item-text" th:each="step, iter : ${recipe.method}">
+                        <span style="font-weight: bold;" th:text="${iter.index + 1} + @{.}"></span>
+                        <span th:text="${step}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4">
+                <div class="recipe-admin-dish-list">
+                    <!-- Fills by js -->
+                </div>
+            </div>
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4 mb-5">
+                <div class="recipe-admin-button-block">
+                    <div class="edit-and-publish-admin-buttons">
+                        <a class="primary-btn btn btn-outline-primary" th:href="@{/recipe/update(id=${recipe.id})}" role="button">Редактировать</a>
+                    </div>
+
+                    <div class="unpublish-and-delete-admin-buttons">
+                        <a class="remove-btn btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
+                           onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,9 +151,6 @@
             } else {
                 $("#span-author-recipes-number").text("---");
             }
-
-
-
 
             var link = window.location.pathname;
 

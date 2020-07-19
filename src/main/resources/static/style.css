@@ -285,14 +285,6 @@ body {
     justify-content: space-between;
 }
 
-@media (min-width: 700px) {
-    .main-container {
-
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-    }
-}
-
 .main-container {
     margin-top: 3rem;
 
@@ -311,7 +303,7 @@ body {
 @media screen and (max-width: 700px) {
     .main-container {
         width: 100%;
-        padding: 0.5rem 0.5rem 0 0.5rem !important;
+        padding: 0.5rem 0 0.5rem 0 !important;
     }
 }
 
@@ -555,16 +547,13 @@ body {
 
     opacity: 0.15;
 }
-/*.recipe-card-image img {*/
-/*    object-fit: cover;*/
-/*    !*object-position: center;*!*/
-/*}*/
+
 .card-title {
     position: absolute;
     z-index: 2;
     top: 50%;
     left: 50%;
-    /*height: 100%;*/
+
     width: 100%;
     padding: 2rem;
     color: #fff;
@@ -572,11 +561,6 @@ body {
 
     font: 25px/27px Roboto,sans-serif;
     font-weight: 900;
-    /*font-size: 25px;*/
-
-    /*font-size: 70px;*/
-    /*font-family: 'Marck Script', cursive;*/
-    /*color: #fff !important;*/
 
     transform: translate(-50%, -50%);
 }
@@ -597,11 +581,10 @@ body {
     z-index: 4;
 
     color: #fff;
-    /*text-align: left;*/
+
     text-decoration: none;
     text-align: end;
 
-    /*background-color: #f5f5f5;*/
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 }
@@ -682,6 +665,9 @@ body {
     .recipe-title {
         padding: 3rem 1rem;
     }
+    .recipe-info-wrap {
+        line-height: 2rem;
+    }
 }
 @media screen and (max-width: 700px) {
     .recipe-info-block {
@@ -690,13 +676,25 @@ body {
     .recipe-title {
         padding: 1.5rem 0 0.5rem 0;
     }
+    .recipe-info-wrap {
+        line-height: 1.6rem;
+    }
+    .recipe__author {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    .recipe-description-text,
+    .recipe-ingredient-list-wrap,
+    .recipe-method-block {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
-.recipe-info-block {
-    line-height: 33px;
-}
+/*.recipe-info-block {*/
+/*    line-height: 33px;*/
+/*}*/
 .recipe-method-block {
     width: 100%;
-    line-height: 33px;
 
     /*padding-left: 0.5rem;*/
     /*padding-right: 0.5rem;*/
@@ -917,6 +915,7 @@ body {
 }
 .ingredient_item_div {
     position: relative;
+    max-width: 100%;
 }
 .ingredient_item_div::before {
     display: table;
