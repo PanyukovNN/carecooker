@@ -7,7 +7,8 @@ body {
     min-width: 320px;
     max-width: 100%;
 
-    overflow: hidden;
+    overflow-x: hidden;
+    /*overflow: hidden;*/
 }
 
 input::placeholder,
@@ -133,6 +134,7 @@ input::-moz-placeholder {
     line-height: 1 !important;
     font-family: 'Marck Script', cursive;
     color: #fff !important;
+    text-decoration: none !important;
 }
 @media (min-width: 700px) {
     .navbar-brand-mobile {
