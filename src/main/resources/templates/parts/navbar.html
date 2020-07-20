@@ -2,42 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <div th:fragment="navbar">
-<!--    <div class="site-header">-->
-<!--        <a href="/">-->
-<!--            <h1>Care Cooker</h1>-->
-<!--        </a>-->
-<!--        <div class="section-overlay"></div>-->
-<!--    </div>-->
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <nav class="navbar navbar-expand-lg static-top navbar-light border-bottom py-1">
-<!--            <a class="navbar-brand ml-3" href="#">Панель администратора</a>-->
-            <div class="collapse navbar-collapse dual-collapse2">
-                <ul class="navbar-nav">
-                    <li class="nav-item ml-3">
-                        <a class="nav-link font-weight-bold" href="/recipe/to-publication">Неопубликованные</a>
-                    </li>
-                    <li class="nav-item ml-3">
-                        <a class="nav-link font-weight-bold" href="/recipe/no-section-list">Рецепты без раздела</a>
-                    </li>
-                    <li class="nav-item ml-3">
-                        <a class="nav-link font-weight-bold" href="/recipe/update">Добавить рецепт</a>
-                    </li>
-                    <li class="nav-item ml-3">
-                        <a class="nav-link font-weight-bold" href="/section/list">Ред. разделы</a>
-                    </li>
-                    <li class="nav-item ml-3">
-                        <a class="nav-link font-weight-bold" href="/dish/list">Ред. блюда</a>
-                    </li>
-                    <li class="nav-item ml-3">
-                        <a class="nav-link font-weight-bold" href="/admin/user-list">Пользователи</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+    <div class="navbar-screen">
+        <div class="site-header">
+            <a href="/">
+                <h1>Care Cooker</h1>
+            </a>
+            <div class="section-overlay"></div>
+        </div>
 
-    <nav class="navbar navbar-light border-bottom">
-        <div class="navbar-screen">
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <nav class="navbar navbar-expand-lg static-top navbar-light border-bottom py-1">
+                <!--            <a class="navbar-brand ml-3" href="#">Панель администратора</a>-->
+                <div class="collapse navbar-collapse dual-collapse2">
+                    <ul class="navbar-nav">
+                        <li class="nav-item ml-3">
+                            <a class="nav-link font-weight-bold" href="/recipe/to-publication">Неопубликованные</a>
+                        </li>
+                        <li class="nav-item ml-3">
+                            <a class="nav-link font-weight-bold" href="/recipe/no-section-list">Рецепты без раздела</a>
+                        </li>
+                        <li class="nav-item ml-3">
+                            <a class="nav-link font-weight-bold" href="/recipe/update">Добавить рецепт</a>
+                        </li>
+                        <li class="nav-item ml-3">
+                            <a class="nav-link font-weight-bold" href="/section/list">Ред. разделы</a>
+                        </li>
+                        <li class="nav-item ml-3">
+                            <a class="nav-link font-weight-bold" href="/dish/list">Ред. блюда</a>
+                        </li>
+                        <li class="nav-item ml-3">
+                            <a class="nav-link font-weight-bold" href="/admin/user-list">Пользователи</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <nav class="navbar navbar-light border-bottom">
             <a class="navbar-brand-screen" href="/">Care Cooker</a>
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-need-margin-right">
@@ -53,9 +54,40 @@
                     </form>
                 </li>
             </ul>
-        </div>
 
-        <div class="navbar-mobile">
+    <!--        <div sec:authorize="isAnonymous()" class="mr-3">-->
+    <!--            <div class="collapse navbar-collapse order-1 order-md-0 dual-collapse2">-->
+    <!--                <ul class="navbar-nav">-->
+    <!--                    <li class="nav-item">-->
+    <!--                        <a class="nav-link font-weight-bold" id="loginLink" href="/login">Войти</a>-->
+    <!--                    </li>-->
+    <!--                    <li class="nav-item">-->
+    <!--                        <a class="nav-link font-weight-bold" href="/user/registration">Регистрация</a>-->
+    <!--                    </li>-->
+    <!--                </ul>-->
+    <!--            </div>-->
+    <!--        </div>-->
+
+            <div sec:authorize="isAuthenticated()" class="mr-3">
+                <div class="">
+                    <ul class="navbar-nav">
+                        <li class="nav-item mr-3 mt-2" sec:authentication="name"></li>
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="javascript: document.logoutForm.submit()">Выйти</a>
+
+                            <form name="logoutForm" action="/logout" method="post" th:hidden="true">
+                                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                                <input hidden type="submit" value="Logout"/>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="navbar-mobile">
+        <nav class="navbar navbar-light border-bottom">
             <div class="navbar-brand-wrap">
                 <a class="navbar-brand-mobile" href="/">CC</a>
             </div>
@@ -64,48 +96,38 @@
                 <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit"><i class="fa fa-search" style="color: white"></i></button>
             </form>
 
-            <input type="checkbox" id="menu-toggle-chk">
-            <label for="menu-toggle-chk" class="show-menu-btn-wrap">
+<!--            <input type="checkbox" id="menu-toggle-chk">-->
+            <div for="menu-toggle-chk" class="show-menu-btn-wrap" id="toggleMobileMenuBtn">
                 <i class="fa fa-bars" style="color: white" aria-hidden="true"></i>
-            </label>
-            <div class="menu-toggle-list">
-                <div class="menu-toggle-list-block">
-                    <a class="menu-toggle-list-link" href="/">Разделы</a>
-                </div>
-                <div class="menu-toggle-list-block">
-                    <a class="menu-toggle-list-link" href="/recipe/all">Рецепты</a>
+            </div>
+            <div class="menu-toggle-list-wrap">
+                <div class="menu-toggle-list">
+                    <div class="menu-toggle-list-block">
+                        <a class="menu-toggle-list-link" href="/">Разделы</a>
+                    </div>
+                    <div class="menu-toggle-list-block">
+                        <a class="menu-toggle-list-link" href="/recipe/all">Рецепты</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </nav>
 
-<!--        <div sec:authorize="isAnonymous()" class="mr-3">-->
-<!--            <div class="collapse navbar-collapse order-1 order-md-0 dual-collapse2">-->
-<!--                <ul class="navbar-nav">-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link font-weight-bold" id="loginLink" href="/login">Войти</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link font-weight-bold" href="/user/registration">Регистрация</a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
+    </div>
 
-        <div sec:authorize="isAuthenticated()" class="mr-3">
-            <div class="">
-                <ul class="navbar-nav">
-                    <li class="nav-item mr-3 mt-2" sec:authentication="name"></li>
-                    <li class="nav-item">
-                        <a class="nav-link font-weight-bold" href="javascript: document.logoutForm.submit()">Выйти</a>
+    <script>
+        $("#toggleMobileMenuBtn").on("click", function (event) {
+            console.log("all ok");
 
-                        <form name="logoutForm" action="/logout" method="post" th:hidden="true">
-                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                            <input hidden type="submit" value="Logout"/>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+            console.log($(".menu-toggle-list").css("right"));
+            if($(".menu-toggle-list").css("right") !== "0px") {
+                $(".menu-toggle-list").css("right", "0");
+            } else {
+                $(".menu-toggle-list").css("right", "-100%");
+            }
+        });
+        // $(document).ready(function() {
+        //
+        // });
+    </script>
 </div>
 </html>
