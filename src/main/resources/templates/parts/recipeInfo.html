@@ -179,7 +179,7 @@
                     } else if (ingredientAmount.units === "MILLILITER") {
                         amountText = amount + " мл";
                     } else if (ingredientAmount.units === "PIECES") {
-                        if (amountLastTwoDigits < 1) {
+                        if (amountLastTwoDigits < 0) {
                             amountText = amount + " штуки";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " штука";
@@ -189,7 +189,7 @@
                             amountText = amount + " штук";
                         }
                     } else if (ingredientAmount.units === "GLASS") {
-                        if (amountLastTwoDigits < 1) {
+                        if (amountLastTwoDigits < 0) {
                             amountText = amount + " стакана";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " стакан";
@@ -199,8 +199,8 @@
                             amountText = amount + " стаканов";
                         }
                     } else if (ingredientAmount.units === "TABLESPOON") {
-                        if (amountLastTwoDigits < 1) {
-                            amountText = amount + " столовой ложка";
+                        if (amountLastTwoDigits < 0) {
+                            amountText = amount + " столовой ложки";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " столовая ложка";
                         } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
@@ -209,12 +209,12 @@
                             amountText = amount + " столовых ложек";
                         }
                     } else if (ingredientAmount.units === "TEASPOON") {
-                        if (amountLastTwoDigits < 1) {
+                        if (amountLastTwoDigits < 0) {
                             amountText = amount + " чайной ложки";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " чайная ложка";
                         } else if (amountLastTwoDigits >= 2 && amountLastTwoDigits <= 4) {
-                            amountText = amount + " чаных ложки";
+                            amountText = amount + " чайных ложки";
                         } else {
                             amountText = amount + " чайных ложек";
                         }
@@ -223,7 +223,7 @@
                     } else if (ingredientAmount.units === "PINCH") {
                         amountText = "щепотка";
                     } else if (ingredientAmount.units === "PIECE") {
-                        if (amountLastTwoDigits < 1) {
+                        if (amountLastTwoDigits < 0) {
                             amountText = amount + " куска";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " кусок";
@@ -233,7 +233,7 @@
                             amountText = amount + " кусоков";
                         }
                     } else if (ingredientAmount.units === "JAR") {
-                        if (amountLastTwoDigits < 1) {
+                        if (amountLastTwoDigits < 0) {
                             amountText = amount + " банки";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " банка";
@@ -243,7 +243,7 @@
                             amountText = amount + " банок";
                         }
                     } else if (ingredientAmount.units === "KG") {
-                        if (amountLastTwoDigits < 1) {
+                        if (amountLastTwoDigits < 0) {
                             amountText = amount + " килограмма";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " килограмм";
@@ -253,7 +253,7 @@
                             amountText = amount + " киллограммов";
                         }
                     } else if (ingredientAmount.units === "LITER") {
-                        if (amountLastTwoDigits < 1) {
+                        if (amountLastTwoDigits < 0) {
                             amountText = amount + " литра";
                         } else if (amountLastTwoDigits === 1) {
                             amountText = amount + " литр";

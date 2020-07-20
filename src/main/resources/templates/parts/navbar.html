@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <div th:fragment="navbar">
-    <div class="site-header">
-        <a href="/">
-            <h1>Care Cooker</h1>
-        </a>
-        <div class="section-overlay"></div>
-    </div>
+<!--    <div class="site-header">-->
+<!--        <a href="/">-->
+<!--            <h1>Care Cooker</h1>-->
+<!--        </a>-->
+<!--        <div class="section-overlay"></div>-->
+<!--    </div>-->
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <nav class="navbar navbar-expand-lg static-top navbar-light border-bottom py-1">
 <!--            <a class="navbar-brand ml-3" href="#">Панель администратора</a>-->
@@ -36,22 +36,9 @@
         </nav>
     </div>
 
-<!--    <div class="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></div>-->
-<!--    <nav>-->
-<!--        <ul>-->
-<!--            <li>-->
-
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </nav>-->
-
-    <nav class="navbar navbar-light border-bottom py-1">
-<!--        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#commonNavbar" aria-controls="commonNavbar" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--            &lt;!&ndash;            <span class="navbar-toggler-icon"></span>&ndash;&gt;-->
-<!--            <i class="fa fa-bars" aria-hidden="true"></i>-->
-<!--        </button>-->
-
-<!--        <div class="d-flex" id="commonNavbar">-->
+    <nav class="navbar navbar-light border-bottom">
+        <div class="navbar-screen">
+            <a class="navbar-brand navbar-brand-screen" href="/">Care Cooker</a>
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-need-margin-right">
                     <a class="nav-link font-weight-bold" href="/">Разделы</a>
@@ -66,11 +53,27 @@
                     </form>
                 </li>
             </ul>
+        </div>
 
+        <div class="navbar-mobile">
+            <a class="navbar-brand navbar-brand-mobile" href="/">CC</a>
             <form class="nav-total-search-form-mobile nav-total-search-form form-inline" method="get" action="/recipe/search">
                 <input class="nav-total-search-form-input form-control" name="filter" type="search" placeholder="Поиск" aria-label="Search">
-                <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit"><i class="fa fa-search"></i></button>
+                <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit"><i class="fa fa-search" style="color: white"></i></button>
             </form>
+            <input type="checkbox" id="menu-toggle-chk">
+            <label for="menu-toggle-chk" class="show-menu-btn">
+                <i class="fa fa-bars" style="color: white" aria-hidden="true"></i>
+            </label>
+            <div class="menu-toggle-list">
+                <div class="menu-toggle-list-block">
+                    <a class="menu-toggle-list-link" href="/">Разделы</a>
+                </div>
+                <div class="menu-toggle-list-block">
+                    <a class="menu-toggle-list-link" href="/recipe/all">Рецепты</a>
+                </div>
+            </div>
+        </div>
 
 <!--        <div sec:authorize="isAnonymous()" class="mr-3">-->
 <!--            <div class="collapse navbar-collapse order-1 order-md-0 dual-collapse2">-->
