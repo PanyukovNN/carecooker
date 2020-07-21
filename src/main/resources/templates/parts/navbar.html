@@ -109,6 +109,9 @@
                     <div class="menu-toggle-list-block">
                         <a class="menu-toggle-list-link" href="/recipe/all">Рецепты</a>
                     </div>
+                    <div class="menu-toggle-list-block">
+                        <a class="menu-toggle-list-link" href="/article/all">Статьи</a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -117,14 +120,12 @@
 
     <script>
         $("#toggleMobileMenuBtn").on("click", function (event) {
-            console.log("all ok");
-
             var menuToggleList = $(".menu-toggle-list");
 
-            if(menuToggleList.css("right") !== "0px") {
-                menuToggleList.css("right", "0");
+            if(menuToggleList.css("top") !== "0px") {
+                menuToggleList.css("top", "0");
             } else {
-                menuToggleList.css("right", "-100%");
+                menuToggleList.css("top", "-100%");
             }
         });
     </script>

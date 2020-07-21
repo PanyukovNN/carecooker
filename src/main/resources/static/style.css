@@ -28,8 +28,6 @@ input::-moz-placeholder {
     cursor: pointer;
     display: none;
 
-    /*margin-bottom: 0 !important;*/
-
     width: 3rem;
     height: 3rem;
 }
@@ -52,7 +50,7 @@ input::-moz-placeholder {
         position: relative;
 
         width: 100%;
-        height: 6.2rem;
+        height: 8.6rem;
         top: -0.1rem;
 
         overflow: hidden;
@@ -60,12 +58,15 @@ input::-moz-placeholder {
     .menu-toggle-list {
         position: absolute;
 
-        width: 100%;
+        width: 50%;
         height: 100%;
 
         background: #434343;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
 
-        right: -100%;
+        top: -100%;
+        right: 0;
 
         text-align: center;
         padding: 0;
@@ -73,20 +74,19 @@ input::-moz-placeholder {
         z-index: 10;
 
         line-height: normal;
-        transition: 0.7s;
+        transition: 0.35s;
     }
     .menu-toggle-list-block {
         position: relative;
         display: flex;
-        height: 3rem;
+        height: 2.8rem;
     }
     .menu-toggle-list-link {
         display: block;
         margin: auto;
+
+        font-size: 13px !important;
     }
-    /*#menu-toggle-chk:checked ~ .menu-toggle-list {*/
-    /*    bottom: 0 !important;*/
-    /*}*/
 }
 
 
@@ -932,7 +932,6 @@ body {
     background-size: cover;
     background-position: center;
     margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
 }
 .choose-photo {
     position: absolute;
@@ -957,7 +956,7 @@ body {
 }
 @media (max-width: 700px) {
     .recipe__author {
-        margin-top: 2.5rem;
+        margin-top: 2.2rem;
         margin-bottom: 0.5rem;
     }
 }
@@ -994,6 +993,31 @@ body {
     font: 14px/2 PT Serif,Georgia,serif;
     text-align: center;
     line-height: 1.6;
+}
+.recipe__source {
+    text-align: center;
+}
+@media (min-width: 700px) {
+    .recipe__source {
+        max-width: 66.6%;
+    }
+    .source {
+        font: 1rem/1.6 PT Serif,Georgia,serif;
+    }
+}
+@media (max-width: 700px) {
+    .source {
+        font: 14px/1.6PT Serif, Georgia, serif;
+    }
+}
+.source {
+    margin: auto;
+
+    color: #fd9334;
+}
+.source:hover {
+    color: #fd9334;
+    text-decoration: underline !important;
 }
 .recipe-meta {
     display: flex;
@@ -1063,9 +1087,11 @@ body {
         padding-top: 1.1rem;
         padding-bottom: 1rem;
     }
-    .recipe-ingredients__heading,
-    .recipe-method__heading {
+    .recipe-ingredients__heading {
         padding-bottom: 1.8rem;
+    }
+    .recipe-method__heading {
+        padding-bottom: 2.2rem;
     }
     .recipe-similar-recipes__heading {
         padding-top: 1.1rem;

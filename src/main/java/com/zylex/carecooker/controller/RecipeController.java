@@ -197,8 +197,12 @@ public class RecipeController {
         }
         model.addAttribute("recipe", recipe);
 
-        User user = (User) recipe.getAuthor();
-        model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthor(user));
+        if (StringHelper.isEmpty(recipe.getSource())) {
+            User user = (User) recipe.getAuthor();
+            model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthorAndSourceIsNull(user));
+        } else {
+            model.addAttribute("source", recipe.getSource());
+        }
 
         if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
             if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
