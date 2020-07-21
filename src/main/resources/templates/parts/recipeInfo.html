@@ -136,6 +136,8 @@
             var authorRecipesNumber = /*[[${authorRecipesNumber} ? ${authorRecipesNumber} : '']]*/ 'default';
             var source = /*[[${source} ? ${source} : '']]*/ 'default';
             /*]]>*/
+            console.log(authorRecipesNumber)
+            console.log(source)
             if (authorRecipesNumber !== '') {
                 var lastTwoDigits = authorRecipesNumber % 100;
                 if (authorRecipesNumber === 0) {
@@ -147,7 +149,7 @@
                 } else {
                     $("#span-author-recipes-number").text(authorRecipesNumber + " рецептов");
                 }
-            } if (source !== '') {
+            } else if (source !== '') {
                 $(".recipe__author").css("display", "none");
             } else {
                 $("#span-author-recipes-number").text("---");
