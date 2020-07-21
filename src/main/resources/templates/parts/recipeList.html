@@ -63,30 +63,29 @@
                     $.each(page.content, function(i, recipe) {
                         $("#recipe-card-block").append(
                             "<div>" +
-                                "<a href='/recipe/" + recipe.id + "' style='text-decoration: none;'>" +
-                                    "<div class='col'>" +
-                                        "<div class='recipe-card overlay'>" +
-                                            "<div class='recipe-card-image' style=\"background-image: url('" + recipe.mainImage + "');\">" +
-                                                "<div class='section-overlay'></div>" +
-                                                "<h4 class='card-title'>" + recipe.name + "</h4>" +
-
-                                                "<div class='recipe-card-meta align-self-end'>" +
-                                                    "<div class='recipe-meta-wrap'>" +
-                                                        "<div class='svg-white clock-white-svg meta-delimiter'></div>" +
-                                                        "<div class='recipe-meta_prep-time' >" + recipe.cookTime.slice(0, 5) + "</div>" +
-                                                    "</div>" +
-                                                    "<div class='recipe-meta-wrap'>" +
-                                                        "<div class='svg-white serving-white-svg meta-delimiter'></div>" +
-                                                        "<div class='recipe-meta_serving'>" + recipe.serving + "</div>" +
-                                                    "</div>" +
-                                                    "<div class='recipe-meta-wrap'>" +
-                                                        "<div class='recipe-meta_complexity'>" + recipe.complexity + "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</div>" +
-                                    "</div>" +
-                                "</a>" +
+                            "   <a href='/recipe/" + recipe.id + "' style='text-decoration: none;'>" +
+                            "       <div class='col'>" +
+                            "           <div class='recipe-card overlay'>" +
+                            "               <div class='recipe-card-image' style=\"background-image: url('" + recipe.mainImage + "');\">" +
+                            "                   <div class='section-overlay'></div>" +
+                            "                   <h4 class='card-title'>" + recipe.name + "</h4>" +
+                            "                   <div class='recipe-card-meta align-self-end'>" +
+                            "                       <div class='recipe-meta-wrap'>" +
+                            "                           <div class='svg-white clock-white-svg meta-delimiter'></div>" +
+                            "                           <div class='recipe-meta_prep-time' >" + recipe.cookTime.slice(0, 5) + "</div>" +
+                            "                       </div>" +
+                            "                       <div class='recipe-meta-wrap'>" +
+                            "                           <div class='svg-white serving-white-svg meta-delimiter'></div>" +
+                            "                           <div class='recipe-meta_serving'>" + recipe.serving + "</div>" +
+                            "                       </div>" +
+                            "                       <div class='recipe-meta-wrap'>" +
+                            "                           <div class='recipe-meta_complexity'>" + recipe.complexity + "</div>" +
+                            "                       </div>" +
+                            "                   </div>" +
+                            "               </div>" +
+                            "           </div>" +
+                            "       </div>" +
+                            "    </a>" +
                             "</div>"
                         );
                     });

@@ -676,6 +676,11 @@ body {
     border-radius: 2px;
     border: 1px;
 }
+@media (max-width: 1000px) {
+    .col {
+        margin-bottom: 0.5rem !important;
+    }
+}
 .col {
     padding-right: 0 !important;
     padding-left: 0 !important;
