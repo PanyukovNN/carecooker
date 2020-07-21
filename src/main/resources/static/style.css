@@ -3,6 +3,7 @@
 *:after {
     box-sizing: border-box;
 }
+
 body {
     min-width: 320px;
     max-width: 100%;
@@ -815,6 +816,11 @@ body {
 }
 
 /* Recipe */
+@media (max-width: 700px) {
+    .recipe-container {
+        font-size: 14px !important;
+    }
+}
 .recipe-container {
     /*width: 66.6%;*/
     position: relative;
