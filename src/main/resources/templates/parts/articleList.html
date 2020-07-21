@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+
+<div th:fragment="articleList" class="main-list-block">
+    <div id="totalElements" class="total-elements-lable py-3">
+        <!-- Fills by js -->
+    </div>
+    <div id="recipe-card-block" class="row row-cols-1 row-cols-md-3 mt-3">
+        <!-- Fills by js-->
+    </div>
+    <div class="no-recipes-block no-recipes-block-no_food_svg" style="display: none">
+    </div>
+
+    <div class="showmore-block d-flex justify-content-center">
+        <button class="btn btn-outline-secondary show-more" style="display: none">Показать еще</button>
+        <div class="spinner-border spinner-show-more" role="status"></div>
+    </div>
+
+    <script>
+        var pageNumber = 0;
+        var showMoreBtn = $(".show-more");
+        var spinner = $(".spinner-show-more");
+
+        $(document).ready(function() {
+            getPage()
+
+            $(document).on("click", '.show-more', function(event) {
+                event.preventDefault();
+
+                getPage();
+            });
+        });
+
+        function getPage() {
+            var link = window.location.pathname;
+            if (window.location.search !== "") {
+                link += window.location.search + "&page=" + pageNumber;
+            } else {
+                link += "?page=" + pageNumber;
+            }
+            pageNumber++;
+
+            $.get(link, function(page, status) {
+                showMoreBtn.css("display", "none");
+                spinner.css("display", "block");
+
+                var totalPages = 0;
+
+                if (!Array.isArray(page)) { // page будет являться массивом, только если элементы отсутствуют
+                    var totalElementsNumber = parseInt(page.totalElements);
+                    var lastTwoDigits = totalElementsNumber % 100;
+                    if (totalElementsNumber === 0) {
+                        $("#totalElements").text("Найдено 0 рецептов");
+                    } else if (lastTwoDigits === 1) {
+                        $("#totalElements").text("Найден " + page.totalElements + " рецепт");
+                    } else if (lastTwoDigits >= 2 && lastTwoDigits <= 4) {
+                        $("#totalElements").text("Найдено " + page.totalElements + " рецепта");
+                    } else {
+                        $("#totalElements").text("Найдено " + page.totalElements + " рецептов");
+                    }
+
+                    totalPages = page.totalPages;
+                    $.each(page.content, function(i, recipe) {
+                        $("#recipe-card-block").append(
+                            "<div>" +
+                                "<a href='/recipe/" + recipe.id + "' style='text-decoration: none;'>" +
+                                    "<div class='col'>" +
+                                        "<div class='recipe-card overlay'>" +
+                                            "<div class='recipe-card-image' style=\"background-image: url('" + recipe.mainImage + "');\">" +
+                                                "<div class='section-overlay'></div>" +
+                                                "<h4 class='card-title'>" + recipe.name + "</h4>" +
+
+                                                "<div class='recipe-card-meta align-self-end'>" +
+                                                    "<div class='recipe-meta-wrap'>" +
+                                                        "<div class='svg-white clock-white-svg meta-delimiter'></div>" +
+                                                        "<div class='recipe-meta_prep-time' >" + recipe.cookTime.slice(0, 5) + "</div>" +
+                                                    "</div>" +
+                                                    "<div class='recipe-meta-wrap'>" +
+                                                        "<div class='svg-white serving-white-svg meta-delimiter'></div>" +
+                                                        "<div class='recipe-meta_serving'>" + recipe.serving + "</div>" +
+                                                    "</div>" +
+                                                    "<div class='recipe-meta-wrap'>" +
+                                                        "<div class='recipe-meta_complexity'>" + recipe.complexity + "</div>" +
+                                                    "</div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</div>" +
+                                    "</div>" +
+                                "</a>" +
+                            "</div>"
+                        );
+                    });
+                }
+
+                showMoreBtn.css("display", "block");
+                spinner.css("display", "none");
+
+                if (pageNumber === totalPages) {
+                    $(".show-more").css("display", "none");
+                }
+
+                if (totalPages === 0) {
+                    $(".no-recipes-block").css("display", "block");
+                    $(".show-more").css("display", "none");
+                }
+            });
+        }
+    </script>
+</div>
+
+</html>

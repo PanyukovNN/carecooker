@@ -38,8 +38,7 @@
             </nav>
         </div>
 
-        <nav class="navbar navbar-light border-bottom">
-            <a class="navbar-brand-screen" href="/">Care Cooker</a>
+        <nav class="navbar navbar-light border-bottom bg-light">
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-need-margin-right">
                     <a class="nav-link font-weight-bold" href="/">Разделы</a>
@@ -48,9 +47,12 @@
                     <a class="nav-link font-weight-bold" href="/recipe/all">Рецепты</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link font-weight-bold" href="/article/all">Статьи</a>
+                </li>
+                <li class="nav-item">
                     <form class="nav-total-search-form-screen nav-total-search-form form-inline" method="get" action="/recipe/search">
-                        <input class="nav-total-search-form-input form-control" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search">
-                        <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit">Поиск</button>
+                        <input class="nav-total-search-form-input nav-total-search-form-input-screen form-control" name="filter" type="search" placeholder="Поиск по сайту" aria-label="Search">
+                        <button class="nav-total-search-form-btn nav-total-search-form-btn-screen btn btn-light nav-search-btn" type="submit">Поиск</button>
                     </form>
                 </li>
             </ul>
@@ -92,12 +94,11 @@
                 <a class="navbar-brand-mobile" href="/">CC</a>
             </div>
             <form class="nav-total-search-form-mobile nav-total-search-form" method="get" action="/recipe/search">
-                <input class="nav-total-search-form-input" name="filter" type="search" placeholder="Поиск" aria-label="Search">
-                <button class="nav-total-search-form-btn btn btn-light nav-search-btn" type="submit"><i class="fa fa-search" style="color: white"></i></button>
+                <input class="nav-total-search-form-input nav-total-search-form-input-mobile" name="filter" type="search" placeholder="Поиск" aria-label="Search">
+                <button class="nav-total-search-form-btn nav-total-search-form-btn-mobile btn btn-light nav-search-btn" type="submit"><i class="fa fa-search" style="color: white"></i></button>
             </form>
 
-<!--            <input type="checkbox" id="menu-toggle-chk">-->
-            <div for="menu-toggle-chk" class="show-menu-btn-wrap" id="toggleMobileMenuBtn">
+            <div class="show-menu-btn-wrap" id="toggleMobileMenuBtn">
                 <i class="fa fa-bars" style="color: white" aria-hidden="true"></i>
             </div>
             <div class="menu-toggle-list-wrap">
@@ -118,16 +119,14 @@
         $("#toggleMobileMenuBtn").on("click", function (event) {
             console.log("all ok");
 
-            console.log($(".menu-toggle-list").css("right"));
-            if($(".menu-toggle-list").css("right") !== "0px") {
-                $(".menu-toggle-list").css("right", "0");
+            var menuToggleList = $(".menu-toggle-list");
+
+            if(menuToggleList.css("right") !== "0px") {
+                menuToggleList.css("right", "0");
             } else {
-                $(".menu-toggle-list").css("right", "-100%");
+                menuToggleList.css("right", "-100%");
             }
         });
-        // $(document).ready(function() {
-        //
-        // });
     </script>
 </div>
 </html>

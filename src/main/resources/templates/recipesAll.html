@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
-    <head th:replace="parts/common.html :: headerfiles"></head>
+    <div th:replace="parts/common.html :: headerfiles"></div>
     <body>
     <div th:replace="parts/navbar.html :: navbar"></div>
     <div th:replace="parts/searchBar.html :: search-bar"></div>
     <div class="main-container">
             <div th:replace="parts/greeting.html :: greeting"></div>
             <div class="content-container">
-                <div th:replace="parts/recipeList.html :: recipeList"></div>
+                <div th:replace="parts/articleList.html :: articleList"></div>
             </div>
         </div>
         <div th:replace="parts/common.html :: footer"></div>

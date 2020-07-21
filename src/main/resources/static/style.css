@@ -144,7 +144,6 @@ input::-moz-placeholder {
         display: none !important;
     }
     .navbar-screen {
-        display: flex !important;
         width: 100%;
     }
 }
@@ -248,7 +247,19 @@ input::-moz-placeholder {
     }
 }
 
-.nav-total-search-form-input::placeholder {
+.nav-total-search-form-input-screen,
+.nav-total-search-form-btn-screen {
+    background-color: white!important;
+    color: #3a3a3a !important;
+}
+
+.nav-total-search-form-input-mobile::placeholder {
+    color: white !important;
+}
+
+.nav-total-search-form-input-mobile,
+.nav-total-search-form-btn-mobile {
+    background-color: #434343 !important;
     color: white !important;
 }
 
@@ -256,9 +267,6 @@ input::-moz-placeholder {
 .nav-total-search-form-btn {
     height: 2rem !important;
     font: 14px PT Sans,Helvetica,sans-serif !important;
-
-    background-color: #434343 !important;
-    color: white !important;
 
     line-height: 2rem !important;
 

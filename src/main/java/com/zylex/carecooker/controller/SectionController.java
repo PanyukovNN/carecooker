@@ -2,6 +2,7 @@ package com.zylex.carecooker.controller;
 
 import com.zylex.carecooker.model.Recipe;
 import com.zylex.carecooker.model.Section;
+import com.zylex.carecooker.model.SectionType;
 import com.zylex.carecooker.model.dto.GreetingDto;
 import com.zylex.carecooker.model.dto.SectionDto;
 import com.zylex.carecooker.repository.RecipeRepository;
@@ -80,7 +81,7 @@ public class SectionController {
             @RequestParam("file") MultipartFile file,
             @RequestParam String name,
             @RequestParam int position) throws IOException {
-        Section section = new Section(name, position);
+        Section section = new Section(name, position, SectionType.RECIPE);
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             String resultFileName = s3Services.uploadFile(file);

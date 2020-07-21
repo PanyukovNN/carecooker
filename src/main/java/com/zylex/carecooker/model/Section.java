@@ -16,12 +16,15 @@ public class Section {
 
     private String image;
 
+    private SectionType sectionType;
+
     public Section() {
     }
 
-    public Section(String name, int position) {
+    public Section(String name, int position, SectionType sectionType) {
         this.name = name;
         this.position = position;
+        this.sectionType = sectionType;
     }
 
     public long getId() {
@@ -56,6 +59,14 @@ public class Section {
         this.image = image;
     }
 
+    public SectionType getSectionType() {
+        return sectionType;
+    }
+
+    public void setSectionType(SectionType sectionType) {
+        this.sectionType = sectionType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,8 +85,9 @@ public class Section {
         return "Section{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", order=" + position +
+                ", position=" + position +
                 ", image='" + image + '\'' +
+                ", sectionType=" + sectionType +
                 '}';
     }
 }
