@@ -198,6 +198,7 @@ public class RecipeController {
         model.addAttribute("recipe", recipe);
 
         if (StringHelper.isEmpty(recipe.getSource())) {
+            System.out.println();
             User user = (User) recipe.getAuthor();
             model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthorAndSourceIsNull(user));
         } else {

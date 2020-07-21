@@ -7,6 +7,7 @@ import com.zylex.carecooker.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,5 +33,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     List<Recipe> findTop7BySectionsContaining(Section section);
 
+    @Query("SELECT COUNT(r) FROM Recipe r WHERE r.author=?1 and (r.source IS NULL OR r.source = '')")
     Long countByAuthorAndSourceIsNull(User author);
 }
