@@ -7,7 +7,6 @@ import com.zylex.carecooker.repository.*;
 import com.zylex.carecooker.service.S3Services;
 import com.zylex.carecooker.service.UserService;
 import org.hibernate.internal.util.StringHelper;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -148,22 +147,6 @@ public class RecipeController {
         return recipeRepository.findByNameContainingIgnoreCase(filter, pageable).map(RecipeCardDto::new);
     }
 
-    @GetMapping(value = "/no-section-list", produces = "text/html")
-    public String getNoSectionRecipes(Model model) {
-        model.addAttribute("greetingDto", new GreetingDto("Рецепты без раздела", ""));
-        model.addAttribute("url", "/recipe/no-section-list");
-
-        return "recipesAll";
-    }
-
-    @ResponseBody
-    @GetMapping(value = "/no-section-list", produces = "application/json")
-    public Page<RecipeCardDto> getNoSectionRecipesPage(@RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
-
-        return recipeRepository.findBySectionsIsNull(pageable).map(RecipeCardDto::new);
-    }
-
     @GetMapping(value = "/to-publication", produces = "text/html")
     public String getToPublicationRecipes(Model model) {
         model.addAttribute("greetingDto", new GreetingDto("Неопубликованные рецепты", ""));
@@ -178,6 +161,22 @@ public class RecipeController {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
 
         return recipeRepository.findByToPublicationIsFalse(pageable).map(RecipeCardDto::new);
+    }
+
+    @GetMapping(value = "/incomplete", produces = "text/html")
+    public String getToEditRecipes(Model model) {
+        model.addAttribute("greetingDto", new GreetingDto("Неполные рецепты", ""));
+        model.addAttribute("url", "/recipe/incomplete");
+
+        return "recipesAll";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/incomplete", produces = "application/json")
+    public Page<RecipeCardDto> getToEditRecipesPage(@RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "publicationDateTime"));
+
+        return recipeRepository.findIncomplete(pageable).map(RecipeCardDto::new);
     }
 
     @GetMapping(value = "/{id}", produces = "text/html")
@@ -198,18 +197,19 @@ public class RecipeController {
         model.addAttribute("recipe", recipe);
 
         if (StringHelper.isEmpty(recipe.getSource())) {
-            System.out.println();
             User user = (User) recipe.getAuthor();
             model.addAttribute("authorRecipesNumber", recipeRepository.countByAuthorAndSourceIsNull(user));
         } else {
             model.addAttribute("source", recipe.getSource());
         }
 
-        if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
-            if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
-                request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
-            }
-        }
+//        if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
+//            if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
+//                if (request.getSession().getAttribute("url_prior_login") == null) {
+//                    request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
+//                }
+//            }
+//        }
 
         return "recipe";
     }
@@ -271,11 +271,13 @@ public class RecipeController {
             @RequestParam List<String> ingredientName,
             @RequestParam List<String> ingredientAmount,
             @RequestParam List<String> ingredientUnits,
+            @RequestParam String ingredientHeap,
             @RequestParam List<Object> method,
             @RequestParam("sections") Set<Long> sectionIds,
             @RequestParam(name = "dishes", required = false) Set<Long> dishIds,
             @RequestParam("toPublication") String toPublicationStr,
-            @RequestParam String source) throws IOException {
+            @RequestParam String source,
+            HttpServletRequest request) throws IOException {
         Recipe recipe = new Recipe();
         if (id != null && id != 0) {
             recipe = recipeRepository.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -322,6 +324,15 @@ public class RecipeController {
         recipe.setIngredientAmounts(ingredientAmounts);
         if (oldIngredientAmounts != null) {
             oldIngredientAmounts.forEach(ingredientAmountRepository::delete);
+        }
+
+        if (!StringUtils.isEmpty(ingredientHeap)) {
+            ingredientHeap = ingredientHeap.trim();
+            List<String> ingredientHeapLines = Arrays.asList(ingredientHeap.split("\n"));
+            ingredientHeapLines.removeIf(String::isEmpty);
+            recipe.setIngredientHeap(ingredientHeap);
+        } else {
+            recipe.setIngredientHeap("");
         }
 
         List<String> methodSteps = method.stream()
@@ -372,12 +383,23 @@ public class RecipeController {
         }
 
         if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
-            String resultFileName = s3Services.uploadFile(file);
-
-            recipe.setMainImage(resultFileName);
+            if (!file.getOriginalFilename().equals(recipe.getMainImage())) {
+                String resultFileName = s3Services.uploadFile(file);
+                recipe.setMainImage(resultFileName);
+            }
+        } else {
+            recipe.setMainImage("");
         }
 
         recipeRepository.save(recipe);
+
+//        if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
+//            if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
+//                if (request.getSession().getAttribute("url_prior_login") == null) {
+//                    request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
+//                }
+//            }
+//        }
 
         return "redirect:/recipe/" + recipe.getId();
     }
@@ -385,23 +407,19 @@ public class RecipeController {
     @GetMapping("/delete")
     public String getDeleteRecipe(@RequestParam long id,
                                   HttpServletRequest request) {
-        LoggerFactory.getLogger(RecipeController.class).info("Начинаю удалять рецепт");
         Recipe recipe = recipeRepository.findById(id).orElse(new Recipe());
         if (recipe.getId() != 0) {
-            LoggerFactory.getLogger(RecipeController.class).info("Рецепт взят из базы");
             recipeRepository.delete(recipe);
-            LoggerFactory.getLogger(RecipeController.class).info("Рецепт удален");
         }
-        LoggerFactory.getLogger(RecipeController.class).info("Рецепт в базе отсутствует");
 
-        HttpSession session = request.getSession();
-        if (session != null) {
-            String redirectUrl = (String) session.getAttribute("url_prior_login");
-            if (StringHelper.isNotEmpty(redirectUrl)) {
-                session.removeAttribute("url_prior_login");
-                return "redirect:" + redirectUrl;
-            }
-        }
+//        HttpSession session = request.getSession();
+//        if (session != null) {
+//            String redirectUrl = (String) session.getAttribute("url_prior_login");
+//            if (StringHelper.isNotEmpty(redirectUrl)) {
+//                session.removeAttribute("url_prior_login");
+//                return "redirect:" + redirectUrl;
+//            }
+//        }
 
         return "redirect:/recipe/all";
     }
@@ -425,9 +443,6 @@ public class RecipeController {
             recipe.setToPublication(false);
             recipeRepository.save(recipe);
         }
-
-//        request.getAttribute()
-//        request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
 
         return "redirect:/recipe/" + id;
     }

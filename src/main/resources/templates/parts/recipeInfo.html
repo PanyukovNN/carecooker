@@ -79,15 +79,20 @@
 
                 <div class="recipe-description-text" th:text="${recipe.description}"></div>
 
-                <div class="recipe-ingredient-list-wrap">
+                <div th:if="${recipe} and ${recipe.ingredientAmounts} ? ${recipe.ingredientAmounts != null and !recipe.ingredientAmounts.empty}" class="recipe-ingredient-list-wrap">
                     <div class="recipe-ingredients__heading">ИНГРЕДИЕНТЫ</div>
                     <ul class="recipe-ingredients__list" id="recipeIngredientsListId">
                         <!-- Fills by js -->
                     </ul>
                 </div>
+
+                <div th:unless="${recipe} and ${recipe.ingredientAmounts} ? ${recipe.ingredientAmounts != null and !recipe.ingredientAmounts.empty}" class="recipe-ingredient-list-wrap">
+                    <div class="recipe-ingredients__heading">ИНГРЕДИЕНТЫ</div>
+                    <div class="recipe-ingredients__list"
+                         th:utext="${recipe} and ${recipe.ingredientHeap} ? ${#strings.replace( #strings.escapeXml( recipe.ingredientHeap ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')} : ''"></div>
+                </div>
             </div>
         </div>
-    <!--    th:utext="${ingredient}-->
 
         <div class="recipe-method-block">
             <div class="recipe-method-wrap border-bottom">
@@ -136,8 +141,6 @@
             var authorRecipesNumber = /*[[${authorRecipesNumber} ? ${authorRecipesNumber} : '']]*/ 'default';
             var source = /*[[${source} ? ${source} : '']]*/ 'default';
             /*]]>*/
-            console.log(authorRecipesNumber)
-            console.log(source)
             if (authorRecipesNumber !== '') {
                 var lastTwoDigits = authorRecipesNumber % 100;
                 if (authorRecipesNumber === 0) {

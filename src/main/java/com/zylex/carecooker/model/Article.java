@@ -29,12 +29,12 @@ public class Article {
     public Article(String title,
                    String subTitle,
                    String image,
-//                   List<ArticleSection> articleSections,
+                   List<Section> sections,
                    List<Paragraph> paragraphs) {
         this.title = title;
         this.subTitle = subTitle;
         this.image = image;
-//        this.articleSections = articleSections;
+        this.sections = sections;
         this.paragraphs = paragraphs;
     }
 

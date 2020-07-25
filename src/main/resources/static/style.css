@@ -677,8 +677,11 @@ body {
     border: 1px;
 }
 @media (max-width: 1000px) {
-    .col {
-        margin-bottom: 0.5rem !important;
+    .card-single {
+        border-bottom: 5px solid #d9d9d9 !important;
+    }
+    .card-single:last-of-type {
+        border-bottom: none !important;
     }
 }
 .col {
@@ -945,6 +948,16 @@ body {
     font-weight: 900;
 
     transform: translate(-50%, -50%);
+}
+.recipe-main-image-cross-icon {
+    position: absolute;
+    display: flex;
+
+    top: -0.2rem;
+    right: -0.8rem;
+
+    cursor: pointer;
+    opacity: 0.5;
 }
 
 @media (min-width: 700px) {
@@ -1267,7 +1280,8 @@ body {
 }
 .footer {
     position: relative;
-    padding-top: 2.1rem;
+    display: flex;
+
     margin: 0 auto 0 auto;
 
     border-top: 1px solid #d9d9d9;
@@ -1279,9 +1293,10 @@ body {
     background-color: white;
 }
 .footer-text {
+    position: relative;
+
     max-width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
 
     opacity: 0.6;
     font: 13px/1 PT Serif,Georgia,serif;

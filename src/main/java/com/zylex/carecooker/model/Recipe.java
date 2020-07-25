@@ -29,6 +29,8 @@ public class Recipe {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<IngredientAmount> ingredientAmounts;
 
+    private String ingredientHeap;
+
     @ElementCollection
     private List<String> method;
 
@@ -58,6 +60,7 @@ public class Recipe {
                   int serving,
                   String complexity,
                   List<IngredientAmount> ingredientAmounts,
+                  String ingredientHeap,
                   List<String> method,
                   List<Section> sections,
                   List<Dish> dishes,
@@ -71,6 +74,7 @@ public class Recipe {
         this.serving = serving;
         this.complexity = complexity;
         this.ingredientAmounts = ingredientAmounts;
+        this.ingredientHeap = ingredientHeap;
         this.method = method;
         this.sections = sections;
         this.dishes = dishes;
@@ -150,6 +154,14 @@ public class Recipe {
 
     public void setIngredientAmounts(List<IngredientAmount> ingredientAmounts) {
         this.ingredientAmounts = ingredientAmounts;
+    }
+
+    public String getIngredientHeap() {
+        return ingredientHeap;
+    }
+
+    public void setIngredientHeap(String ingredientHeap) {
+        this.ingredientHeap = ingredientHeap;
     }
 
     public List<String> getMethod() {
@@ -250,13 +262,15 @@ public class Recipe {
                 ", serving=" + serving +
                 ", complexity='" + complexity + '\'' +
                 ", ingredientAmounts=" + ingredientAmounts +
-                ", method='" + method + '\'' +
+                ", ingredientHeap='" + ingredientHeap + '\'' +
+                ", method=" + method +
                 ", sections=" + sections +
                 ", author=" + author +
                 ", dishes=" + dishes +
                 ", toPublication=" + toPublication +
                 ", publicationDateTime=" + publicationDateTime +
                 ", views=" + views +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

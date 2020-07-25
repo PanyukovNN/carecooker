@@ -17,9 +17,18 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findAllByToPublicationIsTrue(Pageable pageable);
 
-    Page<Recipe> findBySectionsIsNull(Pageable pageable);
-
     Page<Recipe> findByToPublicationIsFalse(Pageable pageable);
+
+    @Query("FROM Recipe r " +
+            "WHERE r.name = '' or r.name IS NULL " +
+            "or r.mainImage = '' or r.mainImage IS NULL " +
+            "or r.cookTime = '00:00:00' " +
+            "or r.serving = 0 " +
+            "or r.ingredientAmounts.size = 0 " +
+            "or r.method.size = 0 " +
+            "or r.sections.size = 0 " +
+            "or r.dishes.size = 0")
+    Page<Recipe> findIncomplete(Pageable pageable);
 
     Page<Recipe> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
 
