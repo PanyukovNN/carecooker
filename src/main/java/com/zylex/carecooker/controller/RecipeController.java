@@ -203,15 +203,19 @@ public class RecipeController {
             model.addAttribute("source", recipe.getSource());
         }
 
-//        if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
-//            if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
-//                if (request.getSession().getAttribute("url_prior_login") == null) {
-//                    request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
-//                }
-//            }
-//        }
+        setupRedirectionUrl(request);
 
         return "recipe";
+    }
+
+    private void setupRedirectionUrl(HttpServletRequest request) {
+        if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
+            if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
+                if (request.getSession().getAttribute("url_prior_login") == null) {
+                    request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
+                }
+            }
+        }
     }
 
     private List<Recipe> findSimilarRecipes(Recipe recipe) {
@@ -265,6 +269,7 @@ public class RecipeController {
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam("file") MultipartFile file,
+            @RequestParam String fileName,
             @RequestParam("cookTime") String cookTimeStr,
             @RequestParam("serving") String servingStr,
             @RequestParam String complexity,
@@ -382,24 +387,20 @@ public class RecipeController {
             recipe.setPublicationDateTime(LocalDateTime.now());
         }
 
-        if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
+        // Если есть новый файл то загрузить в облако
+        if (file != null && StringHelper.isNotEmpty(file.getOriginalFilename())) {
             if (!file.getOriginalFilename().equals(recipe.getMainImage())) {
                 String resultFileName = s3Services.uploadFile(file);
                 recipe.setMainImage(resultFileName);
             }
-        } else {
+        } else if (StringHelper.isEmpty(fileName)) {
+            // Если имя файла отсутствует, значит файл удален
             recipe.setMainImage("");
         }
 
         recipeRepository.save(recipe);
 
-//        if (request != null && request.getHeader("Referer") != null && request.getRequestURL() != null) {
-//            if (!request.getHeader("Referer").startsWith(request.getRequestURL().toString())) {
-//                if (request.getSession().getAttribute("url_prior_login") == null) {
-//                    request.getSession().setAttribute("url_prior_login", request.getHeader("Referer"));
-//                }
-//            }
-//        }
+        setupRedirectionUrl(request);
 
         return "redirect:/recipe/" + recipe.getId();
     }
@@ -412,14 +413,14 @@ public class RecipeController {
             recipeRepository.delete(recipe);
         }
 
-//        HttpSession session = request.getSession();
-//        if (session != null) {
-//            String redirectUrl = (String) session.getAttribute("url_prior_login");
-//            if (StringHelper.isNotEmpty(redirectUrl)) {
-//                session.removeAttribute("url_prior_login");
-//                return "redirect:" + redirectUrl;
-//            }
-//        }
+        HttpSession session = request.getSession();
+        if (session != null) {
+            String redirectUrl = (String) session.getAttribute("url_prior_login");
+            if (StringHelper.isNotEmpty(redirectUrl)) {
+                session.removeAttribute("url_prior_login");
+                return "redirect:" + redirectUrl;
+            }
+        }
 
         return "redirect:/recipe/all";
     }

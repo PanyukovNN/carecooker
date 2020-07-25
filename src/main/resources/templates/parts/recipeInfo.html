@@ -104,22 +104,22 @@
                     </div>
                 </div>
 
-                <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4 mb-5">
-                    <div class="recipe-admin-button-block">
-                        <div class="edit-and-publish-admin-buttons">
-                            <a class="primary-btn btn btn-outline-primary" th:href="@{/recipe/update(id=${recipe.id})}" role="button">Редактировать</a>
-                        </div>
-
-                        <div class="unpublish-and-delete-admin-buttons">
-                            <a class="remove-btn btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
-                               onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="recipe__source" th:if="${source}">
                     <a class="source" th:href="${source}">Источник</a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-4 mb-5">
+        <div class="recipe-admin-button-block">
+            <div class="edit-and-publish-admin-buttons">
+                <a class="primary-btn btn btn-outline-primary" th:href="@{/recipe/update(id=${recipe.id})}" role="button">Редактировать</a>
+            </div>
+
+            <div class="unpublish-and-delete-admin-buttons">
+                <a class="remove-btn btn btn-outline-danger" th:href="@{/recipe/unpublish(id=${recipe.id})}" role="button"
+                   onclick="return confirm('Вы действительно хотите снять рецепт с публикации?');">Снять с публикации</a>
             </div>
         </div>
     </div>

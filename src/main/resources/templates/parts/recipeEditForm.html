@@ -21,7 +21,9 @@
                     <div style="padding-top: 52%;"></div>
                 </div>
             </label>
-            <input type="file" name="file" id="customFile" th:value="${recipe} and ${recipe.mainImage} ? ${recipe.mainImage} : ''"/>
+            <input type="file" name="file" id="customFile" />
+            <input type="hidden" name="fileName" id="customFileName" />
+<!--                   th:value="${recipe} and ${recipe.mainImage} ? ${recipe.mainImage} : ''"/>-->
         </div>
 
         <script th:inline="javascript">
@@ -29,6 +31,7 @@
             var mainImage = /*[[${recipe} and ${recipe.mainImage} ? ${recipe.mainImage} : '']]*/ '';
             var recipeMainImage = $("#recipeMainImage");
             /*]]>*/
+            var customFileName = $("#customFileName");
 
             $(document).ready(function () {
                 console.log(mainImage)
@@ -37,6 +40,7 @@
                     recipeMainImage.append("<div class='choose-photo'>Нажмите для выбора фото</div>");
                 } else {
                     recipeMainImage.attr("style", "background-image:url('" + mainImage + "');");
+                    customFileName.val(mainImage);
                 }
             });
 
@@ -45,6 +49,7 @@
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         recipeMainImage.attr('style', "background-image: url(" + e.target.result + ");");
+                        customFileName.val(e.target.result);
                         $('.choose-photo').remove();
                     }
                     reader.readAsDataURL(this.files[0]);
@@ -56,6 +61,7 @@
 
                 recipeMainImage.attr("style", "background-image:url('../../static/img_placeholder.svg');");
                 recipeMainImage.append("<div class='choose-photo'>Нажмите для выбора фото</div>");
+                customFileName.val("");
             })
         </script>
     </div>
