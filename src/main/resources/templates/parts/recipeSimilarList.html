@@ -3,7 +3,7 @@
 
 <div th:fragment="recipeSimilarList" class="main-list-block">
     <div class="row row-cols-1 row-cols-md-2">
-        <div th:each="recipe : ${similarRecipes}">
+        <div class="card-single" th:each="recipe : ${similarRecipes}">
             <a th:href="@{/recipe/} + ${recipe.id}" style="text-decoration: none;">
                 <div class="col">
                     <div class="recipe-card overlay">
